@@ -146,7 +146,7 @@ SetScr_WithinBottom:
 		move.b	(v_zone).w,d0
 		lsl.b	#2,d0
 		move.l	LoopTileNums(pc,d0.w),(v_256loop1).w
-		bra.w	LevSz_LoadScrollBlockSize
+		rts
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Sonic start location array
@@ -171,59 +171,6 @@ LoopTileNums:
 	dc.b	$7F,	$7F,	$7F,	$7F	; Ending (Green Hill)
 
 		even
-
-; ===========================================================================
-; LevSz_Unk:
-LevSz_LoadScrollBlockSize:
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		lsl.w	#3,d0
-		lea	BGScrollBlockSizes(pc,d0.w),a1
-		lea	(v_scroll_block_1_size).w,a2
-		move.l	(a1)+,(a2)+
-		move.l	(a1)+,(a2)+
-		rts	
-; End of function LevelSizeLoad
-
-; ===========================================================================
-; dword_61B4:
-BGScrollBlockSizes:
-		; GHZ
-		dc.w $70
-		dc.w $100	; I guess these used to be per act?
-		dc.w $100	; Or maybe each scroll block got its own size?
-		dc.w $100	; Either way, these are unused now.
-		; LZ
-		dc.w $800
-		dc.w $100
-		dc.w $100
-		dc.w 0
-		; MZ
-		dc.w $800
-		dc.w $100
-		dc.w $100
-		dc.w 0
-		; SLZ
-		dc.w $800
-		dc.w $100
-		dc.w $100
-		dc.w 0
-		; SYZ
-		dc.w $800
-		dc.w $100
-		dc.w $100
-		dc.w 0
-		; SBZ
-		dc.w $800
-		dc.w $100
-		dc.w $100
-		dc.w 0
-		zonewarning BGScrollBlockSizes,8
-		; Ending
-		dc.w $70
-		dc.w $100
-		dc.w $100
-		dc.w $100
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	set scroll speed of some backgrounds
@@ -258,7 +205,15 @@ BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:
-		bra.w	Deform_GHZ
+		clr.l	(v_bgscreenposx).w
+		clr.l	(v_bgscreenposy).w
+		clr.l	(v_bg2screenposy).w
+		clr.l	(v_bg3screenposy).w
+		lea	($FFFFA800).w,a2
+		clr.l	(a2)+
+		clr.l	(a2)+
+		clr.l	(a2)+
+		rts
 ; ===========================================================================
 
 BgScroll_LZ:
@@ -275,6 +230,7 @@ BgScroll_SLZ:
 		asr.l	#1,d0
 		addi.w	#$C0,d0
 		move.w	d0,(v_bgscreenposy).w
+		clr.l	(v_bgscreenposx).w
 		rts	
 ; ===========================================================================
 
@@ -284,26 +240,35 @@ BgScroll_SYZ:
 		asl.l	#1,d0
 		add.l	d2,d0
 		asr.l	#8,d0
+		addq.w	#1,d0
 		move.w	d0,(v_bgscreenposy).w
-		move.w	d0,(v_bg2screenposy).w
+		clr.l	(v_bgscreenposx).w
 		rts	
 ; ===========================================================================
 
 BgScroll_SBZ:
-		asl.l	#4,d0
-		asl.l	#1,d0
-		asr.l	#8,d0
+		andi.w	#$7F8,d0
+		asr.w	#3,d0
+		addq.w	#1,d0
 		move.w	d0,(v_bgscreenposy).w
 		rts	
 ; ===========================================================================
 
 BgScroll_End:
-		move.w	#$1E,(v_bgscreenposy).w
-		move.w	#$1E,(v_bg2screenposy).w
-		rts	
-; ===========================================================================
-		move.w	#$A8,(v_bgscreenposx).w
-		move.w	#$1E,(v_bgscreenposy).w
-		move.w	#-$40,(v_bg2screenposx).w
-		move.w	#$1E,(v_bg2screenposy).w
+		move.w	(v_screenposx).w,d0
+		asr.w	#1,d0
+		move.w	d0,(v_bgscreenposx).w
+		move.w	d0,(v_bg2screenposx).w
+		asr.w	#2,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d1,d0
+		move.w	d0,(v_bg3screenposx).w
+		clr.l	(v_bgscreenposy).w
+		clr.l	(v_bg2screenposy).w
+		clr.l	(v_bg3screenposy).w
+		lea	($FFFFA800).w,a2
+		clr.l	(a2)+
+		clr.l	(a2)+
+		clr.l	(a2)+
 		rts

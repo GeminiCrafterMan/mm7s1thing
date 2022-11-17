@@ -12,7 +12,7 @@ Sonic_LoadGfx:
 		beq.s	.nochange	; if not, branch
 
 		move.b	d0,(v_sonframenum).w
-		lea	(SonicDynPLC).l,a2 ; load PLC script
+		lea	(MegaManDynPLC).l,a2 ; load PLC script
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		moveq	#0,d1
@@ -30,7 +30,7 @@ Sonic_LoadGfx:
 		lsl.w	#8,d2
 		move.b	(a2)+,d2
 		lsl.w	#5,d2
-		lea	(Art_Sonic).l,a1
+		lea	(Art_MegaMan).l,a1
 		adda.l	d2,a1
 
 .loadtile:
