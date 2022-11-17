@@ -24,7 +24,6 @@ ptr_PLC_SBZ2:		dc.w PLC_SBZ2-ArtLoadCues
 ptr_PLC_TitleCard:	dc.w PLC_TitleCard-ArtLoadCues
 ptr_PLC_Boss:		dc.w PLC_Boss-ArtLoadCues
 ptr_PLC_Signpost:	dc.w PLC_Signpost-ArtLoadCues
-ptr_PLC_Warp:		dc.w PLC_Warp-ArtLoadCues
 ptr_PLC_SpecialStage:	dc.w PLC_SpecialStage-ArtLoadCues
 PLC_Animals:
 ptr_PLC_GHZAnimals:	dc.w PLC_GHZAnimals-ArtLoadCues
@@ -122,9 +121,6 @@ PLC_LZ2:	dc.w ((PLC_LZ2end-PLC_LZ2-2)/6)-1
 		plcm	Nem_LzDoor2, $7CC0	; large	horizontal door
 		plcm	Nem_LzWheel, $7EC0	; wheel
 		plcm	Nem_Gargoyle, $5D20	; gargoyle head
-		if Revision=0
-		plcm	Nem_LzSonic, $8800	; Sonic	holding	his breath
-		endif
 		plcm	Nem_LzPlatfm, $89E0	; rising platform
 		plcm	Nem_Orbinaut, $8CE0	; orbinaut enemy
 		plcm	Nem_Jaws, $90C0		; jaws enemy
@@ -256,15 +252,6 @@ PLC_Signpost:	dc.w ((PLC_Signpostend-PLC_Signpost-2)/6)-1
 		plcm	Nem_BigFlash, $8C40	; giant	ring flash effect
 PLC_Signpostend:
 ; ---------------------------------------------------------------------------
-; Pattern load cues - beta special stage warp effect
-; ---------------------------------------------------------------------------
-PLC_Warp:
-		if Revision=0
-		dc.w ((PLC_Warpend-PLC_Warp-2)/6)-1
-		plcm	Nem_Warp, $A820
-		endif
-PLC_Warpend:
-; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage
 ; ---------------------------------------------------------------------------
 PLC_SpecialStage:	dc.w ((PLC_SpeStageend-PLC_SpecialStage-2)/6)-1
@@ -348,9 +335,6 @@ PLC_Ending:	dc.w ((PLC_Endingend-PLC_Ending-2)/6)-1
 		plcm	Nem_EndFlower, $7400	; flowers
 		plcm	Nem_EndEm, $78A0	; emeralds
 		plcm	Nem_EndSonic, $7C20	; Sonic
-		if Revision=0
-		plcm	Nem_EndEggman, $A480	; Eggman's death ((unused)
-		endif
 		plcm	Nem_Rabbit, $AA60	; rabbit
 		plcm	Nem_Chicken, $ACA0	; chicken
 		plcm	Nem_BlackBird, $AE60	; blackbird
@@ -410,7 +394,6 @@ plcid_SBZ2:		equ (ptr_PLC_SBZ2-ArtLoadCues)/2	; $F
 plcid_TitleCard:	equ (ptr_PLC_TitleCard-ArtLoadCues)/2	; $10
 plcid_Boss:		equ (ptr_PLC_Boss-ArtLoadCues)/2	; $11
 plcid_Signpost:		equ (ptr_PLC_Signpost-ArtLoadCues)/2	; $12
-plcid_Warp:		equ (ptr_PLC_Warp-ArtLoadCues)/2	; $13
 plcid_SpecialStage:	equ (ptr_PLC_SpecialStage-ArtLoadCues)/2 ; $14
 plcid_GHZAnimals:	equ (ptr_PLC_GHZAnimals-ArtLoadCues)/2	; $15
 plcid_LZAnimals:	equ (ptr_PLC_LZAnimals-ArtLoadCues)/2	; $16
