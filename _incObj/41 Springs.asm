@@ -42,7 +42,6 @@ Spring_Main:	; Routine 0
 		move.b	#8,obRoutine(a0) ; use "Spring_LR" routine
 		move.b	#1,obAnim(a0)
 		move.b	#3,obFrame(a0)
-		move.w	#$533,obGfx(a0)
 		move.b	#8,obActWid(a0)
 
 Spring_NotLR:
@@ -80,7 +79,7 @@ Spring_BounceUp:
 		move.w	spring_pow(a0),obVelY(a1) ; move Sonic upwards
 		bset	#1,obStatus(a1)
 		bclr	#3,obStatus(a1)
-		move.b	#id_Spring,obAnim(a1) ; use "bouncing" animation
+		move.b	#id_Jump,obAnim(a1) ; use "bouncing" animation
 		move.b	#2,obRoutine(a1)
 		bclr	#3,obStatus(a0)
 		clr.b	obSolid(a0)
@@ -129,7 +128,7 @@ Spring_Flipped:
 		bchg	#0,obStatus(a1)
 		btst	#2,obStatus(a1)
 		bne.s	loc_DC56
-		move.b	#id_Walk,obAnim(a1)	; use walking animation
+		move.b	#id_Tiptoe,obAnim(a1)	; use walking animation
 
 loc_DC56:
 		bclr	#5,obStatus(a0)

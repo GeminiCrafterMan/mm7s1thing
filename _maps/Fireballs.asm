@@ -1,23 +1,20 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - fire balls (MZ, SLZ)
-; ---------------------------------------------------------------------------
-Map_Fire_internal:
-		dc.w .vertical1-Map_Fire_internal
-		dc.w .vertical2-Map_Fire_internal
-		dc.w .vertcollide-Map_Fire_internal
-		dc.w .horizontal1-Map_Fire_internal
-		dc.w .horizontal2-Map_Fire_internal
-		dc.w .horicollide-Map_Fire_internal
-.vertical1:	dc.b 1
-		dc.b $E8, 7, 0,	0, $F8
-.vertical2:	dc.b 1
-		dc.b $E8, 7, 0,	8, $F8
-.vertcollide:	dc.b 1
-		dc.b $F0, 6, 0,	$10, $F8
-.horizontal1:	dc.b 1
-		dc.b $F8, $D, 0, $16, $E8
-.horizontal2:	dc.b 1
-		dc.b $F8, $D, 0, $1E, $E8
-.horicollide:	dc.b 1
-		dc.b $F8, 9, 0,	$26, $F0
-		even
+Map_9e1e:
+Map_9e1e_0: 	dc.w Map_9e1e_C-Map_9e1e
+Map_9e1e_2: 	dc.w Map_9e1e_12-Map_9e1e
+Map_9e1e_4: 	dc.w Map_9e1e_18-Map_9e1e
+Map_9e1e_6: 	dc.w Map_9e1e_1E-Map_9e1e
+Map_9e1e_8: 	dc.w Map_9e1e_24-Map_9e1e
+Map_9e1e_A: 	dc.w Map_9e1e_2A-Map_9e1e
+Map_9e1e_C: 	dc.b $1
+	dc.b $E8, $7, $20, $0, $F8
+Map_9e1e_12: 	dc.b $1
+	dc.b $E8, $7, $20, $8, $F8
+Map_9e1e_18: 	dc.b $1
+	dc.b $F0, $6, $20, $10, $F8
+Map_9e1e_1E: 	dc.b $1
+	dc.b $F8, $D, $20, $16, $E8
+Map_9e1e_24: 	dc.b $1
+	dc.b $F8, $D, $20, $1E, $E8
+Map_9e1e_2A: 	dc.b $1
+	dc.b $F8, $9, $20, $26, $F0
+	even

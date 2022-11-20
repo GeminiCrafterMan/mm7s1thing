@@ -250,3 +250,14 @@ zonewarning:	macro loc,elementsize
 		warning "Size of loc (\{(._end-loc)/elementsize}) does not match ZoneCount (\{ZoneCount})."
 		endif
 		endm
+
+; why did they get rid of these
+music:	macro mus
+		move.w	mus,d0
+		jsr		(PlaySound).l
+		endm
+
+sfx:	macro snd
+		move.w	snd,d0
+		jsr		(PlaySound_Special).l
+		endm

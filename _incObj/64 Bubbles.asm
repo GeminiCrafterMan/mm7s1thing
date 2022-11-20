@@ -15,7 +15,6 @@ Bub_Index:	dc.w Bub_Main-Bub_Index
 		dc.w Bub_Delete-Bub_Index
 		dc.w Bub_BblMaker-Bub_Index
 
-bub_inhalable = $2E		; flag set when bubble is collectable
 bub_origX = $30		; original x-axis position
 bub_time = $32		; time until next bubble spawn
 bub_freq = $33		; frequency of bubble spawn
@@ -49,10 +48,6 @@ Bub_Main:	; Routine 0
 Bub_Animate:	; Routine 2
 		lea	(Ani_Bub).l,a1
 		jsr	(AnimateSprite).l
-		cmpi.b	#6,obFrame(a0)	; is bubble full-size?
-		bne.s	Bub_ChkWater	; if not, branch
-
-		move.b	#1,bub_inhalable(a0) ; set "inhalable" flag
 
 Bub_ChkWater:	; Routine 4
 		move.w	(v_waterpos1).w,d0
@@ -74,30 +69,7 @@ Bub_ChkWater:	; Routine 4
 		ext.w	d0
 		add.w	bub_origX(a0),d0
 		move.w	d0,obX(a0)	; change bubble's x-axis position
-		tst.b	bub_inhalable(a0)
-		beq.s	.display
-		bsr.w	Bub_ChkSonic	; has Sonic touched the	bubble?
-		beq.s	.display	; if not, branch
 
-		bsr.w	ResumeMusic	; cancel countdown music
-		move.w	#sfx_Bubble,d0
-		jsr	(PlaySound_Special).l	; play collecting bubble sound
-		lea	(v_player).w,a1
-		clr.w	obVelX(a1)
-		clr.w	obVelY(a1)
-		clr.w	obInertia(a1)	; stop Sonic
-		move.b	#id_GetAir,obAnim(a1) ; use bubble-collecting animation
-		move.w	#$23,$3E(a1)
-		move.b	#0,$3C(a1)
-		bclr	#5,obStatus(a1)
-		bclr	#4,obStatus(a1)
-		btst	#2,obStatus(a1)
-		beq.w	.burst
-		bclr	#2,obStatus(a1)
-		move.b	#$13,obHeight(a1)
-		move.b	#9,obWidth(a1)
-		subq.w	#5,obY(a1)
-		bra.w	.burst
 ; ===========================================================================
 
 .display:

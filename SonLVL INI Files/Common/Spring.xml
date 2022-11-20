@@ -2,27 +2,27 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Spring" Image="redvert">
   <Images>
     <ImageFromMappings id="redvert">
-      <ArtFile filename="../artnem/Spring Horizontal.bin" />
+      <ArtFile filename="../artnem/Spring.bin" />
       <MapFile type="ASM" filename="../_maps/Springs.asm" frame="0" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="yelvert">
-      <ArtFile filename="../artnem/Spring Horizontal.bin" />
+      <ArtFile filename="../artnem/Spring.bin" />
       <MapFile type="ASM" filename="../_maps/Springs.asm" frame="0" startpal="1" />
     </ImageFromMappings>
     <ImageFromMappings id="redhorz">
-      <ArtFile filename="../artnem/Spring Vertical.bin" />
+      <ArtFile filename="../artnem/Spring.bin" />
       <MapFile type="ASM" filename="../_maps/Springs.asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="yelhorz">
-      <ArtFile filename="../artnem/Spring Vertical.bin" />
+      <ArtFile filename="../artnem/Spring.bin" />
       <MapFile type="ASM" filename="../_maps/Springs.asm" frame="3" startpal="1" />
     </ImageFromMappings>
   </Images>
   <Subtypes>
     <Subtype id="00" name="Red Up" image="redvert" />
     <Subtype id="02" name="Yellow Up" image="yelvert" />
-    <Subtype id="10" name="Red Horizontal" image="redhorz" />
-    <Subtype id="12" name="Yellow Horizontal" image="yelhorz" />
+    <Subtype id="10" name="Red" image="redhorz" />
+    <Subtype id="12" name="Yellow" image="yelhorz" />
     <Subtype id="20" name="Red Down" image="redvert" />
     <Subtype id="22" name="Yellow Down" image="yelvert" />
   </Subtypes>

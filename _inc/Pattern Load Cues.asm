@@ -88,8 +88,7 @@ PLC_GHZ:	dc.w ((PLC_GHZ2-PLC_GHZ-2)/6)-1
 		plcm	Nem_Newtron, $9360	; newtron enemy
 		plcm	Nem_Motobug, $9E00	; motobug enemy
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 
 PLC_GHZ2:	dc.w ((PLC_GHZ2end-PLC_GHZ2-2)/6)-1
 		plcm	Nem_Swing, $7000	; swinging platform
@@ -127,8 +126,7 @@ PLC_LZ2:	dc.w ((PLC_LZ2end-PLC_LZ2-2)/6)-1
 		plcm	Nem_LzSwitch, $A1E0	; switch
 		plcm	Nem_Cork, $A000		; cork block
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 PLC_LZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Marble
@@ -148,8 +146,7 @@ PLC_MZ:		dc.w ((PLC_MZ2-PLC_MZ-2)/6)-1
 PLC_MZ2:	dc.w ((PLC_MZ2end-PLC_MZ2-2)/6)-1
 		plcm	Nem_MzSwitch, $A260	; switch
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 		plcm	Nem_MzBlock, $5700	; green	stone block
 PLC_MZ2end:
 ; ---------------------------------------------------------------------------
@@ -163,8 +160,7 @@ PLC_SLZ:	dc.w ((PLC_SLZ2-PLC_SLZ-2)/6)-1
 		plcm	Nem_SlzBlock, $9C00	; block
 		plcm	Nem_SlzWall, $A260	; breakable wall
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 
 PLC_SLZ2:	dc.w ((PLC_SLZ2end-PLC_SLZ2-2)/6)-1
 		plcm	Nem_Seesaw, $6E80	; seesaw
@@ -191,8 +187,7 @@ PLC_SYZ2:	dc.w ((PLC_SYZ2end-PLC_SYZ2-2)/6)-1
 		plcm	Nem_Cater, $9FE0	; caterkiller enemy
 		plcm	Nem_LzSwitch, $A1E0	; switch
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 PLC_SYZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Scrap Brain
@@ -223,8 +218,7 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
 		plcm	Nem_LzSwitch, $A1E0	; switch
 		plcm	Nem_Spikes, $A360	; spikes
-		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_Spring, $A460	; horizontal spring
 PLC_SBZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - title card

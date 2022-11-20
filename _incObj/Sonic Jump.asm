@@ -38,15 +38,7 @@ loc_1341C:
 		clr.b	$38(a0)
 		move.w	#sfx_Jump,d0
 		jsr	(PlaySound_Special).l	; play jumping sound
-		move.b	#$13,obHeight(a0)
-		move.b	#9,obWidth(a0)
-		btst	#2,obStatus(a0)
-		bne.s	loc_13490
-		move.b	#$E,obHeight(a0)
-		move.b	#7,obWidth(a0)
-		move.b	#id_Roll,obAnim(a0) ; use "jumping" animation
-		bset	#2,obStatus(a0)
-		addq.w	#5,obY(a0)
+		move.b	#id_Jump,obAnim(a0)
 
 locret_1348E:
 		rts	

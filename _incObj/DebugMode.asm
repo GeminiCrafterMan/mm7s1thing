@@ -22,7 +22,7 @@ Debug_Main:	; Routine 0
 		andi.w	#$7FF,(v_screenposy).w
 		andi.w	#$3FF,(v_bgscreenposy).w
 		move.b	#0,obFrame(a0)
-		move.b	#id_Walk,obAnim(a0)
+		move.b	#id_Fall,obAnim(a0)
 		cmpi.b	#id_Special,(v_gamemode).w ; is game mode $10 (special stage)?
 		bne.s	.islevel	; if not, branch
 

@@ -14,12 +14,14 @@ ReactToItem:
 		move.b	obHeight(a0),d5	; load Sonic's height
 		subq.b	#3,d5
 		sub.w	d5,d3
-		cmpi.b	#fr_Duck,obFrame(a0) ; is Sonic ducking?
-		bne.s	.notducking	; if not, branch
+		cmpi.b	#fr_Slide1,obFrame(a0) ; is Mega Man sliding?
+		blt.s	.notsliding	; if not, branch
+		cmpi.b	#fr_Slide2,obFrame(a0) ; is Mega Man sliding?
+		bgt.s	.notsliding	; if not, branch
 		addi.w	#$C,d3
 		moveq	#$A,d5
 
-.notducking:
+.notsliding:
 		move.w	#$10,d4
 		add.w	d5,d5
 		lea	(v_objspace+$800).w,a1 ; set object RAM start address

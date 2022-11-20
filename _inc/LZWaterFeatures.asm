@@ -349,7 +349,7 @@ LZWindTunnels:
 		dbf	d1,.chksonic	; on act 1, repeat for a second tunnel
 		tst.b	(f_wtunnelmode).w ; is Sonic still in a tunnel?
 		beq.s	.quit		; if yes, branch
-		move.b	#id_Walk,obAnim(a1)	; use walking animation
+		move.b	#id_Walking,obAnim(a1)	; use walking animation
 
 .clrquit:
 		clr.b	(f_wtunnelmode).w ; finish tunnel

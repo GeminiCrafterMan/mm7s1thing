@@ -1,11 +1,8 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - Chopper enemy (GHZ)
-; ---------------------------------------------------------------------------
-Map_Chop_internal:
-		dc.w .mouthshut-Map_Chop_internal
-		dc.w .mouthopen-Map_Chop_internal
-.mouthshut:	dc.b 1
-		dc.b $F0, $F, 0, 0, $F0
-.mouthopen:	dc.b 1
-		dc.b $F0, $F, 0, $10, $F0
-		even
+Map_0bed:
+Map_0bed_0: 	dc.w Map_0bed_4-Map_0bed
+Map_0bed_2: 	dc.w Map_0bed_A-Map_0bed
+Map_0bed_4: 	dc.b $1
+	dc.b $F0, $F, $20, $0, $F0
+Map_0bed_A: 	dc.b $1
+	dc.b $F0, $F, $20, $10, $F0
+	even

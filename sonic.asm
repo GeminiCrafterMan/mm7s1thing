@@ -5473,7 +5473,7 @@ loc_8A92:
 loc_8AA8:
 		btst	#5,obStatus(a0)
 		beq.s	locret_8AC2
-		move.w	#id_Run,obAnim(a1)
+		move.w	#id_Walking,obAnim(a1)
 
 loc_8AB6:
 		bclr	#5,obStatus(a0)
@@ -6757,6 +6757,10 @@ Sonic_MdNormal:
 ; ===========================================================================
 
 Sonic_MdJump:
+		tst.b	obVelY(a0)
+		blt.s	.rising
+		move.b	#id_Fall,obAnim(a0)
+	.rising:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6783,6 +6787,10 @@ Sonic_MdRoll:
 ; ===========================================================================
 
 Sonic_MdJump2:
+		tst.b	obVelY(a0)
+		blt.s	.rising
+		move.b	#id_Fall,obAnim(a0)
+	.rising:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6799,26 +6807,6 @@ loc_12EA6:
 		include	"_incObj/Sonic Move.asm"
 		include	"_incObj/Sonic RollSpeed.asm"
 		include	"_incObj/Sonic JumpDirection.asm"
-
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Unused subroutine to squash Sonic
-; ---------------------------------------------------------------------------
-		move.b	obAngle(a0),d0
-		addi.b	#$20,d0
-		andi.b	#$C0,d0
-		bne.s	locret_13302
-		bsr.w	Sonic_DontRunOnWalls
-		tst.w	d1
-		bpl.s	locret_13302
-		move.w	#0,obInertia(a0) ; stop Sonic moving
-		move.w	#0,obVelX(a0)
-		move.w	#0,obVelY(a0)
-		move.b	#id_Warp3,obAnim(a0) ; use "warping" animation
-
-locret_13302:
-		rts	
-
 		include	"_incObj/Sonic LevelBound.asm"
 		include	"_incObj/Sonic Roll.asm"
 		include	"_incObj/Sonic Jump.asm"
@@ -8261,6 +8249,7 @@ Nem_JapNames:	binclude	"artnem/Hidden Japanese Credits.bin"
 Map_MegaMan:	include	"_maps/Mega Man.asm"
 MegaManDynPLC:	include	"_maps/Mega Man - Dynamic Gfx Script.asm"
 
+Map_SSWalls:	include	"_maps/SS Walls.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Mega Man
 ; ---------------------------------------------------------------------------
@@ -8273,9 +8262,6 @@ Nem_Shield:	binclude	"artnem/Shield.bin"
 		even
 Nem_Stars:	binclude	"artnem/Invincibility Stars.bin"
 		even
-
-Map_SSWalls:	include	"_maps/SS Walls.asm"
-
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
 ; ---------------------------------------------------------------------------
@@ -8507,9 +8493,7 @@ Nem_Points:	binclude	"artnem/Points.bin"	; points from destroyed enemy or object
 		even
 Nem_GameOver:	binclude	"artnem/Game Over.bin"	; game over / time over
 		even
-Nem_HSpring:	binclude	"artnem/Spring Horizontal.bin"
-		even
-Nem_VSpring:	binclude	"artnem/Spring Vertical.bin"
+Nem_Spring:	binclude	"artnem/Spring.bin"
 		even
 Nem_SignPost:	binclude	"artnem/Signpost.bin"	; end of level signpost
 		even

@@ -15,6 +15,7 @@ Sonic_SlopeRepel:
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		beq.s	locret_13580
+	; mvabs.w obInertia(a0),d0
 		move.w	obInertia(a0),d0
 		bpl.s	loc_1356A
 		neg.w	d0
