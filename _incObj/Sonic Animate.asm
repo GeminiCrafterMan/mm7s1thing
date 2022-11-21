@@ -98,6 +98,8 @@ Sonic_Animate:
 		neg.w	d2		; modulus speed
 
 .nomodspeed:
+		cmpi.b	#id_Tiptoe,obAnim(a0)
+		beq.s	.contNoModSpeed
 		cmpi.b	#id_Walking,obAnim(a0)
 		ble.s	.alreadyWalking
 		lea	(MegaAni_Tiptoe).l,a1 ; use	tiptoe	animation
@@ -120,9 +122,14 @@ Sonic_Animate:
 
 .belowmax:
 		lsr.w	#8,d2
+		lsl.b	#1,d2
+		subq.b	#4,d2
+		bne.s	.nonzero
+		moveq	#0,d2
+	.nonzero:
 		move.b	d2,obTimeFrame(a0) ; modify frame duration
 		bsr.w	.loadframe
-		add.b	d3,obFrame(a0)	; modify frame number
+;		add.b	d3,obFrame(a0)	; modify frame number
 		rts	
 ; ===========================================================================
 

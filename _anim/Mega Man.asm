@@ -21,10 +21,10 @@ ptr_Jump:	dc.w MegaAni_Jump-Ani_MegaMan
 ptr_Fall:	dc.w MegaAni_Fall-Ani_MegaMan
 ptr_Land:	dc.w MegaAni_Land-Ani_MegaMan
 
-MegaAni_Tiptoe:	dc.b 1, fr_Step1, fr_Step2, afChange, id_Walking
+MegaAni_Tiptoe:	dc.b 4, fr_Step1, fr_Step2, afChange, id_Walking
 		even
 	; dc.b $FF when you fix it
-MegaAni_Walking:	dc.b 3,	fr_Walk1,	fr_Walk2,	fr_Walk3,	fr_Walk4,	fr_Walk5,	fr_Walk6,	fr_Walk7,	fr_Walk8,	fr_Walk9,	fr_WalkA, afEnd
+MegaAni_Walking:	dc.b $FF,	fr_Walk1,	fr_Walk2,	fr_Walk3,	fr_Walk4,	fr_Walk5,	fr_Walk6,	fr_Walk7,	fr_Walk8,	fr_Walk9,	fr_WalkA, afEnd
 		even
 MegaAni_Roll:	dc.b $FE,  fr_Roll1,  fr_Roll2,  fr_Roll3,  fr_Roll4,  fr_Roll5,     afEnd, afEnd
 		even

@@ -91,9 +91,9 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
-		dc.b "(C)SEGA 1991.APR" ; Copyright holder and release date (generally year)
-		dc.b "SONIC THE               HEDGEHOG                " ; Domestic name
-		dc.b "SONIC THE               HEDGEHOG                " ; International name
+		dc.b "GEMINI0 2022.NOV" ; Copyright holder and release date (generally year)
+		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; Domestic name
+		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; International name
 		dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
 Checksum:
 		dc.w $AFC7
@@ -5777,15 +5777,17 @@ Map_Got:	dc.w M_Got_SonicHas-Map_Got
 		dc.w M_Card_Act1-Map_Got
 		dc.w M_Card_Act2-Map_Got
 		dc.w M_Card_Act3-Map_Got
-M_Got_SonicHas:	dc.b 8			; SONIC HAS
-		dc.b $F8, 5, 0,	$3E, $B8
-		dc.b $F8, 5, 0,	$32, $C8
-		dc.b $F8, 5, 0,	$2E, $D8
-		dc.b $F8, 1, 0,	$20, $E8
-		dc.b $F8, 5, 0,	8, $F0
-		dc.b $F8, 5, 0,	$1C, $10
-		dc.b $F8, 5, 0,	0, $20
-		dc.b $F8, 5, 0,	$3E, $30
+M_Got_SonicHas:	dc.b $C	;  SONIC HAS | MEGA MAN HAS
+		dc.b $F8, 5, 0, $2A, $A8	; M
+		dc.b $F8, 5, 0, $10, $B8	; E
+		dc.b $F8, 5, 0, $18, $C8	; G
+		dc.b $F8, 5, 0, 0, $D8		; A
+		dc.b $F8, 5, 0, $2A, $F8	; M
+		dc.b $F8, 5, 0, 0, $8		; A
+		dc.b $F8, 5, 0, $2E, $18	; N
+		dc.b $F8, 5, 0, $1C, $38	; H
+		dc.b $F8, 5, 0, 0, $48		; A
+		dc.b $F8, 5, 0, $3E, $58	; S
 M_Got_Passed:	dc.b 6			; PASSED
 		dc.b $F8, 5, 0,	$36, $D0
 		dc.b $F8, 5, 0,	0, $E0

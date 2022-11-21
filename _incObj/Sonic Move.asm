@@ -138,10 +138,11 @@ Sonic_MoveLeft:
 		move.w	#-$40,d0
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
-		cmpi.b	#id_Walking,obAnim(a0)
-		ble.s	.cont
-		move.b	#id_Tiptoe,obAnim(a0)
 	.cont:
+		cmpi.b	#id_Walking,obAnim(a0)
+		ble.s	.cont2
+		move.b	#id_Tiptoe,obAnim(a0)
+	.cont2:
 		bset	#0,obStatus(a0)
 		bne.s	loc_1309A
 		bclr	#5,obStatus(a0)
@@ -173,10 +174,11 @@ Sonic_MoveRight:
 		move.w	#$40,d0
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
-		cmpi.b	#id_Walking,obAnim(a0)
-		ble.s	.cont
-		move.b	#id_Tiptoe,obAnim(a0)
 	.cont:
+		cmpi.b	#id_Walking,obAnim(a0)
+		ble.s	.cont2
+		move.b	#id_Tiptoe,obAnim(a0)
+	.cont2:
 		bclr	#0,obStatus(a0)
 		beq.s	loc_13104
 		bclr	#5,obStatus(a0)
