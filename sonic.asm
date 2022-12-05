@@ -2171,8 +2171,9 @@ Tit_LoadText:
 		bsr.w	NemDec
 		moveq	#palid_Title,d0	; load title screen palette
 		bsr.w	PalLoad1
-		move.b	#bgm_Title,d0
-		bsr.w	PlaySound_Special	; play title screen music
+	;blep
+;		move.b	#bgm_Title,d0
+;		bsr.w	PlaySound_Special	; play title screen music
 		move.b	#0,(f_debugmode).w ; disable debug mode
 		move.w	#$178,(v_demolength).w ; run title screen for $178 frames
 		lea	(v_objspace+$80).w,a1
@@ -2308,13 +2309,12 @@ LevelSelect:
 		bsr.w	RunPLC
 		tst.l	(v_plc_buffer).w
 		bne.s	LevelSelect
-		andi.b	#btnABC+btnStart,(v_jpadpress1).w ; is A, B, C, or Start pressed?
+		andi.b	#btnC+btnStart,(v_jpadpress1).w ; is C or Start pressed?
 		beq.s	LevelSelect	; if not, branch
 		move.w	(v_levselitem).w,d0
 		cmpi.w	#$14,d0		; have you selected item $14 (sound test)?
 		bne.s	LevSel_Level_SS	; if not, go to	Level/SS subroutine
 		move.w	(v_levselsound).w,d0
-		addi.w	#$80,d0
 		tst.b	(f_creditscheat).w ; is Japanese Credits cheat on?
 		beq.s	LevSel_PlaySnd	; if not, branch
 		cmpi.w	#$9F,d0		; is sound $9F being played?
@@ -2520,29 +2520,34 @@ LevSel_SndTest:
 		cmpi.w	#$14,(v_levselitem).w ; is item $14 selected?
 		bne.s	LevSel_NoMove	; if not, branch
 		move.b	(v_jpadpress1).w,d1
-		andi.b	#btnR+btnL,d1	; is left/right	pressed?
+		andi.b	#btnR+btnL+btnA+btnB,d1	; is left/right/A/B	pressed?
 		beq.s	LevSel_NoMove	; if not, branch
 		move.w	(v_levselsound).w,d0
 		btst	#bitL,d1	; is left pressed?
 		beq.s	LevSel_Right	; if not, branch
 		subq.w	#1,d0		; subtract 1 from sound	test
-		bhs.s	LevSel_Right
-		moveq	#$4F,d0		; if sound test	moves below 0, set to $4F
 
 LevSel_Right:
 		btst	#bitR,d1	; is right pressed?
-		beq.s	LevSel_Refresh2	; if not, branch
+		beq.s	LevSel_A	; if not, branch
 		addq.w	#1,d0		; add 1	to sound test
-		cmpi.w	#$50,d0
-		blo.s	LevSel_Refresh2
-		moveq	#0,d0		; if sound test	moves above $4F, set to	0
+
+LevSel_A:
+		btst	#bitA,d1	; is A pressed?
+		beq.s	LevSel_B
+		addi.w	#$10,d0
+
+LevSel_B:
+		btst	#bitB,d1	; is B pressed?
+		beq.s	LevSel_Refresh2
+		subi.w	#$10,d0
 
 LevSel_Refresh2:
 		move.w	d0,(v_levselsound).w ; set sound test number
 		bsr.w	LevSelTextLoad	; refresh text
 
 LevSel_NoMove:
-		rts	
+		rts
 ; End of function LevSelControls
 
 ; ---------------------------------------------------------------------------
@@ -2593,7 +2598,6 @@ LevSel_DrawAll:
 LevSel_DrawSnd:
 		locVRAM	$EC30		; sound test position on screen
 		move.w	(v_levselsound).w,d0
-		addi.w	#$80,d0
 		move.b	d0,d2
 		lsr.b	#4,d0
 		bsr.w	LevSel_ChgSnd	; draw 1st digit

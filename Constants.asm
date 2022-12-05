@@ -192,7 +192,7 @@ afReset:	equ $FB	; reset animation and 2nd object routine counter
 af2ndRoutine:	equ $FA	; increment 2nd routine counter
 
 ; Background music
-bgm__First:	equ $81
+bgm__First:	equ $01
 bgm_GHZ:	equ ((ptr_mus81-MusicIndex)/4)+bgm__First
 bgm_LZ:		equ ((ptr_mus82-MusicIndex)/4)+bgm__First
 bgm_MZ:		equ ((ptr_mus83-MusicIndex)/4)+bgm__First
@@ -215,7 +215,7 @@ bgm_Emerald:	equ ((ptr_mus93-MusicIndex)/4)+bgm__First
 bgm__Last:	equ ((ptr_musend-MusicIndex-4)/4)+bgm__First
 
 ; Sound effects
-sfx__First:	equ $A0
+sfx__First:	equ bgm__Last+1
 sfx_Jump:	equ ((ptr_sndA0-SoundIndex)/4)+sfx__First
 sfx_Lamppost:	equ ((ptr_sndA1-SoundIndex)/4)+sfx__First
 sfx_A2:		equ ((ptr_sndA2-SoundIndex)/4)+sfx__First
@@ -264,14 +264,15 @@ sfx_Spring:	equ ((ptr_sndCC-SoundIndex)/4)+sfx__First
 sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
+sfx_JumpLand:   equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects
-spec__First:	equ $D0
+spec__First:	equ sfx__Last+1
 sfx_Waterfall:	equ ((ptr_sndD0-SpecSoundIndex)/4)+spec__First
 spec__Last:	equ ((ptr_specend-SpecSoundIndex-4)/4)+spec__First
 
-flg__First:	equ $E0
+flg__First:	equ $FB ; last few possible sounds
 bgm_Fade:	equ ((ptr_flgE0-Sound_ExIndex)/4)+flg__First
 sfx_Sega:	equ ((ptr_flgE1-Sound_ExIndex)/4)+flg__First
 bgm_Speedup:	equ ((ptr_flgE2-Sound_ExIndex)/4)+flg__First

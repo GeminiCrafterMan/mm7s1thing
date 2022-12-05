@@ -33,5 +33,7 @@ loc_137AE:
 loc_137E4:
 		move.b	#0,$3C(a0)
 		move.w	#0,(v_itembonus).w
+		move.w	#sfx_JumpLand,d0
+		jsr	(PlaySound_Special).l	; play jumping sound
 		rts	
 ; End of function Sonic_ResetOnFloor
