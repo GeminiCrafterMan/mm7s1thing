@@ -41,7 +41,7 @@ ptr_Rings:		dc.l Rings
 ptr_Monitor:		dc.l Monitor
 ptr_ExplosionItem:	dc.l ExplosionItem
 ptr_Animals:		dc.l Animals		; $28
-ptr_Points:		dc.l Points
+ptr_Obj29:		dc.l NullObject
 ptr_AutoDoor:		dc.l AutoDoor
 ptr_Chopper:		dc.l Chopper
 ptr_Jaws:		dc.l Jaws
@@ -185,7 +185,7 @@ id_Rings:		equ ((ptr_Rings-Obj_Index)/4)+1
 id_Monitor:		equ ((ptr_Monitor-Obj_Index)/4)+1
 id_ExplosionItem:	equ ((ptr_ExplosionItem-Obj_Index)/4)+1
 id_Animals:		equ ((ptr_Animals-Obj_Index)/4)+1		; $28
-id_Points:		equ ((ptr_Points-Obj_Index)/4)+1
+id_Obj29:		equ ((ptr_Obj29-Obj_Index)/4)+1
 id_AutoDoor:		equ ((ptr_AutoDoor-Obj_Index)/4)+1
 id_Chopper:		equ ((ptr_Chopper-Obj_Index)/4)+1
 id_Jaws:		equ ((ptr_Jaws-Obj_Index)/4)+1

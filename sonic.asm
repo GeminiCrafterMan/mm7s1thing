@@ -671,13 +671,7 @@ VBla_08:
 
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		tst.b	(f_sonframechg).w ; has Sonic's sprite changed?
-		beq.s	.nochg		; if not, branch
-
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
-		move.b	#0,(f_sonframechg).w
-
-.nochg:
+		jsr		ProcessDMAQueue
 		startZ80
 		movem.l	(v_screenposx).w,d0-d7
 		movem.l	d0-d7,(v_screenposx_dup).w
@@ -720,13 +714,7 @@ VBla_0A:
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		startZ80
 		bsr.w	PalCycle_SS
-		tst.b	(f_sonframechg).w ; has Sonic's sprite changed?
-		beq.s	.nochg		; if not, branch
-
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
-		move.b	#0,(f_sonframechg).w
-
-.nochg:
+		jsr		ProcessDMAQueue
 		tst.w	(v_demolength).w	; is there time left on the demo?
 		beq.w	.end	; if not, return
 		subq.w	#1,(v_demolength).w	; subtract 1 from time left in demo
@@ -752,12 +740,7 @@ VBla_0C:
 		move.w	(v_hbla_hreg).w,(a5)
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		tst.b	(f_sonframechg).w
-		beq.s	.nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic
-		move.b	#0,(f_sonframechg).w
-
-.nochg:
+		jsr		ProcessDMAQueue
 		startZ80
 		movem.l	(v_screenposx).w,d0-d7
 		movem.l	d0-d7,(v_screenposx_dup).w
@@ -791,12 +774,7 @@ VBla_16:
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		startZ80
-		tst.b	(f_sonframechg).w
-		beq.s	.nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic
-		move.b	#0,(f_sonframechg).w
-
-.nochg:
+		jsr		ProcessDMAQueue
 		tst.w	(v_demolength).w
 		beq.w	.end
 		subq.w	#1,(v_demolength).w
@@ -1105,6 +1083,8 @@ Tilemap_Cell:
 		dbf	d2,Tilemap_Line	; next line
 		rts	
 ; End of function TilemapToVRAM
+
+		include	"_inc/DMA Queue.asm"
 
 		include	"_inc/Nemesis Decompression.asm"
 
@@ -5566,7 +5546,7 @@ Map_MisDissolve:include	"_maps/Buzz Bomber Missile Dissolve.asm"
 		include	"_maps/Explosions.asm"
 
 		include	"_incObj/28 Animals.asm"
-		include	"_incObj/29 Points.asm"
+;		include	"_incObj/29.asm"
 Map_Animal1:	include	"_maps/Animals 1.asm"
 Map_Animal2:	include	"_maps/Animals 2.asm"
 Map_Animal3:	include	"_maps/Animals 3.asm"

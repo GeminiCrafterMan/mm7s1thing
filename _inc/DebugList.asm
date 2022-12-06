@@ -34,7 +34,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_Newt,	id_Newtron,	0,	0,	$249B
 	dbug	Map_Edge,	id_EdgeWalls,	0,	0,	$434C
 	dbug	Map_GBall,	id_Obj19,	0,	0,	$43AA
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 	dbug	Map_GRing,	id_GiantRing,	0,	0,	$2400
 	dbug	Map_Bonus,	id_HiddenBonus,	1,	1,	$84B6
 .GHZend:
@@ -67,7 +67,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_WFall,	id_Waterfall,	9,	9,	$C259
 	dbug	Map_Pole,	id_Pole,	0,	0,	$43DE
 	dbug	Map_Flap,	id_FlapDoor,	2,	0,	$4328
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 .LZend:
 
 .MZ:
@@ -91,7 +91,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_LTag,	id_LavaTag,	0,	0,	$8680
 	dbug	Map_Bas,	id_Basaran,	0,	0,	$4B8
 	dbug	Map_Cat,	id_Caterkiller,	0,	0,	$24FF
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 .MZend:
 
 .SLZ:
@@ -112,7 +112,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_Scen,	id_Scenery,	0,	0,	$44D8
 	dbug	Map_Bomb,	id_Bomb,	0,	0,	$400
 	dbug	Map_Orb,	id_Orbinaut,	0,	0,	$2429
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 .SLZend:
 
 .SYZ:
@@ -133,7 +133,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_FBlock,	id_FloatingBlock, 0,	0,	$4000
 	dbug	Map_But,	id_Button,	0,	0,	$513
 	dbug	Map_Cat,	id_Caterkiller,	0,	0,	$24FF
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 .SYZend:
 
 .SBZ:
@@ -168,7 +168,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_Gird,	id_Girder,	0,	0,	$42F0
 	dbug	Map_Invis,	id_Invisibarrier, $11,	0,	$8680
 	dbug	Map_Hog,	id_BallHog,	4,	0,	$2302
-	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$7A0
+	dbug	Map_Lamp,	id_Lamppost,	1,	0,	$6C0
 .SBZend:
 
 .Ending:

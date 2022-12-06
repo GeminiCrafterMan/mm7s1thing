@@ -8,40 +8,48 @@
 Sonic_LoadGfx:
 		moveq	#0,d0
 		move.b	obFrame(a0),d0	; load frame number
-		cmp.b	(v_sonframenum).w,d0 ; has frame changed?
-		beq.s	.nochange	; if not, branch
-
+		bsr.w	LoadMegaManMap
+		cmp.b	(v_sonframenum).w,d0
+		beq.s	.nochange
 		move.b	d0,(v_sonframenum).w
-		lea	(MegaManDynPLC).l,a2 ; load PLC script
+		lea	(MegaManDynPLC).l,a2
+
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
+		moveq	#0,d5
+		move.b	(a2)+,d5
+		subq.w	#1,d5
+		bmi.s	.nochange
+		move.w	obGfx(a0),d4    ; get art tile
+		andi.w  #$7FF,d4	; clear art flags
+		lsl.w   #5,d4	   ; get VRAM address
+		move.l	#Art_MegaMan,d6
+
+    .readentry:
 		moveq	#0,d1
-		move.b	(a2)+,d1	; read "number of entries" value
-		subq.b	#1,d1
-		bmi.s	.nochange	; if zero, branch
-		lea	(v_sgfx_buffer).w,a3
-		move.b	#1,(f_sonframechg).w ; set flag for Sonic graphics DMA
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(QueueDMATransfer).l
+		dbf	d5,.readentry	; repeat for number of entries
 
-.readentry:
-		moveq	#0,d2
-		move.b	(a2)+,d2
-		move.w	d2,d0
-		lsr.b	#4,d0
-		lsl.w	#8,d2
-		move.b	(a2)+,d2
-		lsl.w	#5,d2
-		lea	(Art_MegaMan).l,a1
-		adda.l	d2,a1
-
-.loadtile:
-		movem.l	(a1)+,d2-d6/a4-a6
-		movem.l	d2-d6/a4-a6,(a3)
-		lea	$20(a3),a3	; next tile
-		dbf	d0,.loadtile	; repeat for number of tiles
-
-		dbf	d1,.readentry	; repeat for number of entries
-
-.nochange:
+    .nochange:
 		rts	
-
 ; End of function Sonic_LoadGfx
+
+LoadMegaManMap:
+		cmpi.l	#Map_MegaMan,(v_player+obMap).w
+		beq.s	.skip
+		move.l	#Map_MegaMan,(v_player+obMap).w
+	.skip:
+		rts
