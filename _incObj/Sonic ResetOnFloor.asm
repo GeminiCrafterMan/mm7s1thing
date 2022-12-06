@@ -21,13 +21,6 @@ loc_137AE:
 		bclr	#2,obStatus(a0)
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
-		tst.b	obVelX(a0)
-		bne.s	.walkAnim
-		move.b	#id_Land,obAnim(a0)
-		bra.s	.cont
-	.walkAnim:
-		move.b	#id_Walking,obAnim(a0)
-	.cont:
 		subq.w	#5,obY(a0)
 
 loc_137E4:
@@ -35,5 +28,23 @@ loc_137E4:
 		move.w	#0,(v_itembonus).w
 		move.w	#sfx_JumpLand,d0
 		jsr	(PlaySound_Special).l	; play jumping sound
+		moveq	#0,d0
+		btst	#3,obStatus(a0)	; on platform?
+		bne.s	.onPlatform
+		move.w	obInertia(a0),d0
+		bra.s	.cont
+	.onPlatform:
+		move.w	obVelX(a0),d0
+	.cont:
+		bpl.s	.positive
+		neg.w	d0
+	.positive:
+		cmpi.w	#$80,d0
+		bgt.s	.walkAnim
+		move.b	#id_Land,obAnim(a0)
+		bra.s	.ret
+	.walkAnim:
+		move.b	#id_Walking,obAnim(a0)
+	.ret:
 		rts	
 ; End of function Sonic_ResetOnFloor
