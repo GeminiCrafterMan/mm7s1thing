@@ -2574,6 +2574,7 @@ ptr_sndCD:	dc.l SoundCD
 ptr_sndCE:	dc.l SoundCE
 ptr_sndCF:	dc.l SoundCF
 ptr_sndJumpLand:	dc.l SoundJumpLand
+ptr_sndSlide:	dc.l SoundSlide
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
@@ -2683,6 +2684,8 @@ SoundCE:	include	"sound/sfx/SndCE - Ring Left Speaker.asm"
 SoundCF:	include	"sound/sfx/SndCF - Signpost.asm"
 		even
 SoundJumpLand:	include "sound/sfx/Snd - Jump Land.asm"
+		even
+SoundSlide:	include	"sound/sfx/Snd - Slide.asm"
 		even
 
 ; ---------------------------------------------------------------------------

@@ -6,6 +6,12 @@
 
 
 Sonic_Jump:
+		cmpi.b	#id_Slide,obAnim(a0)
+		beq.s	.noDownTest
+		btst	#bitDn,(v_jpadhold2).w
+		bne.w	locret_1348E
+	.noDownTest:
+		moveq	#0,d0
 		move.b	(v_jpadpress2).w,d0
 		andi.b	#btnABC,d0	; is A, B or C pressed?
 		beq.w	locret_1348E	; if not, branch

@@ -156,6 +156,8 @@ loc_1309A:
 		move.w	d1,d0
 
 loc_130A6:
+		btst	#2,obStatus(a0)
+		bne.s	.noCap	; sliding
 		cmpi.w	#-$400,d0
 		bge.s	.noCap
 		move.w	#-$400,d0
@@ -190,6 +192,8 @@ loc_13104:
 		move.w	d6,d0
 
 loc_1310C:
+		btst	#2,obStatus(a0)
+		bne.s	.noCap	; sliding
 		cmpi.w	#$400,d0
 		ble.s	.noCap
 		move.w	#$400,d0

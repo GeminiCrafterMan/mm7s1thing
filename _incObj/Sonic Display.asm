@@ -3,6 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Display:
+		tst.b	obSlideTimer(a0)
+		beq.s	.noDecSlide
+		subq.b	#1,obSlideTimer(a0)
+	.noDecSlide:
 		move.w	flashtime(a0),d0
 		beq.s	.display
 		subq.w	#1,flashtime(a0)

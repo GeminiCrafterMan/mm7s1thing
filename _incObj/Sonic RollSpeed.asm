@@ -88,14 +88,14 @@ Sonic_RollLeft:
 
 loc_1320A:
 		bset	#0,obStatus(a0)
-		move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
+		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
 		rts	
 ; ===========================================================================
 
 loc_13218:
-		sub.w	d4,d0
-		bcc.s	loc_13220
-		move.w	#-$80,d0
+		bset	#0,obStatus(a0)
+		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
+		move.w	#-$500,d0
 
 loc_13220:
 		move.w	d0,obInertia(a0)
@@ -110,14 +110,14 @@ Sonic_RollRight:
 		move.w	obInertia(a0),d0
 		bmi.s	loc_1323A
 		bclr	#0,obStatus(a0)
-		move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
+		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
 		rts	
 ; ===========================================================================
 
 loc_1323A:
-		add.w	d4,d0
-		bcc.s	loc_13242
-		move.w	#$80,d0
+		bclr	#0,obStatus(a0)
+		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
+		move.w	#$500,d0
 
 loc_13242:
 		move.w	d0,obInertia(a0)

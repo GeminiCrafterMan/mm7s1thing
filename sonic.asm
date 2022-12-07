@@ -6723,10 +6723,11 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		bsr.w	Sonic_Roll
 		bsr.w	Sonic_Jump
 		bsr.w	Sonic_SlopeResist
 		bsr.w	Sonic_Move
-		bsr.w	Sonic_Roll
+	; original position of Sonic_Roll
 		bsr.w	Sonic_LevelBound
 		jsr	(SpeedToPos).l
 		bsr.w	Sonic_AnglePos
@@ -6754,6 +6755,7 @@ loc_12E5C:
 ; ===========================================================================
 
 Sonic_MdRoll:
+		bsr.w	Sonic_ChkRoll ; slide time test
 		bsr.w	Sonic_Jump
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed

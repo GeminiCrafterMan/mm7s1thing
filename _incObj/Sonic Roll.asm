@@ -7,42 +7,57 @@
 
 Sonic_Roll:
 		tst.b	(f_jumponly).w
-		bne.s	.noroll
-		move.w	obInertia(a0),d0
-		bpl.s	.ispositive
-		neg.w	d0
-
-.ispositive:
-		cmpi.w	#$80,d0		; is Sonic moving at $80 speed or faster?
-		bcs.s	.noroll		; if not, branch
-		move.b	(v_jpadhold2).w,d0
-		andi.b	#btnL+btnR,d0	; is left/right	being pressed?
-		bne.s	.noroll		; if yes, branch
+		bne.s	Sonic_ChkRoll.ret
+		btst	#2,obStatus(a0)
+		bne.s	Sonic_ChkRoll ; keep sliding
+		tst.b	obSlideTimer(a0)	; cooldown timer
+		bne.s	Sonic_ChkRoll.ret
 		btst	#bitDn,(v_jpadhold2).w ; is down being pressed?
-		bne.s	Sonic_ChkRoll	; if yes, branch
-
-.noroll:
-		rts	
-; ===========================================================================
-
+		beq.s	Sonic_ChkRoll.ret	; if not, branch
+		andi.b	#btnABC,(v_jpadpress2).w	; is A, B or C pressed? ; change later when you add shooting and the rush coil button
+		beq.s	Sonic_ChkRoll.ret
 Sonic_ChkRoll:
-		btst	#2,obStatus(a0)	; is Sonic already rolling?
-		beq.s	.roll		; if not, branch
-		rts	
-; ===========================================================================
-
-.roll:
+		btst	#2,obStatus(a0)	; is Mega Man already sliding?
+		beq.s	MegaMan_Slide		; if not, branch
+		tst.b	obSlideTimer(a0)
+		beq.w	MegaMan_Slide.stopSliding
+;		btst	#0,obStatus(a0)
+;		beq.s	.notLeft
+;		move.w	#-$500,obInertia(a0) ; set inertia
+;		bra.s	.ret
+;	.notLeft:
+;		move.w	#$500,obInertia(a0) ; set inertia
+	.ret:
+		rts
+MegaMan_Slide:
 		bset	#2,obStatus(a0)
 		move.b	#$E,obHeight(a0)
 		move.b	#7,obWidth(a0)
-		move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
-		addq.w	#5,obY(a0)
-		move.w	#sfx_Roll,d0
-		jsr	(PlaySound_Special).l	; play rolling sound
+		btst	#0,obStatus(a0)
+		beq.s	.notLeft
+		move.w	#-$500,obInertia(a0) ; set inertia
+		bra.s	.contSlide
+	.notLeft:
+		move.w	#$500,obInertia(a0) ; set inertia
+	.contSlide:
+		move.b	#id_SlideStart,obAnim(a0) ; use "rolling" animation
+;		addq.w	#5,obY(a0)
+		move.b	#30,obSlideTimer(a0)
+		move.w	#sfx_Slide,d0
+		jsr	(PlaySound_Special).l	; play slide sound
 		tst.w	obInertia(a0)
-		bne.s	.ismoving
-		move.w	#$200,obInertia(a0) ; set inertia if 0
-
-.ismoving:
-		rts	
+		beq.s	.stopSliding
+		rts
+	.stopSliding:
+		clr.w	obInertia(a0)
+		move.b	#id_SlideStop,obAnim(a0)
+		clr.b	obTimeFrame(a0)
+		clr.b	obAniFrame(a0)
+		subq.w	#5,obY(a0)
+		move.b	#$13,obHeight(a0)
+		move.b	#9,obWidth(a0)
+		bclr	#2,obStatus(a0)
+		move.b	#5,obSlideTimer(a0)	; cooldown
+	.ret:
+		rts
 ; End of function Sonic_Roll

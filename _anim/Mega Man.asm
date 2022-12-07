@@ -20,6 +20,9 @@ ptr_Float4:	dc.w MegaAni_Float4-Ani_MegaMan
 ptr_Jump:	dc.w MegaAni_Jump-Ani_MegaMan
 ptr_Fall:	dc.w MegaAni_Fall-Ani_MegaMan
 ptr_Land:	dc.w MegaAni_Land-Ani_MegaMan
+ptr_SlideStart:	dc.w MegaAni_SlideStart-Ani_MegaMan
+ptr_Slide:	dc.w MegaAni_Slide-Ani_MegaMan
+ptr_SlideStop:	dc.w MegaAni_SlideStop-Ani_MegaMan
 
 MegaAni_Tiptoe:	dc.b 4, fr_Step1, fr_Step2, afChange, id_Walking
 		even
@@ -65,7 +68,9 @@ MegaAni_Fall:	dc.b 9, fr_Jump4, fr_Jump3, afBack, 1
 		even
 MegaAni_Land:	dc.b 1, fr_Jump2, fr_Jump1, afChange, id_Wait
 		even
-MegaAni_Slide:	dc.b 3, fr_SlideT, fr_Slide1, fr_Slide2, afBack, 2
+MegaAni_SlideStart:	dc.b 3, fr_SlideT, afChange, id_Slide
+		even
+MegaAni_Slide:	dc.b 1, fr_Slide1, fr_Slide2, afEnd
 		even
 MegaAni_SlideStop:	dc.b 3, fr_SlideT, afChange, id_Wait
 		even
@@ -87,6 +92,9 @@ id_Float4:	equ (ptr_Float4-Ani_MegaMan)/2	; $1E
 id_Jump:	equ (ptr_Jump-Ani_MegaMan)/2	; $1D
 id_Fall:	equ (ptr_Fall-Ani_MegaMan)/2	; $1E
 id_Land:	equ (ptr_Land-Ani_MegaMan)/2
+id_SlideStart:	equ (ptr_SlideStart-Ani_MegaMan)/2
+id_Slide:	equ (ptr_Slide-Ani_MegaMan)/2
+id_SlideStop:	equ (ptr_SlideStop-Ani_MegaMan)/2
 
 ; Sonic frame IDs
 	phase 0 ; Reset ds.b value to 0

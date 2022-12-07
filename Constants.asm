@@ -152,6 +152,7 @@ obSubtype:	equ $28	; object subtype
 obSolid:	equ ob2ndRout ; solid status flag
 
 ; Object variables used by Sonic
+obSlideTimer:   equ $29 ; byte, timer for sliding, should be 30 frames by default
 flashtime:	equ $30	; time between flashes after getting hit
 invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
@@ -265,6 +266,7 @@ sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
 sfx_JumpLand:   equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
+sfx_Slide:      equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects
