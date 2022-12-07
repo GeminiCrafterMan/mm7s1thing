@@ -4,7 +4,7 @@ Snd_Slide_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cFM4, Snd_Slide_FM4,	$00, $10
+	smpsHeaderSFXChannel cFM4, Snd_Slide_FM4,	$00, $00
 
 ; FM4 Data
 Snd_Slide_FM4:
