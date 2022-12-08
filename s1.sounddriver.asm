@@ -2236,9 +2236,7 @@ SendVoiceTL:
 		movea.l	v_voice_ptr(a6),a1	; Voice pointer
 		tst.b	f_voice_selector(a6)
 		beq.s	.gotvoiceptr
-		; DANGER! This uploads the wrong voice! It should have been a5 instead
-		; of a6!
-		movea.l	TrackVoicePtr(a6),a1
+		movea.l	TrackVoicePtr(a5),a1
 		tst.b	f_voice_selector(a6)
 		bmi.s	.gotvoiceptr
 		movea.l	v_special_voice_ptr(a6),a1
