@@ -3,9 +3,15 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Display:
-		tst.b	obSlideTimer(a0)
+		tst.b	shoottimer(a0)
+		beq.s	.noDecShoot
+		subq.b	#1,shoottimer(a0)
+		bne.s	.noDecShoot
+		bclr	#7,obStatus(a0) ; clear "shooting" status
+	.noDecShoot:
+		tst.b	slidetimer(a0)
 		beq.s	.noDecSlide
-		subq.b	#1,obSlideTimer(a0)
+		subq.b	#1,slidetimer(a0)
 	.noDecSlide:
 		move.w	flashtime(a0),d0
 		beq.s	.display

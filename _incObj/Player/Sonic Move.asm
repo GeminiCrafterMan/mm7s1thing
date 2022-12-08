@@ -31,6 +31,10 @@ Sonic_Move:
 		bne.w	Sonic_ResetScr	; if yes, branch
 		bclr	#5,obStatus(a0)
 		move.b	#id_Wait,obAnim(a0) ; use "standing" animation
+	.addShoot:
+		btst	#7,obStatus(a0)
+		beq.s	Sonic_ResetScr
+		addq.b	#1,obAnim(a0)
 	; Continues right into Sonic_ResetScr
 ; ===========================================================================
 
@@ -139,7 +143,7 @@ Sonic_MoveLeft:
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
 	.cont:
-		cmpi.b	#id_Walking,obAnim(a0)
+		cmpi.b	#id_WalkingShoot,obAnim(a0)
 		ble.s	.cont2
 		move.b	#id_Tiptoe,obAnim(a0)
 	.cont2:
@@ -177,7 +181,7 @@ Sonic_MoveRight:
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
 	.cont:
-		cmpi.b	#id_Walking,obAnim(a0)
+		cmpi.b	#id_WalkingShoot,obAnim(a0)
 		ble.s	.cont2
 		move.b	#id_Tiptoe,obAnim(a0)
 	.cont2:

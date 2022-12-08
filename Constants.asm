@@ -152,10 +152,11 @@ obSubtype:	equ $28	; object subtype
 obSolid:	equ ob2ndRout ; solid status flag
 
 ; Object variables used by Sonic
-obSlideTimer:   equ $29 ; byte, timer for sliding, should be 30 frames by default
+slidetimer:   equ $29 ; byte, timer for sliding, should be 30 frames by default
 flashtime:	equ $30	; time between flashes after getting hit
 invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
+shoottimer: equ $39 ; time left for the firing animation
 standonobject:	equ $3D	; object Sonic stands on
 
 ; Object variables (Sonic 2 disassembly nomenclature)
@@ -191,6 +192,9 @@ afChange:	equ $FD	; run specified animation
 afRoutine:	equ $FC	; increment routine counter
 afReset:	equ $FB	; reset animation and 2nd object routine counter
 af2ndRoutine:	equ $FA	; increment 2nd routine counter
+
+; Note about music and sounds: include them in s1.sounddriver.asm,
+; add them to the sound index, then include them in this list.
 
 ; Background music
 bgm__First:	equ $01
@@ -267,6 +271,7 @@ sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
 sfx_JumpLand:   equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
 sfx_Slide:      equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
+sfx_BusterShot: equ ((ptr_sndBusterShot-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects

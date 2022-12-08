@@ -10,16 +10,16 @@ Sonic_Roll:
 		bne.s	Sonic_ChkRoll.ret
 		btst	#2,obStatus(a0)
 		bne.s	Sonic_ChkRoll ; keep sliding
-		tst.b	obSlideTimer(a0)	; cooldown timer
+		tst.b	slidetimer(a0)	; cooldown timer
 		bne.s	Sonic_ChkRoll.ret
 		btst	#bitDn,(v_jpadhold2).w ; is down being pressed?
 		beq.s	Sonic_ChkRoll.ret	; if not, branch
-		andi.b	#btnABC,(v_jpadpress2).w	; is A, B or C pressed? ; change later when you add shooting and the rush coil button
+		andi.b	#btnC,(v_jpadpress2).w	; is C pressed?
 		beq.s	Sonic_ChkRoll.ret
 Sonic_ChkRoll:
 		btst	#2,obStatus(a0)	; is Mega Man already sliding?
 		beq.s	MegaMan_Slide		; if not, branch
-		tst.b	obSlideTimer(a0)
+		tst.b	slidetimer(a0)
 		beq.w	MegaMan_Slide.stopSliding
 ;		btst	#0,obStatus(a0)
 ;		beq.s	.notLeft
@@ -42,7 +42,7 @@ MegaMan_Slide:
 	.contSlide:
 		move.b	#id_SlideStart,obAnim(a0) ; use "rolling" animation
 ;		addq.w	#5,obY(a0)
-		move.b	#30,obSlideTimer(a0)
+		move.b	#30,slidetimer(a0)
 		move.w	#sfx_Slide,d0
 		jsr	(PlaySound_Special).l	; play slide sound
 		tst.w	obInertia(a0)
@@ -50,14 +50,14 @@ MegaMan_Slide:
 		rts
 	.stopSliding:
 		clr.w	obInertia(a0)
+;		clr.b	obAniFrame(a0)
+;		clr.w	obTimeFrame(a0) ; also clears obDelayAni
 		move.b	#id_SlideStop,obAnim(a0)
-		clr.b	obTimeFrame(a0)
-		clr.b	obAniFrame(a0)
 		subq.w	#5,obY(a0)
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
 		bclr	#2,obStatus(a0)
-		move.b	#5,obSlideTimer(a0)	; cooldown
+		move.b	#5,slidetimer(a0)	; cooldown
 	.ret:
 		rts
 ; End of function Sonic_Roll

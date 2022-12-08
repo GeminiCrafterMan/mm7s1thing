@@ -37,7 +37,7 @@ loc_13602:
 		bsr.w	Sonic_HitFloor
 		move.b	d1,($FFFFFFEF).w
 		tst.w	d1
-		bpl.s	locret_1367E
+		bpl.w	locret_1367E
 		move.b	obVelY(a0),d2
 		addq.b	#8,d2
 		neg.b	d2
@@ -57,6 +57,10 @@ loc_1361E:
 	.walkAnim:
 		move.b	#id_Walking,obAnim(a0)
 	.cont:
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		addq.b	#1,obAnim(a0)
+	.notShooting:
 		move.b	d3,d0
 		addi.b	#$20,d0
 		andi.b	#$40,d0
@@ -130,6 +134,10 @@ loc_136B4:
 	.walkAnim:
 		move.b	#id_Walking,obAnim(a0)
 	.cont:
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		addq.b	#1,obAnim(a0)
+	.notShooting:
 		move.w	#0,obVelY(a0)
 		move.w	obVelX(a0),obInertia(a0)
 
@@ -215,6 +223,10 @@ loc_13772:
 	.walkAnim:
 		move.b	#id_Walking,obAnim(a0)
 	.cont:
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		addq.b	#1,obAnim(a0)
+	.notShooting:
 		move.w	#0,obVelY(a0)
 		move.w	obVelX(a0),obInertia(a0)
 

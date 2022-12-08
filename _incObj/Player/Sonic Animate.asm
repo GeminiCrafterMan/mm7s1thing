@@ -42,7 +42,7 @@ Sonic_Animate:
 		rts	
 ; ===========================================================================
 
-.end_FF:
+.end_FF: ; afEnd
 		addq.b	#1,d0		; is the end flag = $FF	?
 		bne.s	.end_FE		; if not, branch
 		move.b	#0,obAniFrame(a0) ; restart the animation
@@ -50,7 +50,7 @@ Sonic_Animate:
 		bra.s	.next
 ; ===========================================================================
 
-.end_FE:
+.end_FE: ; afBack
 		addq.b	#1,d0		; is the end flag = $FE	?
 		bne.s	.end_FD		; if not, branch
 		move.b	2(a1,d1.w),d0	; read the next	byte in	the script
@@ -60,7 +60,7 @@ Sonic_Animate:
 		bra.s	.next
 ; ===========================================================================
 
-.end_FD:
+.end_FD: ; afChange
 		addq.b	#1,d0		; is the end flag = $FD	?
 		bne.s	.end		; if not, branch
 		move.b	2(a1,d1.w),obAnim(a0) ; read next byte, run that animation
@@ -93,16 +93,28 @@ Sonic_Animate:
 
 		lsr.b	#4,d0		; divide angle by $10
 		andi.b	#6,d0		; angle	must be	0, 2, 4	or 6
-		move.w	obInertia(a0),d2 ; get Sonic's speed
+		move.w	obInertia(a0),d2 ; get Sonic's speed	; this is an absolute value
 		bpl.s	.nomodspeed
 		neg.w	d2		; modulus speed
 
-.nomodspeed:
-		cmpi.b	#id_Tiptoe,obAnim(a0)
-		beq.s	.contNoModSpeed
-		cmpi.b	#id_Walking,obAnim(a0)
-		ble.s	.alreadyWalking
-		lea	(MegaAni_Tiptoe).l,a1 ; use	tiptoe	animation
+.nomodspeed: ; apparently the tiptoe animation doesn't even actually use this at all.
+		btst	#7,obStatus(a0)	; shooting?
+		beq.s	.notShooting
+		cmpi.b	#id_Walking,obAnim(a0)	; walking animation?
+		bge.s	.alreadyWalkingS	; if lower, we're not already out of the tiptoe one
+		lea	(MegaAni_TiptoeShoot).l,a1 ; use tiptoe shoot animation
+		bra.s	.tiptoeSpeed
+
+	.alreadyWalkingS:
+		lea	(MegaAni_WalkingShoot).l,a1 ; use walking shoot animation
+		bra.s	.contNoModSpeed
+
+	.notShooting:
+		cmpi.b	#id_TiptoeShoot,obAnim(a0)	; tiptoe shoot animation?
+		bgt.s	.alreadyWalking	; if higher, we're already out of it
+		lea	(MegaAni_Tiptoe).l,a1 ; use tiptoe animation
+	.tiptoeSpeed:
+		lsl.w	#3,d2
 		bra.s	.contNoModSpeed
 
 	.alreadyWalking:

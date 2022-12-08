@@ -320,6 +320,7 @@ GameInit:
 		move.l	d7,(a6)+
 		dbf	d6,.clearRAM	; clear RAM ($0000-$FDFF)
 
+		jsr		(InitDMAQueue).l
 		bsr.w	VDPSetupGame
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
@@ -357,6 +358,7 @@ ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
 ; ===========================================================================
 
 CheckSumError:
+		jsr		(InitDMAQueue).l
 		bsr.w	VDPSetupGame
 		move.l	#$C0000000,(vdp_control_port).l ; set VDP to CRAM write
 		moveq	#$3F,d7
@@ -2803,7 +2805,6 @@ Level_SkipTtlCard:
 		bset	#2,(v_fg_scroll_flags).w
 		bsr.w	LevelDataLoad ; load block mappings and palettes
 		bsr.w	LoadTilesFromStart
-		jsr	(ConvertCollisionArray).l
 		bsr.w	ColIndexLoad
 		bsr.w	LZWaterFeatures
 		move.b	#id_MegaManPlayer,(v_player).w ; load Sonic object
@@ -3137,6 +3138,7 @@ GM_Special:
 		move.w	(v_vdp_buffer1).w,d0
 		andi.b	#$BF,d0
 		move.w	d0,(vdp_control_port).l
+		ResetDMAQueue
 		bsr.w	ClearScreen
 		enable_ints
 		fillVRAM	0,$6FFF,$5000
@@ -6522,6 +6524,7 @@ Map_Bump:	include	"_maps/Bumper.asm"
 		include	"_incObj/0D Signpost.asm" ; includes "GotThroughAct" subroutine
 		include	"_anim/Signpost.asm"
 Map_Sign:	include	"_maps/Signpost.asm"
+SignDynPLC:	include	"_maps/Signpost - Dynamic Gfx Script.asm"
 
 		include	"_incObj/4C & 4D Lava Geyser Maker.asm"
 		include	"_incObj/4E Wall of Lava.asm"
@@ -6713,9 +6716,9 @@ MusicList2:
 		; The ending doesn't get an entry
 		even
 
-		include	"_incObj/Sonic Display.asm"
-		include	"_incObj/Sonic RecordPosition.asm"
-		include	"_incObj/Sonic Water.asm"
+		include	"_incObj/Player/Sonic Display.asm"
+		include	"_incObj/Player/Sonic RecordPosition.asm"
+		include	"_incObj/Player/Sonic Water.asm"
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -6723,6 +6726,7 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		bsr.w	MegaMan_Shoot
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_Jump
 		bsr.w	Sonic_SlopeResist
@@ -6736,10 +6740,28 @@ Sonic_MdNormal:
 ; ===========================================================================
 
 Sonic_MdJump:
+		bsr.w	MegaMan_Shoot
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		tst.b	obVelY(a0)
+		blt.s	.risingS
+		move.b	#id_FallShoot,obAnim(a0)
+		move.b	#id_FallShoot,obNextAni(a0)
+		bra.s	.done
+	.risingS:
+		move.b	#id_JumpShoot,obAnim(a0)
+		move.b	#id_JumpShoot,obNextAni(a0)
+		bra.s	.done
+	.notShooting:
 		tst.b	obVelY(a0)
 		blt.s	.rising
 		move.b	#id_Fall,obAnim(a0)
+		move.b	#id_Fall,obNextAni(a0)
+		bra.s	.done
 	.rising:
+		move.b	#id_Jump,obAnim(a0)
+		move.b	#id_Jump,obNextAni(a0)
+	.done:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6767,10 +6789,28 @@ Sonic_MdRoll:
 ; ===========================================================================
 
 Sonic_MdJump2:
+		bsr.w	MegaMan_Shoot
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		tst.b	obVelY(a0)
+		blt.s	.risingS
+		move.b	#id_FallShoot,obAnim(a0)
+		move.b	#id_FallShoot,obNextAni(a0)
+		bra.s	.done
+	.risingS:
+		move.b	#id_JumpShoot,obAnim(a0)
+		move.b	#id_JumpShoot,obNextAni(a0)
+		bra.s	.done
+	.notShooting:
 		tst.b	obVelY(a0)
 		blt.s	.rising
 		move.b	#id_Fall,obAnim(a0)
+		move.b	#id_Fall,obNextAni(a0)
+		bra.s	.done
 	.rising:
+		move.b	#id_Jump,obAnim(a0)
+		move.b	#id_Jump,obNextAni(a0)
+	.done:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6784,24 +6824,25 @@ loc_12EA6:
 		bsr.w	Sonic_Floor
 		rts	
 
-		include	"_incObj/Sonic Move.asm"
-		include	"_incObj/Sonic RollSpeed.asm"
-		include	"_incObj/Sonic JumpDirection.asm"
-		include	"_incObj/Sonic LevelBound.asm"
-		include	"_incObj/Sonic Roll.asm"
-		include	"_incObj/Sonic Jump.asm"
-		include	"_incObj/Sonic JumpHeight.asm"
-		include	"_incObj/Sonic SlopeResist.asm"
-		include	"_incObj/Sonic RollRepel.asm"
-		include	"_incObj/Sonic SlopeRepel.asm"
-		include	"_incObj/Sonic JumpAngle.asm"
-		include	"_incObj/Sonic Floor.asm"
-		include	"_incObj/Sonic ResetOnFloor.asm"
-		include	"_incObj/Sonic (part 2).asm"
-		include	"_incObj/Sonic Loops.asm"
-		include	"_incObj/Sonic Animate.asm"
+		include	"_incObj/Player/Sonic Move.asm"
+		include	"_incObj/Player/Sonic RollSpeed.asm"
+		include	"_incObj/Player/Sonic JumpDirection.asm"
+		include	"_incObj/Player/Sonic LevelBound.asm"
+		include "_incObj/Player/Mega Man Shoot.asm"
+		include	"_incObj/Player/Sonic Roll.asm"
+		include	"_incObj/Player/Sonic Jump.asm"
+		include	"_incObj/Player/Sonic JumpHeight.asm"
+		include	"_incObj/Player/Sonic SlopeResist.asm"
+		include	"_incObj/Player/Sonic RollRepel.asm"
+		include	"_incObj/Player/Sonic SlopeRepel.asm"
+		include	"_incObj/Player/Sonic JumpAngle.asm"
+		include	"_incObj/Player/Sonic Floor.asm"
+		include	"_incObj/Player/Sonic ResetOnFloor.asm"
+		include	"_incObj/Player/Sonic (part 2).asm"
+		include	"_incObj/Player/Sonic Loops.asm"
+		include	"_incObj/Player/Sonic Animate.asm"
 		include	"_anim/Mega Man.asm"
-		include	"_incObj/Sonic LoadGfx.asm"
+		include	"_incObj/Player/Sonic LoadGfx.asm"
 
 		include	"_incObj/0A Drowning Countdown.asm"
 
@@ -6855,122 +6896,11 @@ Map_Vanish:	include	"_maps/Special Stage Entry (Unused).asm"
 		include	"_anim/Water Splash.asm"
 Map_Splash:	include	"_maps/Water Splash.asm"
 
-		include	"_incObj/Sonic AnglePos.asm"
+		include	"_incObj/Player/Sonic AnglePos.asm"
 
 		include	"_incObj/sub FindNearestTile.asm"
 		include	"_incObj/sub FindFloor.asm"
 		include	"_incObj/sub FindWall.asm"
-
-; ---------------------------------------------------------------------------
-; This subroutine takes 'raw' bitmap-like collision block data as input and
-; converts it into the proper collision arrays (ColArray and ColArray2).
-; Pointers to said raw data are dummied out.
-; Curiously, an example of the original 'raw' data that this was intended
-; to process can be found in the J2ME version, in a file called 'blkcol.bct'.
-; ---------------------------------------------------------------------------
-
-RawColBlocks		equ CollArray1
-ConvRowColBlocks	equ CollArray1
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-ConvertCollisionArray:
-		rts	
-; ---------------------------------------------------------------------------
-		; The raw format stores the collision data column by column for the normal collision array.
-		; This makes a copy of the data, but stored row by row, for the rotated collision array.
-		lea	(RawColBlocks).l,a1	; Source location of raw collision block data
-		lea	(ConvRowColBlocks).l,a2	; Destinatation location for row-converted collision block data
-
-		move.w	#$100-1,d3		; Number of blocks in collision data
-
-.blockLoop:
-		moveq	#16,d5			; Start on the 16th bit (the leftmost pixel)
-
-		move.w	#16-1,d2		; Width of a block in pixels
-
-.columnLoop:
-		moveq	#0,d4
-
-		move.w	#16-1,d1		; Height of a block in pixels
-
-.rowLoop:
-		move.w	(a1)+,d0		; Get row of collision bits
-		lsr.l	d5,d0			; Push the selected bit of this row into the 'eXtend' flag
-		addx.w	d4,d4			; Shift d4 to the left, and insert the selected bit into bit 0
-		dbf	d1,.rowLoop		; Loop for each row of pixels in a block
-
-		move.w	d4,(a2)+		; Store column of collision bits
-		suba.w	#2*16,a1		; Back to the start of the block
-		subq.w	#1,d5			; Get next bit in the row
-		dbf	d2,.columnLoop		; Loop for each column of pixels in a block
-
-		adda.w	#2*16,a1		; Next block
-		dbf	d3,.blockLoop		; Loop for each block in the raw collision block data
-
-		; This then converts the collision data into the final collision arrays
-		lea	(ConvRowColBlocks).l,a1
-		lea	(CollArray2).l,a2	; Convert the row-converted collision block data into final rotated collision array
-		bsr.s	.convertArray
-		lea	(RawColBlocks).l,a1
-		lea	(CollArray1).l,a2	; Convert the raw collision block data into final normal collision array
-
-
-.convertArray:
-		move.w	#$1000-1,d3		; Size of the collision array
-
-.processLoop:
-		moveq	#0,d2
-		move.w	#$F,d1
-		move.w	(a1)+,d0		; Get current column of collision pixels
-		beq.s	.noCollision		; Branch if there's no collision in this column
-		bmi.s	.topPixelSolid		; Branch if top pixel of collision is solid
-
-	; Here we count, starting from the bottom, how many pixels tall
-	; the collision in this column is.
-.processColumnLoop1:
-		lsr.w	#1,d0
-		bhs.s	.pixelNotSolid1
-		addq.b	#1,d2
-
-.pixelNotSolid1:
-		dbf	d1,.processColumnLoop1
-
-		bra.s	.columnProcessed
-; ===========================================================================
-
-.topPixelSolid:
-		cmpi.w	#$FFFF,d0		; Is entire column solid?
-		beq.s	.entireColumnSolid	; Branch if so
-
-	; Here we count, starting from the top, how many pixels tall
-	; the collision in this column is (the resulting number is negative).
-.processColumnLoop2:
-		lsl.w	#1,d0
-		bhs.s	.pixelNotSolid2
-		subq.b	#1,d2
-
-.pixelNotSolid2:
-		dbf	d1,.processColumnLoop2
-
-		bra.s	.columnProcessed
-; ===========================================================================
-
-.entireColumnSolid:
-		move.w	#$10,d0
-
-.noCollision:
-		move.w	d0,d2
-
-.columnProcessed:
-		move.b	d2,(a2)+		; Store column collision height
-		dbf	d3,.processLoop
-
-		rts	
-
-; End of function ConvertCollisionArray
-
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -8203,7 +8133,7 @@ Art_Hud:	binclude	"artunc/HUD Numbers.bin" ; 8x16 pixel numbers on HUD
 Art_LivesNums:	binclude	"artunc/Lives Counter Numbers.bin" ; 8x8 pixel numbers on lives counter
 		even
 
-		include	"_incObj/DebugMode.asm"
+		include	"_incObj/Player/DebugMode.asm"
 		include	"_inc/DebugList.asm"
 		include	"_inc/LevelHeaders.asm"
 		include	"_inc/Pattern Load Cues.asm"
@@ -8234,6 +8164,11 @@ Map_SSWalls:	include	"_maps/SS Walls.asm"
 ; Uncompressed graphics	- Mega Man
 ; ---------------------------------------------------------------------------
 Art_MegaMan:	binclude	"artunc/Mega Man.bin"	; Mega Man
+		even
+; ---------------------------------------------------------------------------
+; Uncompressed graphics - Signpost
+; ---------------------------------------------------------------------------
+Art_SignPost:	binclude	"artunc/Signpost.bin"	; end of level signpost
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
@@ -8474,8 +8409,6 @@ Nem_Points:	binclude	"artnem/Points.bin"	; points from destroyed enemy or object
 Nem_GameOver:	binclude	"artnem/Game Over.bin"	; game over / time over
 		even
 Nem_Spring:	binclude	"artnem/Spring.bin"
-		even
-Nem_SignPost:	binclude	"artnem/Signpost.bin"	; end of level signpost
 		even
 Nem_Lamp:	binclude	"artnem/Lamppost.bin"
 		even

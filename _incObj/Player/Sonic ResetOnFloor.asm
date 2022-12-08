@@ -42,9 +42,13 @@ loc_137E4:
 		cmpi.w	#$80,d0
 		bgt.s	.walkAnim
 		move.b	#id_Land,obAnim(a0)
-		bra.s	.ret
+		bra.s	.addShoot
 	.walkAnim:
 		move.b	#id_Walking,obAnim(a0)
+	.addShoot:
+		btst	#7,obStatus(a0)
+		beq.s	.ret
+		addq.b	#1,obAnim(a0)
 	.ret:
 		rts	
 ; End of function Sonic_ResetOnFloor

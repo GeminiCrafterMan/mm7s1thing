@@ -2575,6 +2575,7 @@ ptr_sndCE:	dc.l SoundCE
 ptr_sndCF:	dc.l SoundCF
 ptr_sndJumpLand:	dc.l SoundJumpLand
 ptr_sndSlide:	dc.l SoundSlide
+ptr_sndBusterShot:	dc.l SoundBusterShot
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
@@ -2686,6 +2687,8 @@ SoundCF:	include	"sound/sfx/SndCF - Signpost.asm"
 SoundJumpLand:	include "sound/sfx/Snd - Jump Land.asm"
 		even
 SoundSlide:	include	"sound/sfx/Snd - Slide.asm"
+		even
+SoundBusterShot:	include "sound/sfx/Snd - Buster Shot.asm"
 		even
 
 ; ---------------------------------------------------------------------------

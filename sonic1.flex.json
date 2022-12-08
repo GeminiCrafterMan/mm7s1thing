@@ -37,12 +37,16 @@
                         {
                             "path": "palette/Mega Man.bin",
                             "length": 1
+                        },
+                        {
+                            "path": "palette/Green Hill Zone.bin",
+                            "length": 3
                         }
                     ],
                     "format": "Sonic 1.js",
                     "art": {
-                        "path": "artnem/Signpost.bin",
-                        "compression": "Nemesis",
+                        "path": "artunc/Signpost.bin",
+                        "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
@@ -50,8 +54,8 @@
                         "label": ""
                     },
                     "dplcs": {
-                        "enabled": false,
-                        "path": "",
+                        "enabled": true,
+                        "path": "_maps/Signpost - Dynamic Gfx Script.asm",
                         "label": ""
                     },
                     "uuid": "472ab9f3-6355-46ce-a3a8-3fd70d6d9cd8"

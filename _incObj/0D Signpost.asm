@@ -11,6 +11,7 @@ Signpost:
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
+		bsr.w	Signpost_LoadGfx
 		rts	
 ; ===========================================================================
 Sign_Index:	dc.w Sign_Main-Sign_Index
@@ -19,6 +20,7 @@ Sign_Index:	dc.w Sign_Main-Sign_Index
 		dc.w Sign_SonicRun-Sign_Index
 		dc.w Sign_Exit-Sign_Index
 
+sign_prevframe = $29
 spintime = $30		; time for signpost to spin
 sparkletime = $32		; time between sparkles
 sparkle_id = $34		; counter to keep track of sparkles
@@ -31,6 +33,7 @@ Sign_Main:	; Routine 0
 		move.b	#4,obRender(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#4,obPriority(a0)
+		move.b	#-1,sign_prevframe(a0)
 
 Sign_Touch:	; Routine 2
 		move.w	(v_player+obX).w,d0
@@ -166,4 +169,45 @@ TimeBonuses:	dc.w 5000, 5000, 1000, 500, 400, 400, 300, 300,	200, 200
 ; ===========================================================================
 
 Sign_Exit:	; Routine 8
+		rts
+
+Signpost_LoadGfx:
+		moveq	#0,d0
+		move.b	obFrame(a0),d0	; load frame number
+		cmp.b	sign_prevframe(a0),d0
+		beq.s	.nochange
+		move.b	d0,sign_prevframe(a0)
+		lea	(SignDynPLC).l,a2
+
+		add.w	d0,d0
+		adda.w	(a2,d0.w),a2
+		moveq	#0,d5
+		move.b	(a2)+,d5
+		subq.w	#1,d5
+		bmi.s	.nochange
+		move.w	obGfx(a0),d4    ; get art tile
+		andi.w  #$7FF,d4	; clear art flags
+		lsl.w   #5,d4	   ; get VRAM address
+		move.l	#Art_SignPost,d6
+
+    .readentry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(QueueDMATransfer).l
+		dbf	d5,.readentry	; repeat for number of entries
+
+    .nochange:
 		rts	
+; End of function Signpost_LoadGfx
