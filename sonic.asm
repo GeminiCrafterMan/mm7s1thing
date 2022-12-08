@@ -91,7 +91,7 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
-		dc.b "GEMINI0 2022.NOV" ; Copyright holder and release date (generally year)
+		dc.b "GEMINI0 2022.DEC" ; Copyright holder and release date (generally year)
 		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; Domestic name
 		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; International name
 		dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
@@ -1330,12 +1330,12 @@ Qplc_Loop:
 		include	"_inc/Kosinski Decompression.asm"
 
 		include	"_inc/PaletteCycle.asm"
+		include "_inc/DynaWater.asm"
 
 Pal_TitleCyc:	binclude	"palette/Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	binclude	"palette/Cycle - GHZ.bin"
 Pal_LZCyc1:	binclude	"palette/Cycle - LZ Waterfall.bin"
 Pal_LZCyc2:	binclude	"palette/Cycle - LZ Conveyor Belt.bin"
-Pal_LZCyc3:	binclude	"palette/Cycle - LZ Conveyor Belt Underwater.bin"
 Pal_SBZ3Cyc:	binclude	"palette/Cycle - SBZ3 Waterfall.bin"
 Pal_MZCyc:	binclude	"palette/Cycle - MZ (Unused).bin"
 Pal_SLZCyc:	binclude	"palette/Cycle - SLZ.bin"
@@ -1936,7 +1936,6 @@ Pal_LevelSel:	binclude	"palette/Level Select.bin"
 Pal_MegaMan:	binclude	"palette/Mega Man.bin"
 Pal_GHZ:	binclude	"palette/Green Hill Zone.bin"
 Pal_LZ:		binclude	"palette/Labyrinth Zone.bin"
-Pal_LZWater:	binclude	"palette/Labyrinth Zone Underwater.bin"
 Pal_MZ:		binclude	"palette/Marble Zone.bin"
 Pal_SLZ:	binclude	"palette/Star Light Zone.bin"
 Pal_SYZ:	binclude	"palette/Spring Yard Zone.bin"
@@ -1944,9 +1943,6 @@ Pal_SBZ1:	binclude	"palette/SBZ Act 1.bin"
 Pal_SBZ2:	binclude	"palette/SBZ Act 2.bin"
 Pal_Special:	binclude	"palette/Special Stage.bin"
 Pal_SBZ3:	binclude	"palette/SBZ Act 3.bin"
-Pal_SBZ3Water:	binclude	"palette/SBZ Act 3 Underwater.bin"
-Pal_LZSonWater:	binclude	"palette/Sonic - LZ Underwater.bin"
-Pal_SBZ3SonWat:	binclude	"palette/Sonic - SBZ3 Underwater.bin"
 Pal_SSResult:	binclude	"palette/Special Stage Results.bin"
 Pal_Continue:	binclude	"palette/Special Stage Continue Bonus.bin"
 Pal_Ending:	binclude	"palette/Ending.bin"
@@ -2753,13 +2749,7 @@ Level_LoadPal:
 		cmpi.b	#id_LZ,(v_zone).w ; is level LZ?
 		bne.s	Level_GetBgm	; if not, branch
 
-		moveq	#palid_LZSonWater,d0 ; palette number $F (LZ)
-		cmpi.b	#3,(v_act).w	; is act number 3?
-		bne.s	Level_WaterPal	; if not, branch
-		moveq	#palid_SBZ3SonWat,d0 ; palette number $10 (SBZ3)
-
-Level_WaterPal:
-		bsr.w	PalLoad3_Water	; load underwater palette
+		jsr		loadWaterShift
 		tst.b	(v_lastlamp).w
 		beq.s	Level_GetBgm
 		move.b	($FFFFFE53).w,(f_wtr_state).w
@@ -2879,17 +2869,6 @@ Level_Demo:
 		move.w	#510,(v_demolength).w
 
 Level_ChkWaterPal:
-		cmpi.b	#id_LZ,(v_zone).w ; is level LZ/SBZ3?
-		bne.s	Level_Delay	; if not, branch
-		moveq	#palid_LZWater,d0 ; palette $B (LZ underwater)
-		cmpi.b	#3,(v_act).w	; is level SBZ3?
-		bne.s	Level_WtrNotSbz	; if not, branch
-		moveq	#palid_SBZ3Water,d0 ; palette $D (SBZ3 underwater)
-
-Level_WtrNotSbz:
-		bsr.w	PalLoad4_Water
-
-Level_Delay:
 		move.w	#3,d1
 
 Level_DelayLoop:

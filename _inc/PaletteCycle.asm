@@ -11,7 +11,8 @@ PaletteCycle:
 		move.b	(v_zone).w,d0	; get level number
 		add.w	d0,d0
 		move.w	PCycle_Index(pc,d0.w),d0
-		jmp	PCycle_Index(pc,d0.w) ; jump to relevant palette routine
+		jsr	PCycle_Index(pc,d0.w) ; jump to relevant palette routine
+		jmp		updateWaterShift
 ; End of function PaletteCycle
 
 ; ===========================================================================
@@ -114,10 +115,6 @@ loc_1A0A:
 		add.w	d1,d0
 		lea	(Pal_LZCyc2).l,a0
 		lea	(v_pal_dry+$76).w,a1
-		move.l	(a0,d0.w),(a1)+
-		move.w	4(a0,d0.w),(a1)
-		lea	(Pal_LZCyc3).l,a0
-		lea	(v_pal_water+$76).w,a1
 		move.l	(a0,d0.w),(a1)+
 		move.w	4(a0,d0.w),(a1)
 

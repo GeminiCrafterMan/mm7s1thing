@@ -17,6 +17,7 @@ v_16x16	= ramaddr ( $FFFFB000 )	; 16x16 tile mappings
 
 vdp_command_buffer	= ramaddr ( $FFFFC800 )	; DMA Queue size ($E - size of each entry) - $FC or 252 bytes
 vdp_command_buffer_slot	= ramaddr ( $FFFFC8FC ) ; stores the address of the next open slot for a queued VDP command - 4 bytes...?
+waterValues = ramaddr ( $FFFFC900 ) ; DynaWater
 v_tracksonic	= ramaddr ( $FFFFCB00 )	; position tracking data for Sonic ($100 bytes)
 v_hscrolltablebuffer	= ramaddr ( $FFFFCC00 )	; scrolling table data (actually $380 bytes, but $400 is reserved for it)
 v_objspace	= ramaddr ( $FFFFD000 )	; object variable space ($40 bytes per object) ($2000 bytes)
