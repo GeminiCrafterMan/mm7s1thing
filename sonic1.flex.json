@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "Mega Man in Sonic 1",
-    "node": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
+    "node": "6400cd25-0e81-4fb4-8ef0-6ce8c1cfd238",
     "objects": [
         {
             "name": "Common",
@@ -1364,6 +1364,35 @@
                     },
                     "mappings": {
                         "path": "_maps/Sideways Stomper.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    },
+                    "uuid": "606ea77a-40bb-4e10-a21a-0e08f146c440"
+                },
+                {
+                    "name": "Chained Stompers",
+                    "format": "Sonic 1.js",
+                    "palettes": [
+                        {
+                            "path": "palette/Mega Man.bin",
+                            "length": 1
+                        },
+                        {
+                            "path": "palette/Marble Zone.bin",
+                            "length": 3
+                        }
+                    ],
+                    "art": {
+                        "path": "artnem/MZ Metal Blocks.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Chained Stompers.asm",
                         "label": ""
                     },
                     "dplcs": {

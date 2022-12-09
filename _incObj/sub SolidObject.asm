@@ -64,7 +64,7 @@ SolidObject71:
 
 .stand:
 		move.w	d4,d2
-		bsr.w	MvSonicOnPtfm
+		jsr		MvSonicOnPtfm
 		moveq	#0,d4
 		rts	
 ; ===========================================================================
