@@ -47,8 +47,13 @@ loc_137E4:
 		move.b	#id_Walking,obAnim(a0)
 	.addShoot:
 		btst	#7,obStatus(a0)
-		beq.s	.ret
+		beq.s	.painCheck
 		addq.b	#1,obAnim(a0)
+		bra.s	.ret
+	.painCheck:
+		tst.w	(v_rings).w	; change to low health check later...
+		bne.s	.ret
+		move.b	#id_PainIdle,obAnim(a0)
 	.ret:
 		rts	
 ; End of function Sonic_ResetOnFloor

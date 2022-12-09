@@ -11,6 +11,7 @@ ptr_Roll:			dc.w MegaAni_Roll-Ani_MegaMan
 ptr_Roll2:			dc.w MegaAni_Roll2-Ani_MegaMan
 ptr_Wait:			dc.w MegaAni_Wait-Ani_MegaMan
 ptr_Shoot:			dc.w MegaAni_Shoot-Ani_MegaMan
+ptr_PainIdle:		dc.w MegaAni_PainIdle-Ani_MegaMan
 ptr_Float1:			dc.w MegaAni_Float1-Ani_MegaMan
 ptr_Float2:			dc.w MegaAni_Float2-Ani_MegaMan
 ptr_Hang:			dc.w MegaAni_Hang-Ani_MegaMan
@@ -54,6 +55,12 @@ MegaAni_Wait:	dc.b 3 ; speed of 3 so i don't have to type everything out so many
 		dc.b fr_Blink1, fr_Blink2, fr_Blink2, fr_Blink1, afEnd
 		even
 MegaAni_Shoot:	dc.b 0, fr_Shoot1, fr_Shoot2, fr_Shoot3, fr_Shoot2, fr_Shoot1, afBack, 1
+		even
+MegaAni_PainIdle:	dc.b 9
+		rept 3
+			dc.b fr_PainI1, fr_PainI2, fr_PainI3, fr_PainI3, fr_PainI2, fr_PainI1, fr_PainI1
+		endm
+			dc.b fr_PainI1, fr_PainI4, fr_PainI5, fr_PainI4, fr_PainI1, fr_PainI1, fr_PainI1, afEnd
 		even
 MegaAni_Float1:	dc.b 7,	fr_Float1, fr_Float4, afEnd
 		even
@@ -100,6 +107,7 @@ id_Roll:		equ (ptr_Roll-Ani_MegaMan)/2	; 2
 id_Roll2:		equ (ptr_Roll2-Ani_MegaMan)/2	; 3
 id_Wait:		equ (ptr_Wait-Ani_MegaMan)/2	; 5
 id_Shoot:		equ (ptr_Shoot-Ani_MegaMan)/2	; 5
+id_PainIdle:	equ (ptr_PainIdle-Ani_MegaMan)/2
 id_Float1:		equ (ptr_Float1-Ani_MegaMan)/2	; $E
 id_Float2:		equ (ptr_Float2-Ani_MegaMan)/2	; $F
 id_Hang:		equ (ptr_Hang-Ani_MegaMan)/2	; $11
@@ -129,6 +137,11 @@ fr_Blink2:	ds.b 1
 fr_Shoot1:	ds.b 1
 fr_Shoot2:	ds.b 1
 fr_Shoot3:	ds.b 1
+fr_PainI1:	ds.b 1
+fr_PainI2:	ds.b 1
+fr_PainI3:	ds.b 1
+fr_PainI4:	ds.b 1
+fr_PainI5:	ds.b 1
 fr_Roll1:	ds.b 1
 fr_Roll2:	ds.b 1
 fr_Roll3:	ds.b 1

@@ -33,8 +33,14 @@ Sonic_Move:
 		move.b	#id_Wait,obAnim(a0) ; use "standing" animation
 	.addShoot:
 		btst	#7,obStatus(a0)
-		beq.s	Sonic_ResetScr
+		beq.s	.painCheck
 		addq.b	#1,obAnim(a0)
+		bra.s	Sonic_ResetScr
+	.painCheck:
+		tst.w	(v_rings).w	; change to low health check later...
+		bne.s	.notInPain
+		move.b	#id_PainIdle,obAnim(a0)
+	.notInPain:
 	; Continues right into Sonic_ResetScr
 ; ===========================================================================
 
