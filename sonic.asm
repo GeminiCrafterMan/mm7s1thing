@@ -3689,6 +3689,11 @@ Cont_GotoLevel:
 		subq.b	#1,(v_continues).w ; subtract 1 from continues
 		rts	
 ; ===========================================================================
+		include "_incObj/02 Mega Buster Shot.asm"
+
+Nem_BusterShot:	binclude "artnem/Buster Shot.bin"
+		even
+Map_BusterShot:	include "_maps/Buster Shot.asm"
 
 		include	"_incObj/80 Continue Screen Elements.asm"
 		include	"_incObj/81 Continue Screen Sonic.asm"
@@ -6626,7 +6631,7 @@ Sonic_Main:	; Routine 0
 		move.b	#2,obPriority(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#4,obRender(a0)
-		move.w	#$600,(v_sonspeedmax).w ; Sonic's top speed
+		move.w	#$400,(v_sonspeedmax).w ; Sonic's top speed
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
 

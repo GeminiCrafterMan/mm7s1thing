@@ -132,6 +132,12 @@ ReactToItem:
 		andi.b	#$3F,d0
 		cmpi.b	#6,d0		; is collision type $46	?
 		beq.s	React_Monitor	; if yes, branch
+		cmpi.b	#id_BusterShot,0(a0)
+		bne.s	.notBullet
+		move.b	#1,obAnim(a0)
+		clr.w	obVelX(a0)
+		bra.s	.invincible
+	.notBullet:
 		cmpi.w	#90,$30(a0)	; is Sonic invincible?
 		bcc.w	.invincible	; if yes, branch
 		addq.b	#2,obRoutine(a1) ; advance the object's routine counter
@@ -141,6 +147,12 @@ ReactToItem:
 ; ===========================================================================
 
 React_Monitor:
+		cmpi.b	#id_BusterShot,0(a0)
+		bne.s	.notBullet
+		move.b	#1,obAnim(a0)
+		clr.w	obVelX(a0)
+		bra.s	.break
+	.notBullet:
 		tst.w	obVelY(a0)	; is Sonic moving upwards?
 		bpl.s	.movingdown	; if not, branch
 
@@ -160,6 +172,7 @@ React_Monitor:
 		cmpi.b	#id_Roll,obAnim(a0) ; is Sonic rolling/jumping?
 		bne.s	.donothing
 		neg.w	obVelY(a0)	; reverse Sonic's y-motion
+	.break:
 		addq.b	#2,obRoutine(a1) ; advance the monitor's routine counter
 
 .donothing:
@@ -167,6 +180,12 @@ React_Monitor:
 ; ===========================================================================
 
 React_Enemy:
+		cmpi.b	#id_BusterShot,0(a0)
+		bne.s	.notBullet
+		move.b	#1,obAnim(a0)
+		clr.w	obVelX(a0)
+		bra.s	.donthurtsonic
+	.notBullet:
 		tst.b	(v_invinc).w	; is Sonic invincible?
 		bne.s	.donthurtsonic	; if yes, branch
 		cmpi.b	#id_Roll,obAnim(a0) ; is Sonic rolling/jumping?
@@ -235,6 +254,12 @@ React_Caterkiller:
 		bset	#7,obStatus(a1)
 
 React_ChkHurt:
+		cmpi.b	#id_BusterShot,0(a0)
+		bne.s	.notBullet
+		move.b	#1,obAnim(a0)
+		clr.w	obVelX(a0)
+		bra.s	.isflashing
+	.notBullet:
 		tst.b	(v_invinc).w	; is Sonic invincible?
 		beq.s	.notinvincible	; if not, branch
 
@@ -355,10 +380,17 @@ React_Special:
 		beq.s	.caterkiller	; if yes, branch
 		cmpi.b	#$C,d1		; is collision type $CC	?
 		beq.s	.yadrin		; if yes, branch
+		cmpi.b	#id_BusterShot,0(a0)
+		bne.s	.notBullet
+		move.b	#1,obAnim(a0)
+		clr.w	obVelX(a0)
+		bra.s	.return
+	.notBullet:
 		cmpi.b	#$17,d1		; is collision type $D7	?
 		beq.s	.D7orE1		; if yes, branch
 		cmpi.b	#$21,d1		; is collision type $E1	?
 		beq.s	.D7orE1		; if yes, branch
+	.return:
 		rts	
 ; ===========================================================================
 

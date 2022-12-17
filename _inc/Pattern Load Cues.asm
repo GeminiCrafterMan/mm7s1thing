@@ -65,6 +65,7 @@ PLC_Main2end:
 ; Pattern load cues - explosion
 ; ---------------------------------------------------------------------------
 PLC_Explode:	dc.w ((PLC_Explodeend-PLC_Explode-2)/6)-1
+		plcm	Nem_BusterShot, $7AA*$20
 		plcm	Nem_Explode, $B400	; explosion
 PLC_Explodeend:
 ; ---------------------------------------------------------------------------

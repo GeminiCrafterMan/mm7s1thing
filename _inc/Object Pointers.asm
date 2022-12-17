@@ -2,7 +2,7 @@
 ; Object pointers
 ; ---------------------------------------------------------------------------
 ptr_MegaManPlayer:	dc.l MegaManPlayer	; $01
-ptr_Obj02:		dc.l NullObject
+ptr_BusterShot:	dc.l BusterShot
 ptr_Obj03:		dc.l NullObject
 ptr_Obj04:		dc.l NullObject
 ptr_Obj05:		dc.l NullObject
@@ -146,7 +146,7 @@ NullObject:
 		;jmp	(DeleteObject).l	; It would be safer to have this instruction here, but instead it just falls through to ObjectFall
 
 id_MegaManPlayer:		equ ((ptr_MegaManPlayer-Obj_Index)/4)+1		; $01
-id_Obj02:		equ ((ptr_Obj02-Obj_Index)/4)+1
+id_BusterShot:		equ ((ptr_BusterShot-Obj_Index)/4)+1
 id_Obj03:		equ ((ptr_Obj03-Obj_Index)/4)+1
 id_Obj04:		equ ((ptr_Obj04-Obj_Index)/4)+1
 id_Obj05:		equ ((ptr_Obj05-Obj_Index)/4)+1

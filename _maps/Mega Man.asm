@@ -222,31 +222,31 @@ MegaMan_Map_1F2: 	dc.b $5
 	dc.b $D, $0, $0, $13, $9
 	dc.b $F5, $1, $0, $14, $11
 MegaMan_Map_20C: 	dc.b $5
-	dc.b $D, $C, $0, $0, $E8
-	dc.b $5, $C, $0, $4, $F0
-	dc.b $ED, $6, $0, $8, $F8
-	dc.b $FD, $0, $0, $E, $8
-	dc.b $D, $0, $0, $F, $8
+	dc.b $D, $C, $0, $0, $E9
+	dc.b $5, $C, $0, $4, $F1
+	dc.b $ED, $6, $0, $8, $F9
+	dc.b $FD, $0, $0, $E, $9
+	dc.b $D, $0, $0, $F, $9
 MegaMan_Map_226: 	dc.b $3
-	dc.b $5, $D, $0, $0, $E9
-	dc.b $ED, $6, $0, $8, $F9
-	dc.b $FD, $2, $0, $E, $9
+	dc.b $5, $D, $0, $0, $EA
+	dc.b $ED, $6, $0, $8, $FA
+	dc.b $FD, $2, $0, $E, $A
 MegaMan_Map_236: 	dc.b $3
-	dc.b $5, $D, $0, $0, $E9
-	dc.b $ED, $6, $0, $8, $F9
-	dc.b $5, $1, $0, $E, $9
+	dc.b $5, $D, $0, $0, $EA
+	dc.b $ED, $6, $0, $8, $FA
+	dc.b $5, $1, $0, $E, $A
 MegaMan_Map_246: 	dc.b $5
-	dc.b $D, $C, $0, $0, $E8
-	dc.b $5, $C, $0, $4, $F0
-	dc.b $ED, $6, $0, $8, $F8
-	dc.b $FD, $0, $0, $E, $8
-	dc.b $D, $0, $0, $F, $8
+	dc.b $D, $C, $0, $0, $E9
+	dc.b $5, $C, $0, $4, $F1
+	dc.b $ED, $6, $0, $8, $F9
+	dc.b $FD, $0, $0, $E, $9
+	dc.b $D, $0, $0, $F, $9
 MegaMan_Map_260: 	dc.b $5
-	dc.b $D, $C, $0, $0, $E8
-	dc.b $5, $C, $0, $4, $F0
-	dc.b $ED, $6, $0, $8, $F8
-	dc.b $FD, $0, $0, $E, $8
-	dc.b $D, $0, $0, $F, $8
+	dc.b $D, $C, $0, $0, $E9
+	dc.b $5, $C, $0, $4, $F1
+	dc.b $ED, $6, $0, $8, $F9
+	dc.b $FD, $0, $0, $E, $9
+	dc.b $D, $0, $0, $F, $9
 MegaMan_Map_27A: 	dc.b $1
 	dc.b $F0, $F, $0, $0, $F0
 MegaMan_Map_280: 	dc.b $1

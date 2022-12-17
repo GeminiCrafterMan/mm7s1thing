@@ -168,6 +168,13 @@ loc_1309A:
 loc_130A6:
 		btst	#2,obStatus(a0)
 		bne.s	.noCap	; sliding
+		tst.b	(v_shoes).w
+		beq.s	.noShoes
+		cmpi.w	#-$800,d0
+		bge.s	.noCap
+		move.w	#-$800,d0
+		bra.s	.noCap
+	.noShoes:
 		cmpi.w	#-$400,d0
 		bge.s	.noCap
 		move.w	#-$400,d0
@@ -204,6 +211,13 @@ loc_13104:
 loc_1310C:
 		btst	#2,obStatus(a0)
 		bne.s	.noCap	; sliding
+		tst.b	(v_shoes).w
+		beq.s	.noShoes
+		cmpi.w	#$800,d0
+		ble.s	.noCap
+		move.w	#$800,d0
+		bra.s	.noCap
+	.noShoes:
 		cmpi.w	#$400,d0
 		ble.s	.noCap
 		move.w	#$400,d0

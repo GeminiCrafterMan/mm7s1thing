@@ -192,7 +192,7 @@ v_sonspeedmax	= ramaddr ( $FFFFF760 )	; Sonic's maximum speed (2 bytes)
 v_sonspeedacc	= ramaddr ( $FFFFF762 )	; Sonic's acceleration (2 bytes)
 v_sonspeeddec	= ramaddr ( $FFFFF764 )	; Sonic's deceleration (2 bytes)
 v_sonframenum	= ramaddr ( $FFFFF766 )	; frame to display for Sonic
-f_sonframechg	= ramaddr ( $FFFFF767 )	; flag set to update Sonic's sprite frame
+v_bulletsonscreen	= ramaddr ( $FFFFF767 )	; used to be f_sonframechg
 v_anglebuffer	= ramaddr ( $FFFFF768 )	; angle of collision block that Sonic or object is standing on
 
 v_opl_routine	= ramaddr ( $FFFFF76C )	; ObjPosLoad - routine counter

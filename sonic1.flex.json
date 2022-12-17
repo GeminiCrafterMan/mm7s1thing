@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "Mega Man in Sonic 1",
-    "node": "6400cd25-0e81-4fb4-8ef0-6ce8c1cfd238",
+    "node": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
     "objects": [
         {
             "name": "Common",
@@ -30,6 +30,26 @@
                         "label": "MegaMan_PLC"
                     },
                     "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
+                },
+                {
+                    "uuid": "cf019825-98bb-486d-8fa1-6ce73e63c5e2",
+                    "format": "Sonic 1.js",
+                    "name": "Buster Shot",
+                    "palettes": [],
+                    "art": {
+                        "path": "artnem/Buster Shot.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Buster Shot.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    }
                 },
                 {
                     "name": "Signpost",
