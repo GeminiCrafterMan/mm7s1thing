@@ -72,7 +72,7 @@ PLC_Explodeend:
 ; Pattern load cues - Buster shot (lemon only)
 ; ---------------------------------------------------------------------------
 PLC_Buster:		dc.w ((PLC_Busterend-PLC_Buster-2)/6)-1
-		plcm	Nem_BusterShot, $7AC*$20
+		plcm	Nem_BusterShot, $6BA*$20
 PLC_Busterend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - game/time	over
