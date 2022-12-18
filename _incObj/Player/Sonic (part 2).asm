@@ -53,8 +53,8 @@ Sonic_Death:	; Routine 6
 ;		jsr	(ObjectFall).l
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
-		jsr		Sonic_LoadGfx
-		jmp	(DisplaySprite).l
+		jmp		Sonic_LoadGfx
+;		jmp	(DisplaySprite).l
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
