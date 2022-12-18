@@ -68,7 +68,11 @@ MegaAni_Float2:	dc.b 7,	fr_Float1, fr_Float2, fr_Float5, fr_Float3, fr_Float6, a
 		even
 MegaAni_Hang:	dc.b 4,	fr_Hang1, fr_Hang2, afEnd
 		even
-MegaAni_Death:	dc.b 3,	fr_Death, afEnd
+MegaAni_Death:	dc.b 1
+		rept 6
+			dc.b fr_Death1, fr_Death2, fr_Death3, fr_Death4, fr_Death5, fr_Death6, fr_Death7, fr_Death8, fr_Death9, fr_Null
+		endm
+			dc.b afEnd
 		even
 MegaAni_Hurt:	dc.b 3,	fr_Injury, afEnd
 		even
@@ -153,7 +157,6 @@ fr_Float3:	ds.b 1
 fr_Float4:	ds.b 1
 fr_Hang1:	ds.b 1
 fr_Hang2:	ds.b 1
-fr_Death:	ds.b 1
 fr_Float5:	ds.b 1
 fr_Float6:	ds.b 1
 fr_Injury:	ds.b 1
@@ -193,5 +196,14 @@ fr_Walk7S:	ds.b 1
 fr_Walk8S:	ds.b 1
 fr_Walk9S:	ds.b 1
 fr_WalkAS:	ds.b 1
+fr_Death1:	ds.b 1
+fr_Death2:	ds.b 1
+fr_Death3:	ds.b 1
+fr_Death4:	ds.b 1
+fr_Death5:	ds.b 1
+fr_Death6:	ds.b 1
+fr_Death7:	ds.b 1
+fr_Death8:	ds.b 1
+fr_Death9:	ds.b 1
 	even
 	dephase

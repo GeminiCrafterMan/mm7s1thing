@@ -6,6 +6,7 @@ ArtLoadCues:
 ptr_PLC_Main:		dc.w PLC_Main-ArtLoadCues
 ptr_PLC_Main2:		dc.w PLC_Main2-ArtLoadCues
 ptr_PLC_Explode:	dc.w PLC_Explode-ArtLoadCues
+ptr_PLC_Buster:		dc.w PLC_Buster-ArtLoadCues
 ptr_PLC_GameOver:	dc.w PLC_GameOver-ArtLoadCues
 PLC_Levels:
 ptr_PLC_GHZ:		dc.w PLC_GHZ-ArtLoadCues
@@ -65,9 +66,14 @@ PLC_Main2end:
 ; Pattern load cues - explosion
 ; ---------------------------------------------------------------------------
 PLC_Explode:	dc.w ((PLC_Explodeend-PLC_Explode-2)/6)-1
-		plcm	Nem_BusterShot, $7AA*$20
 		plcm	Nem_Explode, $B400	; explosion
 PLC_Explodeend:
+; ---------------------------------------------------------------------------
+; Pattern load cues - Buster shot (lemon only)
+; ---------------------------------------------------------------------------
+PLC_Buster:		dc.w ((PLC_Busterend-PLC_Buster-2)/6)-1
+		plcm	Nem_BusterShot, $7AC*$20
+PLC_Busterend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - game/time	over
 ; ---------------------------------------------------------------------------
@@ -371,6 +377,7 @@ PLC_FZBossend:
 plcid_Main:		equ (ptr_PLC_Main-ArtLoadCues)/2	; 0
 plcid_Main2:		equ (ptr_PLC_Main2-ArtLoadCues)/2	; 1
 plcid_Explode:		equ (ptr_PLC_Explode-ArtLoadCues)/2	; 2
+plcid_Buster:		equ (ptr_PLC_Buster-ArtLoadCues)/2
 plcid_GameOver:		equ (ptr_PLC_GameOver-ArtLoadCues)/2	; 3
 plcid_GHZ:		equ (ptr_PLC_GHZ-ArtLoadCues)/2		; 4
 plcid_GHZ2:		equ (ptr_PLC_GHZ2-ArtLoadCues)/2	; 5

@@ -50,21 +50,21 @@ locret_13860:
 
 Sonic_Death:	; Routine 6
 		bsr.w	GameOver
-		jsr	(ObjectFall).l
+;		jsr	(ObjectFall).l
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
-		bsr.w	Sonic_LoadGfx
+		jsr		Sonic_LoadGfx
 		jmp	(DisplaySprite).l
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
 GameOver:
-		move.w	(v_limitbtm2).w,d0
-		addi.w	#$100,d0
-		cmp.w	obY(a0),d0
-		bcc.w	locret_13900
-		move.w	#-$38,obVelY(a0)
+		cmpi.b	#id_Death,obAnim(a0)
+		bne.w	locret_13900
+		cmpi.b	#10*6,obAniFrame(a0)
+		blt.w	locret_13900
+
 		addq.b	#2,obRoutine(a0)
 		clr.b	(f_timecount).w	; stop time counter
 		addq.b	#1,(f_lifecount).w ; update lives counter
@@ -84,7 +84,7 @@ loc_138C2:
 ; ===========================================================================
 
 loc_138D4:
-		move.w	#60,$3A(a0)	; set time delay to 1 second
+		move.w	#3*60,$3A(a0)	; set time delay to 1 second
 		tst.b	(f_timeover).w	; is TIME OVER tag set?
 		beq.s	locret_13900	; if not, branch
 		move.w	#0,$3A(a0)

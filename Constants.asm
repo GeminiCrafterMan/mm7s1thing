@@ -205,7 +205,6 @@ bgm_SLZ:	equ ((ptr_mus84-MusicIndex)/4)+bgm__First
 bgm_SYZ:	equ ((ptr_mus85-MusicIndex)/4)+bgm__First
 bgm_SBZ:	equ ((ptr_mus86-MusicIndex)/4)+bgm__First
 bgm_Invincible:	equ ((ptr_mus87-MusicIndex)/4)+bgm__First
-bgm_ExtraLife:	equ ((ptr_mus88-MusicIndex)/4)+bgm__First
 bgm_SS:		equ ((ptr_mus89-MusicIndex)/4)+bgm__First
 bgm_Title:	equ ((ptr_mus8A-MusicIndex)/4)+bgm__First
 bgm_Ending:	equ ((ptr_mus8B-MusicIndex)/4)+bgm__First
@@ -224,7 +223,7 @@ sfx__First:	equ bgm__Last+1
 sfx_Jump:	equ ((ptr_sndA0-SoundIndex)/4)+sfx__First
 sfx_Lamppost:	equ ((ptr_sndA1-SoundIndex)/4)+sfx__First
 sfx_A2:		equ ((ptr_sndA2-SoundIndex)/4)+sfx__First
-sfx_Death:	equ ((ptr_sndA3-SoundIndex)/4)+sfx__First
+sfx_Hit:	equ ((ptr_sndA3-SoundIndex)/4)+sfx__First
 sfx_Skid:	equ ((ptr_sndA4-SoundIndex)/4)+sfx__First
 sfx_A5:		equ ((ptr_sndA5-SoundIndex)/4)+sfx__First
 sfx_HitSpikes:	equ ((ptr_sndA6-SoundIndex)/4)+sfx__First
@@ -269,9 +268,11 @@ sfx_Spring:	equ ((ptr_sndCC-SoundIndex)/4)+sfx__First
 sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
-sfx_JumpLand:   equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
-sfx_Slide:      equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
-sfx_BusterShot: equ ((ptr_sndBusterShot-SoundIndex)/4)+sfx__First
+sfx_JumpLand:	equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
+sfx_Slide:		equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
+sfx_BusterShot:	equ ((ptr_sndBusterShot-SoundIndex)/4)+sfx__First
+sfx_Death:		equ ((ptr_sndDeath-SoundIndex)/4)+sfx__First
+sfx_1up:		equ ((ptr_snd1up-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects

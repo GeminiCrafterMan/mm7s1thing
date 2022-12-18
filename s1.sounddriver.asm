@@ -65,7 +65,6 @@ ptr_mus84:	dc.l Music84
 ptr_mus85:	dc.l Music85
 ptr_mus86:	dc.l Music86
 ptr_mus87:	dc.l Music87
-ptr_mus88:	dc.l Music88
 ptr_mus89:	dc.l Music89
 ptr_mus8A:	dc.l Music8A
 ptr_mus8B:	dc.l Music8B
@@ -703,8 +702,9 @@ PlaySegaSound:
 ; ---------------------------------------------------------------------------
 ; Sound_81to9F:
 Sound_PlayBGM:
-		cmpi.b	#bgm_ExtraLife,d7	; is the "extra life" music to be played?
-		bne.s	.bgmnot1up		; if not, branch
+;		cmpi.b	#bgm_ExtraLife,d7	; is the "extra life" music to be played?
+;		bne.s	.bgmnot1up		; if not, branch
+		bra.s	.bgmnot1up		; skip all this shit, nobody cares
 		tst.b	f_1up_playing(a6)	; Is a 1-up music playing?
 		bne.w	.locdblret		; if yes, branch
 		lea	v_music_track_ram(a6),a5
@@ -2494,8 +2494,6 @@ Music86:	include	"sound/music/Mus86 - SBZ.asm"
 		even
 Music87:	include	"sound/music/Mus87 - Invincibility.asm"
 		even
-Music88:	include	"sound/music/Mus88 - Extra Life.asm"
-		even
 Music89:	include	"sound/music/Mus89 - Special Stage.asm"
 		even
 Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
@@ -2574,6 +2572,8 @@ ptr_sndCF:	dc.l SoundCF
 ptr_sndJumpLand:	dc.l SoundJumpLand
 ptr_sndSlide:	dc.l SoundSlide
 ptr_sndBusterShot:	dc.l SoundBusterShot
+ptr_sndDeath:	dc.l SoundDeath
+ptr_snd1up:		dc.l Sound1up
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
@@ -2592,7 +2592,7 @@ SoundA1:	include	"sound/sfx/SndA1 - Lamppost.asm"
 		even
 SoundA2:	include	"sound/sfx/SndA2.asm"
 		even
-SoundA3:	include	"sound/sfx/SndA3 - Death.asm"
+SoundA3:	include	"sound/sfx/SndA3 - Hit.asm"
 		even
 SoundA4:	include	"sound/sfx/SndA4 - Skid.asm"
 		even
@@ -2687,6 +2687,10 @@ SoundJumpLand:	include "sound/sfx/Snd - Jump Land.asm"
 SoundSlide:	include	"sound/sfx/Snd - Slide.asm"
 		even
 SoundBusterShot:	include "sound/sfx/Snd - Buster Shot.asm"
+		even
+SoundDeath:	include	"sound/sfx/Snd - Death.asm"
+		even
+Sound1up:	include	"sound/sfx/Snd - 1up.asm"
 		even
 
 ; ---------------------------------------------------------------------------

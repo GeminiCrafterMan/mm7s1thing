@@ -134,8 +134,6 @@ ReactToItem:
 		beq.s	React_Monitor	; if yes, branch
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
-		move.b	#1,obAnim(a0)
-		clr.w	obVelX(a0)
 		bra.s	.invincible
 	.notBullet:
 		cmpi.w	#90,$30(a0)	; is Sonic invincible?
@@ -301,12 +299,11 @@ HurtSonic:
 		move.b	#4,obRoutine(a0)
 		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)
-		move.w	#-$400,obVelY(a0) ; make Sonic bounce away from the object
+		clr.w	obVelY(a0) ; make Sonic bounce away from the object
 		move.w	#-$200,obVelX(a0)
 		btst	#6,obStatus(a0)	; is Sonic underwater?
 		beq.s	.isdry		; if not, branch
 
-		move.w	#-$200,obVelY(a0) ; slower bounce
 		move.w	#-$100,obVelX(a0)
 
 .isdry:
@@ -319,7 +316,7 @@ HurtSonic:
 		move.w	#0,obInertia(a0)
 		move.b	#id_Hurt,obAnim(a0)
 		move.w	#120,$30(a0)	; set temp invincible time to 2 seconds
-		move.w	#sfx_Death,d0	; load normal damage sound
+		move.w	#sfx_Hit,d0	; load normal damage sound
 		cmpi.b	#id_Spikes,(a2)	; was damage caused by spikes?
 		bne.s	.sound		; if not, branch
 		cmpi.b	#id_Harpoon,(a2) ; was damage caused by LZ harpoon?
@@ -335,6 +332,7 @@ HurtSonic:
 .norings:
 		tst.w	(f_debugmode).w	; is debug mode	cheat on?
 		bne.w	.hasshield	; if yes, branch
+		bra.s	KillSonic
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	kill Sonic
@@ -342,26 +340,51 @@ HurtSonic:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
+DeathOrbs_VelTbl:	; okay this kind of makes no sense but it also works to help visualize the orbs
+		dc.w	-$180, -$180,	$0, -$200,	$180, -$180
+		dc.w					$0, -$100
+		dc.w	-$200, $0,	-$100, 0,	$100, 0,	$200, 0
+		dc.w					$0, $100
+		dc.w	-$180, $180,	$0, $200,	$180, $180
+	even
 
 KillSonic:
 		tst.w	(v_debuguse).w	; is debug mode	active?
-		bne.s	.dontdie	; if yes, branch
+		bne.w	.dontdie	; if yes, branch
+		moveq	#12-1,d1	; 12 total, counting the first
+		lea		(DeathOrbs_VelTbl).l,a2
+	.spawnOrbs:
+		jsr		FindFreeObj	; uses a1
+		move.b	#id_DeathOrbs,0(a1)
+		move.w	(v_player+obX).w,obX(a1)
+		move.w	(v_player+obY).w,obY(a1)
+		move.w	(a2)+,obVelX(a1)
+		move.w	(a2)+,obVelY(a1)
+		dbf		d1,.spawnOrbs
+	.done:
 		move.b	#0,(v_invinc).w	; remove invincibility
 		move.b	#6,obRoutine(a0)
-		bsr.w	Sonic_ResetOnFloor
+;		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)
-		move.w	#-$700,obVelY(a0)
 		move.w	#0,obVelX(a0)
 		move.w	#0,obInertia(a0)
 		move.w	obY(a0),$38(a0)
 		move.b	#id_Death,obAnim(a0)
 		bset	#7,obGfx(a0)
-		move.w	#sfx_Death,d0	; play normal death sound
-		cmpi.b	#id_Spikes,(a2)	; check	if you were killed by spikes
-		bne.s	.sound
-		move.w	#sfx_HitSpikes,d0 ; play spikes death sound
 
 .sound:
+		move.w	#bgm_Stop,d0
+		jsr		PlaySound
+		move.b	#1,(f_pause).w
+		move.w  #32,d0
+
+	.wait:
+		move.b	#$C,(v_vbla_routine).w
+		jsr		WaitForVBla
+		dbf		d0,.wait
+		move.b	#0,(f_pause).w
+
+		move.w	#sfx_Death,d0	; play normal death sound
 		jsr	(PlaySound_Special).l
 
 .dontdie:

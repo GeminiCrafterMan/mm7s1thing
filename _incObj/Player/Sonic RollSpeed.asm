@@ -96,6 +96,9 @@ loc_13218:
 		bset	#0,obStatus(a0)
 		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
 		move.w	#-$500,d0
+		tst.b	(v_shoes).w
+		beq.s	loc_13242
+		asl.w	#1,d0
 
 loc_13220:
 		move.w	d0,obInertia(a0)
@@ -118,6 +121,9 @@ loc_1323A:
 		bclr	#0,obStatus(a0)
 		move.b	#id_Slide,obAnim(a0) ; use "rolling" animation
 		move.w	#$500,d0
+		tst.b	(v_shoes).w
+		beq.s	loc_13242
+		lsl.w	#1,d0
 
 loc_13242:
 		move.w	d0,obInertia(a0)

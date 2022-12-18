@@ -5529,7 +5529,8 @@ loc_8B48:
 		include	"_anim/Ball Hog.asm"
 Map_Hog:	include	"_maps/Ball Hog.asm"
 Map_MisDissolve:include	"_maps/Buzz Bomber Missile Dissolve.asm"
-		include	"_maps/Explosions.asm"
+Map_ExplodeItem:		include	"_maps/Item Explosions.asm"
+Map_ExplodeBomb:		include	"_maps/Fire Explosions.asm"
 
 		include	"_incObj/28 Animals.asm"
 ;		include	"_incObj/29.asm"
@@ -5912,8 +5913,8 @@ ExecuteObjects:
 		lea	(v_objspace).w,a0 ; set address for object RAM
 		moveq	#$7F,d7
 		moveq	#0,d0
-		cmpi.b	#6,(v_player+obRoutine).w
-		bhs.s	loc_D362
+;		cmpi.b	#6,(v_player+obRoutine).w
+;		bhs.s	loc_D362
 
 loc_D348:
 		move.b	(a0),d0		; load object number from RAM
@@ -6634,6 +6635,8 @@ Sonic_Main:	; Routine 0
 		move.w	#$400,(v_sonspeedmax).w ; Sonic's top speed
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
+		moveq	#plcid_Buster,d0
+		jsr	(AddPLC).l	; load explosion patterns
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?
@@ -8048,8 +8051,8 @@ AddPoints:
 		bmi.s   .noextralife ; branch if Mega Drive is Japanese
 		addq.b  #1,(v_lives).w ; give extra life
 		addq.b  #1,(f_lifecount).w
-		move.w	#bgm_ExtraLife,d0
-		jmp	(PlaySound).l
+		move.w	#sfx_1up,d0
+		jmp	(PlaySound_Special).l
 
 .noextralife:
 		rts	

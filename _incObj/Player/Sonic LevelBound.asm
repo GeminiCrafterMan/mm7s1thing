@@ -28,7 +28,7 @@ Sonic_LevelBound:
 
 .chkbottom:
 		move.w	(v_limitbtm2).w,d0
-		addi.w	#$E0,d0
+		addi.w	#$F0,d0
 		cmp.w	obY(a0),d0	; has Sonic touched the	bottom boundary?
 		blt.s	.bottom		; if yes, branch
 		rts	

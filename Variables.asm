@@ -106,11 +106,18 @@ v_1up_ram_copy:		= v_spcsfx_track_ram_end
 ; From here on, no longer relative to sound driver RAM
 ; =================================================================================
 
+v_health	= ramaddr ( $FFFFF5C0 ) ; Player health, byte
+v_weapon1energy	= ramaddr ( $FFFFF5C0 ) ; Weapon 1 energy, byte
+
+; F5C2 - F5FF are unused
+
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
 v_jpadhold2	= ramaddr ( $FFFFF602 )	; joypad input - held, duplicate
 v_jpadpress2	= ramaddr ( $FFFFF603 )	; joypad input - pressed, duplicate
 v_jpadhold1	= ramaddr ( $FFFFF604 )	; joypad input - held
 v_jpadpress1	= ramaddr ( $FFFFF605 )	; joypad input - pressed
+; v_jpad2hold1
+; v_jpad2press1
 
 v_vdp_buffer1	= ramaddr ( $FFFFF60C )	; VDP instruction buffer (2 bytes)
 

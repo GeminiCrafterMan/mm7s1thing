@@ -20,12 +20,18 @@ Anml_Index:	dc.w Anml_Ending-Anml_Index, loc_912A-Anml_Index
 		dc.w loc_9314-Anml_Index, loc_9370-Anml_Index
 		dc.w loc_92D6-Anml_Index
 
-Anml_VarIndex:	dc.b 0,	5, 2, 3, 6, 3, 4, 5, 4,	1, 0, 1
+Anml_VarIndex:	dc.b 0,	5	; GHZ
+				dc.b 2, 3	; LZ
+				dc.b 6, 3	; MZ
+				dc.b 4, 5	; SLZ
+				dc.b 4,	1	; SYZ
+				dc.b 0, 1	; SBZ + FZ
 
-Anml_Variables:	dc.w $FE00, $FC00
-		dc.l Map_Animal1
-		dc.w $FE00, $FD00	; horizontal speed, vertical speed
-		dc.l Map_Animal2	; mappings address
+Anml_Variables:
+		dc.w $FE00, $FC00	; horizontal speed, vertical speed
+		dc.l Map_Animal1	; mappings address
+		dc.w $FE00, $FD00
+		dc.l Map_Animal2
 		dc.w $FE80, $FD00
 		dc.l Map_Animal1
 		dc.w $FEC0, $FE80
@@ -96,7 +102,13 @@ Anml_FromEnemy:
 		beq.s	loc_90C0	; if yes, branch
 		move.w	#$592,obGfx(a0)	; VRAM setting for 2nd animal
 
-loc_90C0:
+loc_90C0: ; i... think this is working?
+		cmpi.b	#4,$30(a0)
+		beq.s	.noAdd
+		cmpi.b	#6,$30(a0)
+		beq.s	.noAdd
+		addi.w	#$2000,obGfx(a0)
+	.noAdd:
 		move.b	#$C,obHeight(a0)
 		move.b	#4,obRender(a0)
 		bset	#0,obRender(a0)

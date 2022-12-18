@@ -33,13 +33,17 @@ MegaMan_Slide:
 		bset	#2,obStatus(a0)
 		move.b	#$E,obHeight(a0)
 		move.b	#7,obWidth(a0)
+		moveq	#0,d0
+		move.w	#$500,d0
+		tst.b	(v_shoes).w
+		beq.s	.noShoes
+		lsl.w	#1,d0
+	.noShoes:
 		btst	#0,obStatus(a0)
-		beq.s	.notLeft
-		move.w	#-$500,obInertia(a0) ; set inertia
-		bra.s	.contSlide
-	.notLeft:
-		move.w	#$500,obInertia(a0) ; set inertia
+		beq.s	.contSlide
+		neg.w	d0
 	.contSlide:
+		move.w	d0,obInertia(a0) ; set inertia
 		move.b	#id_SlideStart,obAnim(a0) ; use "rolling" animation
 ;		addq.w	#5,obY(a0)
 		move.b	#30,slidetimer(a0)

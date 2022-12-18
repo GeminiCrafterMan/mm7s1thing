@@ -143,6 +143,8 @@ locret_1307C:
 
 
 Sonic_MoveLeft:
+		btst	#2,obStatus(a0)
+		bne.w	loc_130A6.ret	; sliding
 		move.w	obInertia(a0),d0
 		blt.s	.cont
 		move.w	#-$40,d0
@@ -166,20 +168,19 @@ loc_1309A:
 		move.w	d1,d0
 
 loc_130A6:
-		btst	#2,obStatus(a0)
-		bne.s	.noCap	; sliding
 		tst.b	(v_shoes).w
 		beq.s	.noShoes
-		cmpi.w	#-$800,d0
-		bge.s	.noCap
-		move.w	#-$800,d0
-		bra.s	.noCap
+		cmpi.w	#-$800,d0	; above negative limit?
+		bge.s	.noCap		; ignore
+		bra.s	.cap
 	.noShoes:
-		cmpi.w	#-$400,d0
-		bge.s	.noCap
-		move.w	#-$400,d0
+		cmpi.w	#-$400,d0	; above negative no-shoes limit?
+		bge.s	.noCap		; ignore
+	.cap:
+		addi.w	#1,d0		; if below, add 1
 	.noCap:
 		move.w	d0,obInertia(a0)
+	.ret:
 		rts
 ; End of function Sonic_MoveLeft
 
@@ -188,6 +189,8 @@ loc_130A6:
 
 
 Sonic_MoveRight:
+		btst	#2,obStatus(a0)
+		bne.w	loc_1310C.ret	; sliding
 		move.w	obInertia(a0),d0
 		bgt.s	.cont
 		move.w	#$40,d0
@@ -209,19 +212,18 @@ loc_13104:
 		move.w	d6,d0
 
 loc_1310C:
-		btst	#2,obStatus(a0)
-		bne.s	.noCap	; sliding
 		tst.b	(v_shoes).w
 		beq.s	.noShoes
-		cmpi.w	#$800,d0
-		ble.s	.noCap
-		move.w	#$800,d0
-		bra.s	.noCap
+		cmpi.w	#$800,d0	; below positive limit?
+		ble.s	.noCap		; ignore
+		bra.s	.cap
 	.noShoes:
-		cmpi.w	#$400,d0
-		ble.s	.noCap
-		move.w	#$400,d0
+		cmpi.w	#$400,d0	; below positive no-shoes limit?
+		ble.s	.noCap		; ignore
+	.cap:
+		subi.w	#1,d0		; if above, subtract 1
 	.noCap:
 		move.w	d0,obInertia(a0)
+	.ret:
 		rts
 ; End of function Sonic_MoveRight

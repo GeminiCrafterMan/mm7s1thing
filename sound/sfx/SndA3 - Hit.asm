@@ -1,23 +1,23 @@
-SndA3_Death_Header:
+SndA3_Hit_Header:
 	smpsHeaderStartSong 1
-	smpsHeaderVoice     SndA3_Death_Voices
+	smpsHeaderVoice     SndA3_Hit_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cFM5, SndA3_Death_FM5,	$F4, $00
+	smpsHeaderSFXChannel cFM5, SndA3_Hit_FM5,	$F4, $00
 
 ; FM5 Data
-SndA3_Death_FM5:
+SndA3_Hit_FM5:
 	smpsSetvoice        $00
 	dc.b	nB3, $07, smpsNoAttack, nAb3
 
-SndA3_Death_Loop00:
+SndA3_Hit_Loop00:
 	dc.b	$01
 	smpsAlterVol        $01
-	smpsLoop            $00, $2F, SndA3_Death_Loop00
+	smpsLoop            $00, $2F, SndA3_Hit_Loop00
 	smpsStop
 
-SndA3_Death_Voices:
+SndA3_Hit_Voices:
 ;	Voice $00
 ;	$30
 ;	$30, $30, $30, $30, 	$9E, $D8, $DC, $DC, 	$0E, $0A, $04, $05

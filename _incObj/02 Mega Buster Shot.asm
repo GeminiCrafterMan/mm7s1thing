@@ -16,7 +16,7 @@ BShot_Index:
 BShot_Init:	; Routine 0
 		addq.b	#2,obRoutine(a0)		; go to the next routine
 		move.l	#Map_BusterShot,obMap(a0)	; set mappings
-		move.w	#$7AA,obGfx(a0)		; set VRAM tile
+		move.w	#$7AC,obGfx(a0)		; set VRAM tile
 		move.b	#4,obRender(a0)		; set render flags
 		move.b	#1,obPriority(a0)		; set priority
 		move.b	#8,obHeight(a0)		; set horizontal radius
