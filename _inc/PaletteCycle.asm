@@ -12,6 +12,7 @@ PaletteCycle:
 		add.w	d0,d0
 		move.w	PCycle_Index(pc,d0.w),d0
 		jsr	PCycle_Index(pc,d0.w) ; jump to relevant palette routine
+		jsr		PCycle_MegaManWeapons
 		jmp		updateWaterShift
 ; End of function PaletteCycle
 
@@ -261,3 +262,65 @@ loc_1B52:
 locret_1B64:
 		rts	
 ; End of function PalCycle_SBZ
+
+PCycle_MegaManWeapons:
+	; in case I want to add another weapon that charges later...
+		tst.b	(v_weapon).w
+		beq.s	PCycle_ChargeShot
+		rts
+	PCycle_ChargeShot:
+			lea	(Pal_MMChargeShot).l,a0
+			cmpi.b	#$25,(v_charge).w
+			blt.w	.ret
+			cmpi.b	#$41,(v_charge).w
+			bge.s	.fast
+		.slow:
+	; Just starting a charge
+		; Blue 4 frames, normal 4 frames
+			subq.b	#1,(v_chargecyctimer).w ; decrement timer
+			bpl.w	.ret	; if time remains, branch
+
+			move.b	#4,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	(v_chargecycnum).w,d0 ; get cycle number
+			addq.b	#1,(v_chargecycnum).w ; increment cycle number
+			andi.b	#1,d0		; if cycle > 1, reset to 0
+			bra.s	.execCycle
+		.fast:
+	; Mid-charge, about to transition to full
+		; Blue 2 frames, normal 2 frames
+			cmpi.b	#$5C,(v_charge).w
+			bge.s	.full
+			subq.b	#1,(v_chargecyctimer).w ; decrement timer
+			bpl.s	.ret	; if time remains, branch
+
+			move.b	#2,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	(v_chargecycnum).w,d0 ; get cycle number
+			addq.b	#1,(v_chargecycnum).w ; increment cycle number
+			andi.b	#1,d0		; if cycle > 1, reset to 0
+			bra.s	.execCycle
+		.full:
+		; Fully-charged
+			; Green 2 frames, normal 2 frames, blue 2 frames, normal 2 frames
+			subq.b	#1,(v_chargecyctimer).w ; decrement timer
+			bpl.s	.ret	; if time remains, branch
+
+			move.b	#2,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	(v_chargecycnum).w,d0 ; get cycle number
+			addq.b	#1,(v_chargecycnum).w ; increment cycle number
+			andi.b	#3,d0		; if cycle > 1, reset to 0
+;			bra.w	.execCycle
+		.execCycle:
+			lsl.b	#5,d0
+		; these moves are all 1 longword each, so 4 bytes at a time.
+		; Jeez, that means *two* colors at a time.
+			lea	(v_pal_dry).w,a1
+			move.l	(a0,d0.w),(a1)+
+			move.l	4(a0,d0.w),(a1)
+			move.l	8(a0,d0.w),4(a1)
+			move.l	12(a0,d0.w),8(a1)
+			move.l	16(a0,d0.w),12(a1)
+			move.l	20(a0,d0.w),16(a1)
+			move.l	24(a0,d0.w),20(a1)
+			move.l	28(a0,d0.w),24(a1)
+		.ret:
+			rts

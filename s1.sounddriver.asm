@@ -2574,6 +2574,8 @@ ptr_sndSlide:	dc.l SoundSlide
 ptr_sndBusterShot:	dc.l SoundBusterShot
 ptr_sndDeath:	dc.l SoundDeath
 ptr_snd1up:		dc.l Sound1up
+ptr_sndChargeStart:	dc.l SoundChargeStart
+ptr_sndChargeLoop:	dc.l SoundChargeLoop
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
@@ -2691,6 +2693,10 @@ SoundBusterShot:	include "sound/sfx/Snd - Buster Shot.asm"
 SoundDeath:	include	"sound/sfx/Snd - Death.asm"
 		even
 Sound1up:	include	"sound/sfx/Snd - 1up.asm"
+		even
+SoundChargeStart:	include	"sound/sfx/Snd - Charge Start.asm"
+		even
+SoundChargeLoop:	include	"sound/sfx/Snd - Charge Loop.asm"
 		even
 
 ; ---------------------------------------------------------------------------

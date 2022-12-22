@@ -1342,6 +1342,8 @@ Pal_SLZCyc:	binclude	"palette/Cycle - SLZ.bin"
 Pal_SYZCyc1:	binclude	"palette/Cycle - SYZ1.bin"
 Pal_SYZCyc2:	binclude	"palette/Cycle - SYZ2.bin"
 
+Pal_MMChargeShot:	binclude	"palette/Cycle - Mega Man Charge Shot.bin"
+
 		include	"_inc/SBZ Palette Scripts.asm"
 
 Pal_SBZCyc1:	binclude	"palette/Cycle - SBZ 1.bin"
@@ -6636,12 +6638,12 @@ Sonic_Main:	; Routine 0
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
 		moveq	#plcid_Buster,d0
-		jsr	(AddPLC).l	; load explosion patterns
+		jsr	(AddPLC).l	; load buster shot patterns
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?
 		beq.s	loc_12C58	; if not, branch
-		btst	#bitB,(v_jpadpress1).w ; is button B pressed?
+		btst	#bitA,(v_jpadpress1).w ; is button A pressed?
 		beq.s	loc_12C58	; if not, branch
 		move.w	#1,(v_debuguse).w ; change Sonic into a ring/item
 		clr.b	(f_lockctrl).w
@@ -6764,8 +6766,9 @@ loc_12E5C:
 ; ===========================================================================
 
 Sonic_MdRoll:
-		bsr.w	Sonic_ChkRoll ; slide time test
 		bsr.w	Sonic_Jump
+		bsr.w	Sonic_ChkRoll ; slide time test
+		bsr.w	MegaMan_Shoot ; /!\ REMEMBER TO SET A THING TO CANCEL SHOOTING, BUT NOT CHARGING /!\
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound

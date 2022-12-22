@@ -1,8 +1,62 @@
 {
     "Flex": 2,
     "name": "Mega Man in Sonic 1",
-    "node": "6337c46a-a914-4b30-85fe-2f6400cd250e",
+    "node": "cf019825-98bb-486d-8fa1-6ce73e63c5e2",
     "objects": [
+        {
+            "name": "Mega Man's Weapons",
+            "children": [
+                {
+                    "name": "Mega Buster",
+                    "children": [
+                        {
+                            "uuid": "cf019825-98bb-486d-8fa1-6ce73e63c5e2",
+                            "format": "Sonic 1.js",
+                            "name": "Lemon",
+                            "palettes": [],
+                            "art": {
+                                "path": "artnem/Buster Shot.bin",
+                                "compression": "Nemesis",
+                                "offset": 0
+                            },
+                            "mappings": {
+                                "path": "_maps/Buster Shot.asm",
+                                "label": ""
+                            },
+                            "dplcs": {
+                                "enabled": false,
+                                "path": "",
+                                "label": ""
+                            }
+                        },
+                        {
+                            "uuid": "019ee46c-a440-46cf-9566-df2fe78e1b7d",
+                            "format": "Sonic 1.js",
+                            "name": "Lemon Firing",
+                            "palettes": [],
+                            "art": {
+                                "path": "",
+                                "compression": "Uncompressed",
+                                "offset": 0
+                            },
+                            "mappings": {
+                                "path": "",
+                                "label": ""
+                            },
+                            "dplcs": {
+                                "enabled": false,
+                                "path": "",
+                                "label": ""
+                            }
+                        }
+                    ],
+                    "isDirectory": true,
+                    "expanded": true
+                }
+            ],
+            "isDirectory": true,
+            "expanded": true
+        },
         {
             "name": "Common",
             "children": [
@@ -30,26 +84,6 @@
                         "label": "MegaMan_PLC"
                     },
                     "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
-                },
-                {
-                    "uuid": "cf019825-98bb-486d-8fa1-6ce73e63c5e2",
-                    "format": "Sonic 1.js",
-                    "name": "Buster Shot",
-                    "palettes": [],
-                    "art": {
-                        "path": "artnem/Buster Shot.bin",
-                        "compression": "Nemesis",
-                        "offset": 0
-                    },
-                    "mappings": {
-                        "path": "_maps/Buster Shot.asm",
-                        "label": ""
-                    },
-                    "dplcs": {
-                        "enabled": false,
-                        "path": "",
-                        "label": ""
-                    }
                 },
                 {
                     "name": "Signpost",

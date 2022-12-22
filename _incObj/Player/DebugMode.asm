@@ -135,7 +135,7 @@ loc_1D066:
 		move.l	d3,obX(a0)
 
 Debug_ChgItem:
-		btst	#bitA,(v_jpadhold1).w ; is button A pressed?
+		btst	#bitB,(v_jpadhold1).w ; is button B pressed?
 		beq.s	.createitem	; if not, branch
 		btst	#bitC,(v_jpadpress1).w ; is button C pressed?
 		beq.s	.nextitem	; if not, branch
@@ -146,7 +146,7 @@ Debug_ChgItem:
 ; ===========================================================================
 
 .nextitem:
-		btst	#bitA,(v_jpadpress1).w ; is button A pressed?
+		btst	#bitB,(v_jpadpress1).w ; is button B pressed?
 		beq.s	.createitem	; if not, branch
 		addq.b	#1,(v_debugitem).w ; go forwards 1 item
 		cmp.b	(v_debugitem).w,d6
@@ -176,7 +176,7 @@ Debug_ChgItem:
 ; ===========================================================================
 
 .backtonormal:
-		btst	#bitB,(v_jpadpress1).w ; is button B pressed?
+		btst	#bitA,(v_jpadpress1).w ; is button A pressed?
 		beq.s	.stayindebug	; if not, branch
 		moveq	#0,d0
 		move.w	d0,(v_debuguse).w ; deactivate debug mode

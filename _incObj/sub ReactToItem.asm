@@ -147,8 +147,11 @@ ReactToItem:
 React_Monitor:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
+		tst.b	obColProp(a0)
+		bne.s	.dontDestroyShot
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
+	.dontDestroyShot:
 		bra.s	.break
 	.notBullet:
 		tst.w	obVelY(a0)	; is Sonic moving upwards?
@@ -180,8 +183,11 @@ React_Monitor:
 React_Enemy:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
+		tst.b	obColProp(a0)
+		bne.s	.dontDestroyShot
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
+	.dontDestroyShot:
 		bra.s	.donthurtsonic
 	.notBullet:
 		tst.b	(v_invinc).w	; is Sonic invincible?
@@ -227,12 +233,15 @@ React_Enemy:
 		bsr.w	AddPoints
 		_move.b	#id_ExplosionItem,0(a1) ; change object to explosion
 		move.b	#0,obRoutine(a1)
+		cmpi.b	#id_BusterShot,0(a0)
+		beq.s	.ret
 		tst.w	obVelY(a0)
 		bmi.s	.bouncedown
 		move.w	obY(a0),d0
 		cmp.w	obY(a1),d0
 		bcc.s	.bounceup
 		neg.w	obVelY(a0)
+	.ret:
 		rts	
 ; ===========================================================================
 
@@ -254,8 +263,11 @@ React_Caterkiller:
 React_ChkHurt:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
+		tst.b	obColProp(a0)
+		bne.s	.dontDestroyShot
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
+	.dontDestroyShot:
 		bra.s	.isflashing
 	.notBullet:
 		tst.b	(v_invinc).w	; is Sonic invincible?
@@ -283,6 +295,11 @@ React_ChkHurt:
 
 
 HurtSonic:
+		tst.b	(v_weapon).w
+		bne.s	.notMB
+		lea	(Pal_MegaMan).l,a2
+		jsr		FireMegaBuster.dontFire
+	.notMB:
 		tst.b	(v_shield).w	; does Sonic have a shield?
 		bne.s	.hasshield	; if yes, branch
 		tst.w	(v_rings).w	; does Sonic have any rings?
@@ -405,8 +422,11 @@ React_Special:
 		beq.s	.yadrin		; if yes, branch
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
+		tst.b	obColProp(a0)
+		bne.s	.dontDestroyShot
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
+	.dontDestroyShot:
 		bra.s	.return
 	.notBullet:
 		cmpi.b	#$17,d1		; is collision type $D7	?

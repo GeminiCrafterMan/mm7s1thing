@@ -273,6 +273,8 @@ sfx_Slide:		equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
 sfx_BusterShot:	equ ((ptr_sndBusterShot-SoundIndex)/4)+sfx__First
 sfx_Death:		equ ((ptr_sndDeath-SoundIndex)/4)+sfx__First
 sfx_1up:		equ ((ptr_snd1up-SoundIndex)/4)+sfx__First
+sfx_ChargeStart:    equ ((ptr_sndChargeStart-SoundIndex)/4)+sfx__First
+sfx_ChargeLoop:    equ ((ptr_sndChargeLoop-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects

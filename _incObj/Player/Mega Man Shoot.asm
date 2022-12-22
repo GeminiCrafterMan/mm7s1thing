@@ -1,21 +1,19 @@
 MegaMan_Shoot:
-		cmpi.b	#id_Slide,obAnim(a0)    ; sliding? probably replace with status check
-		beq.s	.noShoot
+	; okay so there was a B button check here, but i think it may be better if i did that in the weapon for the sake of hold checks
 		moveq	#0,d0
-		btst	#bitB,(v_jpadpress2).w
-		bne.s	.shoot
-	.noShoot:
+		move.b	(v_weapon).w,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		movea.l	.weaponLUT(pc,d0.w),a1
+		jmp		(a1)
+	.weaponLUT:
+		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
+	.ret:
 		rts
-	.shoot:	; please god make this more modular later
-		cmpi.b	#3,(v_bulletsonscreen).w
-		bge.s	.noShoot
-		addq.b	#1,(v_bulletsonscreen).w
-
-		jsr		FindFreeObj
-		move.b	#id_BusterShot,0(a1)	; load missile object
+	
+	FireWeapon:
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.w	#$700,obVelX(a1)
 		btst	#0,obStatus(a0)
 		beq.s	.notFlipped
 		neg.w	obVelX(a1)
@@ -32,14 +30,15 @@ MegaMan_Shoot:
 		beq.s	.shootAnim
 		cmpi.b	#id_Shoot,obAnim(a0)
 		beq.s	.shootAnim
-		bra.s	.skipShootAnim
+		bra.s	.ret
 	.shootAnim:
 		clr.b	obAniFrame(a0)
 		clr.b	obTimeFrame(a0)
 		clr.b	obDelayAni(a0)
 		move.b	#id_Shoot,obAnim(a0)
-; probably won't set the animation here... maybe in Animate?
-	.skipShootAnim:
-		move.w	#sfx_BusterShot,d0
-		jsr	(PlaySound_Special).l	; play shooting sound
+    .ret:
 		rts
+
+; Weapon includes
+	include	"_incObj/Player/Weapons/Mega Buster.asm"
+	include	"_incObj/Player/Weapons/Test.asm"

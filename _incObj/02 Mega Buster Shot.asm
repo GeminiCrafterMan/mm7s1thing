@@ -10,6 +10,7 @@ BusterShot:
 ; ===========================================================================
 BShot_Index:
 		dc.w	BShot_Init-BShot_Index
+;		dc.w	BShot_JustFired-BShot_Index
 		dc.w	BShot_Main-BShot_Index
 		dc.w	BShot_Delete-BShot_Index
 ; ===========================================================================
@@ -22,9 +23,10 @@ BShot_Init:	; Routine 0
 		move.b	#8,obHeight(a0)		; set horizontal radius
 		move.b	#8,obWidth(a0)		; set horizontal radius
 		move.b	#8,obActWid(a0)		; set horizontal radius
+		move.b	obSubtype(a0),obColProp(a0)	; set shot "health"
 
 ; ===========================================================================
-BShot_Main:	; Routine 2
+BShot_Main:	; Routine 4
 		jsr		(ChkObjectVisible).l	; is the projectile off-screen?
 		bne.s	BShot_Delete			; if so, branch
 		jsr		ObjFloorDist
@@ -33,7 +35,7 @@ BShot_Main:	; Routine 2
 		jsr		(ReactToItem).l
 		jsr		(SpeedToPos).l
 .animate:
-		lea		(Ani_BShot).l,a1
+		lea		(Ani_Lemon).l,a1
 		jsr		AnimateSprite
 		jmp		DisplaySprite
 
@@ -41,13 +43,18 @@ BShot_Main:	; Routine 2
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
 
-BShot_Delete:
+; ===========================================================================
+BShot_Delete: ; Routine 6
+		cmpi.b	#2,obSubtype(a0)
+		bne.s	.onlyOne
+		subq.b	#2,(v_bulletsonscreen).w
+	.onlyOne:
 		subq.b	#1,(v_bulletsonscreen).w
 		jmp		(DeleteObject).l
 
-Ani_BShot:
-    	dc.w .normal-Ani_BShot
-    	dc.w .explode-Ani_BShot
+Ani_Lemon:
+    	dc.w .normal-Ani_Lemon
+    	dc.w .explode-Ani_Lemon
 
 .normal:	dc.b 2, 0, afEnd
 		even
