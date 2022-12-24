@@ -147,10 +147,9 @@ ReactToItem:
 React_Monitor:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
-		tst.b	obColProp(a0)
+		subq.b	#1,obColProp(a0)
 		bne.s	.dontDestroyShot
-		move.b	#1,obAnim(a0)
-		clr.w	obVelX(a0)
+		bset	#7,obStatus(a0)
 	.dontDestroyShot:
 		bra.s	.break
 	.notBullet:
@@ -183,10 +182,9 @@ React_Monitor:
 React_Enemy:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
-		tst.b	obColProp(a0)
+		subq.b	#1,obColProp(a0)
 		bne.s	.dontDestroyShot
-		move.b	#1,obAnim(a0)
-		clr.w	obVelX(a0)
+		bset	#7,obStatus(a0)
 	.dontDestroyShot:
 		bra.s	.donthurtsonic
 	.notBullet:
@@ -199,17 +197,27 @@ React_Enemy:
 		tst.b	obColProp(a1)
 		beq.s	.breakenemy
 
+		move.b	#0,obColType(a1)
+		cmpi.b	#id_BusterShot,0(a0)
+		beq.s	.hpChecksDHS
 		neg.w	obVelX(a0)	; repel Sonic
 		neg.w	obVelY(a0)
 		asr	obVelX(a0)
 		asr	obVelY(a0)
-		move.b	#0,obColType(a1)
-		subq.b	#1,obColProp(a1)
-		bne.s	.flagnotclear
-		bset	#7,obStatus(a1)
+		subq.b	#1,obColProp(a1)	; subtract 1 from enemy's HP
+		bne.s	.flagnotclear		; if it's not 0, return
+	.killHPEnemy:
+		bset	#7,obStatus(a1)		; if it is, set bit 7
 
 .flagnotclear:
-		rts	
+		rts
+	
+.hpChecksDHS:
+		move.b	obColProp(a0),d0
+		subi.b	d0,obColProp(a1)	; subtract buster shot HP from enemy's...
+		ble.s	.killHPEnemy		; and break the enemy if it's 0
+		bset	#7,obStatus(a0)		; otherwise, destroy the buster shot
+		bra.s	.flagnotclear
 ; ===========================================================================
 
 .breakenemy:
@@ -263,10 +271,9 @@ React_Caterkiller:
 React_ChkHurt:
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
-		tst.b	obColProp(a0)
+		subq.b	#1,obColProp(a0)
 		bne.s	.dontDestroyShot
-		move.b	#1,obAnim(a0)
-		clr.w	obVelX(a0)
+		bset	#7,obStatus(a0)
 	.dontDestroyShot:
 		bra.s	.isflashing
 	.notBullet:
@@ -422,10 +429,9 @@ React_Special:
 		beq.s	.yadrin		; if yes, branch
 		cmpi.b	#id_BusterShot,0(a0)
 		bne.s	.notBullet
-		tst.b	obColProp(a0)
+		subq.b	#1,obColProp(a0)
 		bne.s	.dontDestroyShot
-		move.b	#1,obAnim(a0)
-		clr.w	obVelX(a0)
+		bset	#7,obStatus(a0)
 	.dontDestroyShot:
 		bra.s	.return
 	.notBullet:

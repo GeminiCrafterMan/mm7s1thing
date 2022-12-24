@@ -7,23 +7,23 @@ MegaMan_Shoot:
 		movea.l	.weaponLUT(pc,d0.w),a1
 		jmp		(a1)
 	.weaponLUT:
-		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
+		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_LabyrinthSpear, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
 	.ret:
 		rts
 	
 	FireWeapon:
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		btst	#0,obStatus(a0)
+		move.w	(v_busterfx+obX).w,obX(a1)
+		move.w	(v_busterfx+obY).w,obY(a1)
+		btst	#0,(v_busterfx+obStatus).w
 		beq.s	.notFlipped
 		neg.w	obVelX(a1)
 		bset	#0,obStatus(a1)
-		subi.w	#15,obX(a1)
-		bra.s	.doneFlipChk
-
+	;	subi.w	#15,obX(a1)
+;		bra.s	.doneFlipChk
+;
 	.notFlipped:
-		addi.w	#15,obX(a1)
-	.doneFlipChk:
+	;	addi.w	#15,obX(a1)
+	;.doneFlipChk:
 		bset	#7,obStatus(a0)		; set 'shooting' flag in status
 		move.b	#13,shoottimer(a0)
 		cmpi.b	#id_Wait,obAnim(a0)
@@ -42,3 +42,4 @@ MegaMan_Shoot:
 ; Weapon includes
 	include	"_incObj/Player/Weapons/Mega Buster.asm"
 	include	"_incObj/Player/Weapons/Test.asm"
+	include "_incObj/Player/Weapons/Labyrinth Spear.asm"

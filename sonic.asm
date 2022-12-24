@@ -3691,11 +3691,11 @@ Cont_GotoLevel:
 		subq.b	#1,(v_continues).w ; subtract 1 from continues
 		rts	
 ; ===========================================================================
-		include "_incObj/02 Mega Buster Shot.asm"
+		include "_incObj/Player/8D Mega Buster Shot.asm"
 
-Nem_BusterShot:	binclude "artnem/Buster Shot.bin"
+Nem_BusterLemon:	binclude "artnem/Buster Lemon.bin"
 		even
-Map_BusterShot:	include "_maps/Buster Shot.asm"
+Map_BusterLemon:	include "_maps/Buster Lemon.asm"
 
 		include	"_incObj/80 Continue Screen Elements.asm"
 		include	"_incObj/81 Continue Screen Sonic.asm"
@@ -5535,7 +5535,6 @@ Map_ExplodeItem:		include	"_maps/Item Explosions.asm"
 Map_ExplodeBomb:		include	"_maps/Fire Explosions.asm"
 
 		include	"_incObj/28 Animals.asm"
-;		include	"_incObj/29.asm"
 Map_Animal1:	include	"_maps/Animals 1.asm"
 Map_Animal2:	include	"_maps/Animals 2.asm"
 Map_Animal3:	include	"_maps/Animals 3.asm"
@@ -6525,7 +6524,6 @@ Map_LWall:	include	"_maps/Wall of Lava.asm"
 		include	"_incObj/40 Moto Bug.asm" ; includes "_incObj/sub RememberState.asm"
 		include	"_anim/Moto Bug.asm"
 Map_Moto:	include	"_maps/Moto Bug.asm"
-		include	"_incObj/4F.asm"
 
 		include	"_incObj/50 Yadrin.asm"
 		include	"_anim/Yadrin.asm"
@@ -6638,7 +6636,18 @@ Sonic_Main:	; Routine 0
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
 		moveq	#plcid_Buster,d0
-		jsr	(AddPLC).l	; load buster shot patterns
+		jsr		(AddPLC).l	; load buster shot patterns
+		clr.b	(v_weapon).w ; reset weapon
+		move.b	#id_BusterEffects,(v_busterfx).w
+	.setWeaponEnergy:
+		move.b	#32,(v_weapon1energy).w	; Green Wrecker
+		move.b	#32,(v_weapon2energy).w	; Marble Blazer
+		move.b	#32,(v_weapon3energy).w	; SYZ
+		move.b	#64,(v_weapon4energy).w	; Labyrinth Spear
+		move.b	#32,(v_weapon5energy).w	; SLZ
+		move.b	#32,(v_weapon6energy).w	; SBZ
+		move.b	#32,(v_rushcoilenergy).w; Rush Coil
+		move.b	#32,(v_rushjetenergy).w	; Rush Jet
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?
@@ -6715,6 +6724,7 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_Jump
@@ -6729,6 +6739,7 @@ Sonic_MdNormal:
 ; ===========================================================================
 
 Sonic_MdJump:
+		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
 		btst	#7,obStatus(a0)
 		beq.s	.notShooting
@@ -6768,6 +6779,7 @@ loc_12E5C:
 Sonic_MdRoll:
 		bsr.w	Sonic_Jump
 		bsr.w	Sonic_ChkRoll ; slide time test
+		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot ; /!\ REMEMBER TO SET A THING TO CANCEL SHOOTING, BUT NOT CHARGING /!\
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
@@ -6779,6 +6791,7 @@ Sonic_MdRoll:
 ; ===========================================================================
 
 Sonic_MdJump2:
+		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
 		btst	#7,obStatus(a0)
 		beq.s	.notShooting
@@ -6818,6 +6831,7 @@ loc_12EA6:
 		include	"_incObj/Player/Sonic RollSpeed.asm"
 		include	"_incObj/Player/Sonic JumpDirection.asm"
 		include	"_incObj/Player/Sonic LevelBound.asm"
+		include	"_incObj/Player/Mega Man Weapon Change.asm"
 		include "_incObj/Player/Mega Man Shoot.asm"
 		include	"_incObj/Player/Sonic Roll.asm"
 		include	"_incObj/Player/Sonic Jump.asm"
@@ -6833,6 +6847,8 @@ loc_12EA6:
 		include	"_incObj/Player/Sonic Animate.asm"
 		include	"_anim/Mega Man.asm"
 		include	"_incObj/Player/Sonic LoadGfx.asm"
+
+		include	"_incObj/Player/02 Mega Buster Effects.asm"
 
 		include	"_incObj/0A Drowning Countdown.asm"
 
@@ -8149,11 +8165,21 @@ Nem_JapNames:	binclude	"artnem/Hidden Japanese Credits.bin"
 Map_MegaMan:	include	"_maps/Mega Man.asm"
 MegaManDynPLC:	include	"_maps/Mega Man - Dynamic Gfx Script.asm"
 
+Map_MegaBusterFX:	include	"_maps/Mega Buster Effects.asm"
+MegaBusterFXDynPLC:	include	"_maps/Mega Buster Effects - Dynamic Gfx Script.asm"
+
+Map_BusterCharges:	include	"_maps/Buster Charges.asm"
+BusterChargesDynPLC:	include	"_maps/Buster Charges - Dynamic Gfx Script.asm"
+
 Map_SSWalls:	include	"_maps/SS Walls.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Mega Man
 ; ---------------------------------------------------------------------------
 Art_MegaMan:	binclude	"artunc/Mega Man.bin"	; Mega Man
+		even
+Art_MegaBusterFX:	binclude	"artunc/Mega Buster Effects.bin"	; Mega Buster effect
+		even
+Art_BusterCharges:	binclude	"artunc/Buster Charges.bin"	; Mega Buster charged shots
 		even
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics - Signpost

@@ -2,7 +2,7 @@
 ; Object pointers
 ; ---------------------------------------------------------------------------
 ptr_MegaManPlayer:	dc.l MegaManPlayer	; $01
-ptr_BusterShot:	dc.l BusterShot
+ptr_BusterEffects:	dc.l BusterEffects
 ptr_Obj03:		dc.l NullObject
 ptr_Obj04:		dc.l NullObject
 ptr_Obj05:		dc.l NullObject
@@ -16,7 +16,7 @@ ptr_FlapDoor:		dc.l FlapDoor
 ptr_Signpost:		dc.l Signpost
 ptr_TitleSonic:		dc.l TitleSonic
 ptr_PSBTM:		dc.l PSBTM
-ptr_Obj10:		dc.l Obj10		; $10
+ptr_Obj10:		dc.l NullObject		; $10
 ptr_Bridge:		dc.l Bridge
 ptr_SpinningLight:	dc.l SpinningLight
 ptr_LavaMaker:		dc.l LavaMaker
@@ -79,7 +79,7 @@ ptr_GiantRing:		dc.l GiantRing
 ptr_GeyserMaker:	dc.l GeyserMaker
 ptr_LavaGeyser:		dc.l LavaGeyser
 ptr_LavaWall:		dc.l LavaWall
-ptr_Obj4F:		dc.l Obj4F
+ptr_Obj4F:		dc.l NullObject
 ptr_Yadrin:		dc.l Yadrin		; $50
 ptr_SmashBlock:		dc.l SmashBlock
 ptr_MovingBlock:	dc.l MovingBlock
@@ -141,17 +141,13 @@ ptr_EndSTH:		dc.l EndSTH
 ptr_CreditsText:	dc.l CreditsText
 ptr_EndEggman:		dc.l EndEggman
 ptr_TryChaos:		dc.l TryChaos
+ptr_BusterShot:		dc.l BusterShot
 
 NullObject:
-		;jmp	(DeleteObject).l	; It would be safer to have this instruction here, but instead it just falls through to ObjectFall
+		jmp	(DeleteObject).l	; It would be safer to have this instruction here, but instead it just falls through to ObjectFall
 
 id_MegaManPlayer:		equ ((ptr_MegaManPlayer-Obj_Index)/4)+1		; $01
-id_BusterShot:		equ ((ptr_BusterShot-Obj_Index)/4)+1
-id_Obj03:		equ ((ptr_Obj03-Obj_Index)/4)+1
-id_Obj04:		equ ((ptr_Obj04-Obj_Index)/4)+1
-id_Obj05:		equ ((ptr_Obj05-Obj_Index)/4)+1
-id_Obj06:		equ ((ptr_Obj06-Obj_Index)/4)+1
-id_Obj07:		equ ((ptr_Obj07-Obj_Index)/4)+1
+id_BusterEffects:		equ ((ptr_BusterEffects-Obj_Index)/4)+1
 id_Splash:		equ ((ptr_Splash-Obj_Index)/4)+1		; $08
 id_SonicSpecial:	equ ((ptr_SonicSpecial-Obj_Index)/4)+1
 id_DrownCount:		equ ((ptr_DrownCount-Obj_Index)/4)+1
@@ -160,7 +156,6 @@ id_FlapDoor:		equ ((ptr_FlapDoor-Obj_Index)/4)+1
 id_Signpost:		equ ((ptr_Signpost-Obj_Index)/4)+1
 id_TitleSonic:		equ ((ptr_TitleSonic-Obj_Index)/4)+1
 id_PSBTM:		equ ((ptr_PSBTM-Obj_Index)/4)+1
-id_Obj10:		equ ((ptr_Obj10-Obj_Index)/4)+1			; $10
 id_Bridge:		equ ((ptr_Bridge-Obj_Index)/4)+1
 id_SpinningLight:	equ ((ptr_SpinningLight-Obj_Index)/4)+1
 id_LavaMaker:		equ ((ptr_LavaMaker-Obj_Index)/4)+1
@@ -185,7 +180,6 @@ id_Rings:		equ ((ptr_Rings-Obj_Index)/4)+1
 id_Monitor:		equ ((ptr_Monitor-Obj_Index)/4)+1
 id_ExplosionItem:	equ ((ptr_ExplosionItem-Obj_Index)/4)+1
 id_Animals:		equ ((ptr_Animals-Obj_Index)/4)+1		; $28
-id_Obj29:		equ ((ptr_Obj29-Obj_Index)/4)+1
 id_AutoDoor:		equ ((ptr_AutoDoor-Obj_Index)/4)+1
 id_Chopper:		equ ((ptr_Chopper-Obj_Index)/4)+1
 id_Jaws:		equ ((ptr_Jaws-Obj_Index)/4)+1
@@ -223,7 +217,6 @@ id_GiantRing:		equ ((ptr_GiantRing-Obj_Index)/4)+1
 id_GeyserMaker:		equ ((ptr_GeyserMaker-Obj_Index)/4)+1
 id_LavaGeyser:		equ ((ptr_LavaGeyser-Obj_Index)/4)+1
 id_LavaWall:		equ ((ptr_LavaWall-Obj_Index)/4)+1
-id_Obj4F:		equ ((ptr_Obj4F-Obj_Index)/4)+1
 id_Yadrin:		equ ((ptr_Yadrin-Obj_Index)/4)+1		; $50
 id_SmashBlock:		equ ((ptr_SmashBlock-Obj_Index)/4)+1
 id_MovingBlock:		equ ((ptr_MovingBlock-Obj_Index)/4)+1
@@ -285,3 +278,4 @@ id_EndSTH:		equ ((ptr_EndSTH-Obj_Index)/4)+1
 id_CreditsText:		equ ((ptr_CreditsText-Obj_Index)/4)+1
 id_EndEggman:		equ ((ptr_EndEggman-Obj_Index)/4)+1
 id_TryChaos:		equ ((ptr_TryChaos-Obj_Index)/4)+1
+id_BusterShot:		equ ((ptr_BusterShot-Obj_Index)/4)+1

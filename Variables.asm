@@ -22,6 +22,7 @@ v_tracksonic	= ramaddr ( $FFFFCB00 )	; position tracking data for Sonic ($100 by
 v_hscrolltablebuffer	= ramaddr ( $FFFFCC00 )	; scrolling table data (actually $380 bytes, but $400 is reserved for it)
 v_objspace	= ramaddr ( $FFFFD000 )	; object variable space ($40 bytes per object) ($2000 bytes)
 v_player	= v_objspace	; object variable space for Sonic ($40 bytes)
+v_busterfx	= ramaddr ( $FFFFD1C0 )	; object variable space for the buster effect ($40 bytes)
 v_lvlobjspace	= ramaddr ( $FFFFD800 )	; level object variable space ($1800 bytes)
 
 v_snddriver_ram	= ramaddr ( $FFFFF000 )	; start of RAM for the sound driver data ($5C0 bytes)
@@ -113,17 +114,15 @@ v_weapon3energy	= ramaddr ( $FFFFF5C3 ) ; Weapon 3 energy, byte
 v_weapon4energy	= ramaddr ( $FFFFF5C4 ) ; Weapon 4 energy, byte
 v_weapon5energy	= ramaddr ( $FFFFF5C5 ) ; Weapon 5 energy, byte
 v_weapon6energy	= ramaddr ( $FFFFF5C6 ) ; Weapon 6 energy, byte
-v_weapon7energy	= ramaddr ( $FFFFF5C7 ) ; Weapon 7 energy, byte
-v_weapon8energy	= ramaddr ( $FFFFF5C8 ) ; Weapon 8 energy, byte
-v_rushcoilenergy	= ramaddr ( $FFFFF5C9 ) ; Rush Coil item energy, byte
-v_rushjetenergy	= ramaddr ( $FFFFF5CA ) ; Rush Jet item energy, byte
-v_charge	= ramaddr ( $FFFFF5CB ) ; Charge shot timer, byte
-v_weapon	= ramaddr ( $FFFFF5CC ) ; Current weapon, ranges from 0 (buster) to A (rush jet)... or B if i add rush marine later
+v_rushcoilenergy	= ramaddr ( $FFFFF5C7 ) ; Rush Coil item energy, byte
+v_rushjetenergy	= ramaddr ( $FFFFF5C8 ) ; Rush Jet item energy, byte
+v_charge	= ramaddr ( $FFFFF5C9 ) ; Charge shot timer, byte
+v_weapon	= ramaddr ( $FFFFF5CA ) ; Current weapon, ranges from 0 (buster) to 8 (rush jet)... or 9 if i add rush marine later
 
-v_chargecyctimer	= ramaddr ( $FFFFF5CD ) ; Charge shot - Palette cycle timer
-v_chargecycnum	= ramaddr ( $FFFFF5CE ) ; Charge shot - Palette cycle number
+v_chargecyctimer	= ramaddr ( $FFFFF5CB ) ; Charge shot - Palette cycle timer, byte
+v_chargecycnum	= ramaddr ( $FFFFF5CC ) ; Charge shot - Palette cycle number, byte
 
-; F5CF - F5FF are unused
+; F5CD - F5FF are unused
 
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
 v_jpadhold2	= ramaddr ( $FFFFF602 )	; joypad input - held, duplicate

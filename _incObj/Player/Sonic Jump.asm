@@ -47,10 +47,5 @@ loc_1341C:
 		move.b	#id_Jump,obAnim(a0)
 
 locret_1348E:
-		rts	
-; ===========================================================================
-
-loc_13490:
-		bset	#4,obStatus(a0)
-		rts	
+		rts
 ; End of function Sonic_Jump

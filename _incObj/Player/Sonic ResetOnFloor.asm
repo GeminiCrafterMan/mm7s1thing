@@ -6,16 +6,8 @@
 
 
 Sonic_ResetOnFloor:
-		btst	#4,obStatus(a0)
-		beq.s	loc_137AE
-		nop	
-		nop	
-		nop	
-
-loc_137AE:
 		bclr	#5,obStatus(a0)
 		bclr	#1,obStatus(a0)
-		bclr	#4,obStatus(a0)
 		btst	#2,obStatus(a0)
 		beq.s	loc_137E4
 		bclr	#2,obStatus(a0)

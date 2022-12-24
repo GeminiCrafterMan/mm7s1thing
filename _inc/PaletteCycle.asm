@@ -269,7 +269,6 @@ PCycle_MegaManWeapons:
 		beq.s	PCycle_ChargeShot
 		rts
 	PCycle_ChargeShot:
-			lea	(Pal_MMChargeShot).l,a0
 			cmpi.b	#$25,(v_charge).w
 			blt.w	.ret
 			cmpi.b	#$41,(v_charge).w
@@ -280,7 +279,7 @@ PCycle_MegaManWeapons:
 			subq.b	#1,(v_chargecyctimer).w ; decrement timer
 			bpl.w	.ret	; if time remains, branch
 
-			move.b	#4,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	#3,(v_chargecyctimer).w ; reset timer to 3 frames, ends up being 4
 			move.b	(v_chargecycnum).w,d0 ; get cycle number
 			addq.b	#1,(v_chargecycnum).w ; increment cycle number
 			andi.b	#1,d0		; if cycle > 1, reset to 0
@@ -293,7 +292,7 @@ PCycle_MegaManWeapons:
 			subq.b	#1,(v_chargecyctimer).w ; decrement timer
 			bpl.s	.ret	; if time remains, branch
 
-			move.b	#2,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	#1,(v_chargecyctimer).w ; reset timer to 1 frame, ends up being 2
 			move.b	(v_chargecycnum).w,d0 ; get cycle number
 			addq.b	#1,(v_chargecycnum).w ; increment cycle number
 			andi.b	#1,d0		; if cycle > 1, reset to 0
@@ -304,23 +303,24 @@ PCycle_MegaManWeapons:
 			subq.b	#1,(v_chargecyctimer).w ; decrement timer
 			bpl.s	.ret	; if time remains, branch
 
-			move.b	#2,(v_chargecyctimer).w ; reset timer to 4 frames
+			move.b	#1,(v_chargecyctimer).w ; reset timer to 1 frame, ends up being 2
 			move.b	(v_chargecycnum).w,d0 ; get cycle number
 			addq.b	#1,(v_chargecycnum).w ; increment cycle number
-			andi.b	#3,d0		; if cycle > 1, reset to 0
+			andi.b	#3,d0		; if cycle > 3, reset to 0
 ;			bra.w	.execCycle
 		.execCycle:
 			lsl.b	#5,d0
 		; these moves are all 1 longword each, so 4 bytes at a time.
 		; Jeez, that means *two* colors at a time.
+			lea	(Pal_MMChargeShot).l,a0
 			lea	(v_pal_dry).w,a1
 			move.l	(a0,d0.w),(a1)+
-			move.l	4(a0,d0.w),(a1)
-			move.l	8(a0,d0.w),4(a1)
-			move.l	12(a0,d0.w),8(a1)
-			move.l	16(a0,d0.w),12(a1)
-			move.l	20(a0,d0.w),16(a1)
-			move.l	24(a0,d0.w),20(a1)
-			move.l	28(a0,d0.w),24(a1)
+			move.l	4(a0,d0.w),(a1)+
+			move.l	8(a0,d0.w),(a1)+
+			move.l	12(a0,d0.w),(a1)+
+			move.l	16(a0,d0.w),(a1)+
+			move.l	20(a0,d0.w),(a1)+
+			move.l	24(a0,d0.w),(a1)+
+			move.l	28(a0,d0.w),(a1)+
 		.ret:
 			rts

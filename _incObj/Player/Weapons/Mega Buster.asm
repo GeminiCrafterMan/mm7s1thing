@@ -29,7 +29,7 @@
 		bge.w	.dontFire
 		btst	#bitB,(v_jpadpress2).w	; pressing B?
 		bne.s	.fireLemon	; fire lemon if so
-		tst.b	(v_charge).w
+		tst.b	(v_charge).w	; don't fire if not charging
 		beq.w	.dontFire
 		cmpi.b	#$20,(v_charge).w
 		blt.s	.fireLemon	; not charged enough to care
@@ -45,6 +45,7 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.w	#$700,obVelX(a1)
+		move.b	#1,(v_busterfx+obAnim).w
 		bra.w	.objectLoadedJumpPoint
 	.fireMediumCharge:
 		addq.b	#1,(v_bulletsonscreen).w
@@ -52,8 +53,9 @@
 		jsr		(PlaySound_Special).l	; play shooting sound
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
-		move.b	#1,obSubtype(a1)	; test
-		move.w	#$800,obVelX(a1)
+		move.b	#1,obSubtype(a1)
+		move.b	#2,(v_busterfx+obAnim).w
+		move.w	#$740,obVelX(a1)
 		bra.s	.objectLoadedJumpPoint
 	.fireFullCharge:
 		addq.b	#3,(v_bulletsonscreen).w
@@ -61,8 +63,9 @@
 		jsr		(PlaySound_Special).l	; play shooting sound
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
-		move.b	#2,obSubtype(a1)	; test
-		move.w	#$900,obVelX(a1)
+		move.b	#2,obSubtype(a1)
+		move.b	#3,(v_busterfx+obAnim).w
+		move.w	#$780,obVelX(a1)
 	; god damn this is nasty
 		move.w	#$222,d0
 		move.w	d0,(v_pal_dry+2)
@@ -84,13 +87,13 @@
 		lea	(Pal_MegaMan).l,a2
 		lea	(v_pal_dry).w,a3
 		move.l	(a2,d0.w),(a3)+
-		move.l	4(a2,d0.w),(a3)
-		move.l	8(a2,d0.w),4(a3)
-		move.l	12(a2,d0.w),8(a3)
-		move.l	16(a2,d0.w),12(a3)
-		move.l	20(a2,d0.w),16(a3)
-		move.l	24(a2,d0.w),20(a3)
-		move.l	28(a2,d0.w),24(a3)
+		move.l	4(a2,d0.w),(a3)+
+		move.l	8(a2,d0.w),(a3)+
+		move.l	12(a2,d0.w),(a3)+
+		move.l	16(a2,d0.w),(a3)+
+		move.l	20(a2,d0.w),(a3)+
+		move.l	24(a2,d0.w),(a3)+
+		move.l	28(a2,d0.w),(a3)+
 		clr.b	(v_charge).w	; clear charge
 		clr.b	(v_chargecyctimer).w	; clear charge
 		clr.b	(v_chargecycnum).w	; clear charge
