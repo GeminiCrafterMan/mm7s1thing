@@ -30,6 +30,7 @@ ptr_LandShoot:		dc.w MegaAni_LandShoot-Ani_MegaMan
 ptr_SlideStart:		dc.w MegaAni_SlideStart-Ani_MegaMan
 ptr_Slide:			dc.w MegaAni_Slide-Ani_MegaMan
 ptr_SlideStop:		dc.w MegaAni_SlideStop-Ani_MegaMan
+ptr_ChargeShot:		dc.w MegaAni_ChargeShot-Ani_MegaMan
 
 MegaAni_Tiptoe:	dc.b $FF, fr_Step1, fr_Step2, afChange, id_Walking
 		even
@@ -102,6 +103,8 @@ MegaAni_Slide:	dc.b 1, fr_Slide1, fr_Slide2, afEnd
 		even
 MegaAni_SlideStop:	dc.b 1, fr_SlideT, fr_SlideT, fr_SlideT, fr_SlideT, afChange, id_Wait
 		even
+MegaAni_ChargeShot:	dc.b 1, fr_ChargeShot1, fr_ChargeShot2, fr_ChargeShot3, fr_ChargeShot4, afChange, id_Wait
+		even
 
 id_Tiptoe:		equ (ptr_Tiptoe-Ani_MegaMan)/2	; 0
 id_TiptoeShoot:	equ (ptr_TiptoeShoot-Ani_MegaMan)/2	; 0
@@ -130,6 +133,7 @@ id_LandShoot:	equ (ptr_LandShoot-Ani_MegaMan)/2
 id_SlideStart:	equ (ptr_SlideStart-Ani_MegaMan)/2
 id_Slide:		equ (ptr_Slide-Ani_MegaMan)/2
 id_SlideStop:	equ (ptr_SlideStop-Ani_MegaMan)/2
+id_ChargeShot:	equ (ptr_ChargeShot-Ani_MegaMan)/2
 
 ; Sonic frame IDs
 	phase 0 ; Reset ds.b value to 0
@@ -205,5 +209,30 @@ fr_Death6:	ds.b 1
 fr_Death7:	ds.b 1
 fr_Death8:	ds.b 1
 fr_Death9:	ds.b 1
+fr_Tele1:	ds.b 1
+fr_Tele2:	ds.b 1
+fr_Tele3:	ds.b 1
+fr_Tele4:	ds.b 1
+fr_Tele5:	ds.b 1
+fr_Intro1:	ds.b 1
+fr_Intro2:	ds.b 1
+fr_Intro3:	ds.b 1
+fr_Intro4:	ds.b 1
+fr_Intro5:	ds.b 1
+fr_Intro6:	ds.b 1
+fr_Intro7:	ds.b 1
+; after fr_Intro7 just go to MegaAni_Wait
+fr_Exit1:	ds.b 1
+fr_Exit2:	ds.b 1
+fr_Exit3:	ds.b 1
+fr_Exit4:	ds.b 1
+fr_Exit5:	ds.b 1
+fr_Exit6:	ds.b 1
+fr_Exit7:	ds.b 1
+
+fr_ChargeShot1:	ds.b 1
+fr_ChargeShot2:	ds.b 1
+fr_ChargeShot3:	ds.b 1
+fr_ChargeShot4:	ds.b 1
 	even
 	dephase

@@ -27,7 +27,7 @@ BShot_Init:	; Routine 0
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		mulu.w	#22,d0	; god i hope this works
-	; 4+4+4+4 = 16, 16+2+1+1+1 = 21, +1 to make it even
+	; 4+4+4+4 = 16, 16+2+1+1+1+1 = 22
 		lea		bshot_Values(pc,d0.w),a1
 		move.l	(a1)+,obMap(a0)			; 4
 		move.l	(a1)+,bshot_dplcAddr(a0); 4
@@ -38,13 +38,14 @@ BShot_Init:	; Routine 0
 		move.b	(a1)+,obWidth(a0)		; 1
 		move.b	obWidth(a0),obActWid(a0)
 		move.b	(a1)+,obColProp(a0)		; 1
+		move.b	(a1)+,obAnim(a0)		; 1
 		rts
 	
 	bshot_Values:
 	; Buster
 		dc.l	Map_BusterLemon, 0, 0, Ani_BusterLemon	; mappings/dplcs/art/animations
 		dc.w	$6BA	; VRAM tile
-		dc.b	6, 8, 1, 0	; height, width/sprite width, health, 0
+		dc.b	6, 8, 1, 0	; height, width/sprite width, health, initial animation
 		dc.l	Map_BusterCharges, BusterChargesDynPLC, Art_BusterCharges, Ani_BusterMid
 		dc.w	$7A2
 		dc.b	12, 16, 2, 0
@@ -52,9 +53,9 @@ BShot_Init:	; Routine 0
 		dc.w	$7A2
 		dc.b	24, 32, 3, 0
 	; Labyrinth Spear
-		dc.l	Map_BusterLemon, 0, 0, Ani_BusterLemon
+		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
 		dc.w	$7A2
-		dc.b	6, 8, 2, 0
+		dc.b	5, 16, 2, 4
 		even
 
 ; ===========================================================================
@@ -79,6 +80,8 @@ BShot_Main:	; Routine 2
 		jmp		DisplaySprite
 
 .explode:
+		cmpi.l	#Ani_SpecialWeapons,bshot_animAddr(a0)
+		beq.w	BShot_Delete
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
 ;		move.w	#sfx_Lamppost,d0
@@ -133,8 +136,6 @@ BShot_Delete: ; Routine 4
 	.onlyOne:
 		subq.b	#1,(v_bulletsonscreen).w	; subtract 1
 		jmp		(DeleteObject).l
-	.ret:
-		rts
 
 Ani_BusterLemon:
     	dc.w .normal-Ani_BusterLemon
@@ -161,4 +162,28 @@ Ani_BusterFull:
 .normal:	dc.b 0, 7, 7, 8, 8, 8, 9, afEnd
 		even
 .explode:	dc.b 1, $A, $B, $C, $C, afRoutine
+		even
+
+Ani_SpecialWeapons:
+		dc.w .gwChain-Ani_SpecialWeapons	; probably won't be using this, but who cares
+		dc.w .gwBall-Ani_SpecialWeapons		; bleh
+		dc.w .mbPHolder-Ani_SpecialWeapons	; marble blazer placeholder
+		dc.w .syzPHolder-Ani_SpecialWeapons ; spring yard weapon placeholder
+		dc.w .lsSpike-Ani_SpecialWeapons	; labyrinth spear spike
+		dc.w .slzPHolder-Ani_SpecialWeapons	; star light weapon placeholder
+		dc.w .sbzPHolder-Ani_SpecialWeapons	; scrap brain weapon placeholder
+
+	.gwChain:	dc.b 0, 1, afEnd
+		even
+	.gwBall:	dc.b 0, 2, 3, 2, 4, 2, 5, 2, 4, afEnd
+		even
+	.mbPHolder:	dc.b 0, 6, afEnd
+		even
+	.syzPHolder:	dc.b 0, 7, afEnd
+		even
+	.lsSpike:	dc.b 0, 8, afEnd
+		even
+	.slzPHolder:	dc.b 0, 9, afEnd
+		even
+	.sbzPHolder:	dc.b 0, 10, afEnd
 		even

@@ -13,11 +13,11 @@
 		addq.b	#1,(v_bulletsonscreen).w
 		subq.b	#1,(v_weapon4energy).w
 		bchg	#4,obStatus(a0)	; status bit for this specifically
-		move.w	#sfx_BusterShot,d0
+		move.w	#sfx_A2,d0	; spikeyish sound
 		jsr		(PlaySound_Special).l	; play shooting sound
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
-		move.b	#3,obSubtype(a0)
+		move.b	#3,obSubtype(a1)
 		move.w	#$7C0,obVelX(a1)
 		move.w	#$40,d0
 		moveq	#0,d1	; blue

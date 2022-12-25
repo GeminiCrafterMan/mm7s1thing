@@ -1,0 +1,43 @@
+DPLC_0221:
+DPLC_0221_0: 	dc.w DPLC_0221_16-DPLC_0221
+DPLC_0221_2: 	dc.w DPLC_0221_17-DPLC_0221
+DPLC_0221_4: 	dc.w DPLC_0221_1A-DPLC_0221
+DPLC_0221_6: 	dc.w DPLC_0221_1F-DPLC_0221
+DPLC_0221_8: 	dc.w DPLC_0221_24-DPLC_0221
+DPLC_0221_A: 	dc.w DPLC_0221_29-DPLC_0221
+DPLC_0221_C: 	dc.w DPLC_0221_2E-DPLC_0221
+DPLC_0221_E: 	dc.w DPLC_0221_31-DPLC_0221
+DPLC_0221_10: 	dc.w DPLC_0221_36-DPLC_0221
+DPLC_0221_12: 	dc.w DPLC_0221_39-DPLC_0221
+DPLC_0221_14: 	dc.w DPLC_0221_40-DPLC_0221
+DPLC_0221_16: 	dc.b $0
+DPLC_0221_17: 	dc.b $1
+	dc.b $30, $0
+DPLC_0221_1A: 	dc.b $2
+	dc.b $30, $0
+	dc.b $40, $4
+DPLC_0221_1F: 	dc.b $2
+	dc.b $30, $0
+	dc.b $30, $9
+DPLC_0221_24: 	dc.b $2
+	dc.b $30, $0
+	dc.b $30, $9
+DPLC_0221_29: 	dc.b $2
+	dc.b $30, $0
+	dc.b $30, $9
+DPLC_0221_2E: 	dc.b $1
+	dc.b $10, $D
+DPLC_0221_31: 	dc.b $2
+	dc.b $10, $F
+	dc.b $0, $E
+DPLC_0221_36: 	dc.b $1
+	dc.b $10, $11
+DPLC_0221_39: 	dc.b $3
+	dc.b $0, $F
+	dc.b $0, $13
+	dc.b $0, $E
+DPLC_0221_40: 	dc.b $3
+	dc.b $0, $F
+	dc.b $0, $14
+	dc.b $0, $E
+	even

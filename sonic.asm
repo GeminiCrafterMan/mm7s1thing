@@ -8171,6 +8171,9 @@ MegaBusterFXDynPLC:	include	"_maps/Mega Buster Effects - Dynamic Gfx Script.asm"
 Map_BusterCharges:	include	"_maps/Buster Charges.asm"
 BusterChargesDynPLC:	include	"_maps/Buster Charges - Dynamic Gfx Script.asm"
 
+Map_SpecialWeapons:	include	"_maps/Special Weapons.asm"
+SpecialWeaponsDynPLC:	include	"_maps/Special Weapons - Dynamic Gfx Script.asm"
+
 Map_SSWalls:	include	"_maps/SS Walls.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Mega Man
@@ -8180,6 +8183,8 @@ Art_MegaMan:	binclude	"artunc/Mega Man.bin"	; Mega Man
 Art_MegaBusterFX:	binclude	"artunc/Mega Buster Effects.bin"	; Mega Buster effect
 		even
 Art_BusterCharges:	binclude	"artunc/Buster Charges.bin"	; Mega Buster charged shots
+		even
+Art_SpecialWeapons:	binclude	"artunc/Special Weapons.bin" ; special weapons
 		even
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics - Signpost
