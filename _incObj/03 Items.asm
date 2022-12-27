@@ -53,7 +53,7 @@ Items_Animate:	; Routine 2
 		beq.s	Items_Delete		; if 0, delete
 		subq.b	#1,flashtime(a0)	; subtract 1 from the flash time
 		cmpi.b	#60,flashtime(a0)	; if 1 second is left, continue
-		bgt.s	.justDisplay		; if more than that, just display
+		bhi.s	.justDisplay		; if more than that, just display
 		lsr.b	#2,d0				; flash on and off 2 frames each
 		bcs.s	.justDisplay		; display if carry is clear (2 of every 4 frames)
 		rts							; don't display
@@ -116,7 +116,7 @@ CollectItem:
 		move.w	#sfx_Ring,d0 ; play extra life sound
 		bra.s	.playsnd
 	.scr:	; change this later to add these to the tally at the end of the level.
-		move.w	#10000,d0
+		move.w	#100,d0
 		jsr		AddPoints
 		move.w	#sfx_Ring,d0 ; play extra life sound
 ;		bra.s	.playsnd
