@@ -57,7 +57,7 @@ Brick_Type00:
 ; ===========================================================================
 
 Brick_Type02:
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	loc_E888
 		neg.w	d0

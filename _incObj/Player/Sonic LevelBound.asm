@@ -37,7 +37,7 @@ Sonic_LevelBound:
 .bottom:
 		cmpi.w	#(id_SBZ<<8)+1,(v_zone).w ; is level SBZ2 ?
 		jne		KillSonic	; if not, kill Sonic
-		cmpi.w	#$2000,(v_player+obX).w
+		cmpi.w	#$2000,(o_player+obX).w
 		jcs		KillSonic
 		clr.b	(v_lastlamp).w	; clear	lamppost counter
 		move.w	#1,(f_restart).w ; restart the level

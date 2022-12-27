@@ -165,7 +165,7 @@ loc_17A46:
 ; ===========================================================================
 
 loc_17A50:
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcs.s	loc_17A5A
 		moveq	#4,d1
 

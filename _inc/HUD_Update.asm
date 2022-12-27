@@ -89,7 +89,7 @@ HUD_Update:
 
 TimeOver:
 		clr.b	(f_timecount).w
-		lea	(v_player).w,a0
+		lea	(o_player).w,a0
 		movea.l	a0,a2
 		bsr.w	KillSonic
 		move.b	#1,(f_timeover).w
@@ -206,11 +206,11 @@ HudDb_XY:
 		locVRAM	$DC40		; set VRAM address
 		move.w	(v_screenposx).w,d1 ; load camera x-position
 		swap	d1
-		move.w	(v_player+obX).w,d1 ; load Sonic's x-position
+		move.w	(o_player+obX).w,d1 ; load Sonic's x-position
 		bsr.s	HudDb_XY2
 		move.w	(v_screenposy).w,d1 ; load camera y-position
 		swap	d1
-		move.w	(v_player+obY).w,d1 ; load Sonic's y-position
+		move.w	(o_player+obY).w,d1 ; load Sonic's y-position
 ; End of function HudDb_XY
 
 

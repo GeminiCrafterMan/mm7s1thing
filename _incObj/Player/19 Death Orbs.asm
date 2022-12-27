@@ -4,5 +4,5 @@ DeathOrbs:
 		move.b	#2,obPriority(a0)
 		move.b	#4,obRender(a0)
         jsr     SpeedToPos
-		move.b	(v_player+obFrame).w,obFrame(a0)
+		move.b	(o_player+obFrame).w,obFrame(a0)
         jmp     DisplaySprite

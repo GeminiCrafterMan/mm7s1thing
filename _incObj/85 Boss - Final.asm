@@ -155,7 +155,7 @@ loc_19F10:
 		tst.w	$32(a0)
 		bmi.w	loc_19FA6
 		bclr	#0,obStatus(a0)
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcs.s	loc_19F2E
 		bset	#0,obStatus(a0)
@@ -166,6 +166,7 @@ loc_19F2E:
 		move.w	#$14,d3
 		move.w	obX(a0),d4
 		jsr	(SolidObject).l
+	; do something here
 		tst.w	d4
 		bgt.s	loc_19F50
 
@@ -177,7 +178,7 @@ loc_19F48:
 
 loc_19F50:
 		addq.w	#7,(v_random).w
-		cmpi.b	#id_Roll,(v_player+obAnim).w
+		cmpi.b	#id_Slide,(o_player+obAnim).w	; just so the game's beatable
 		bne.s	loc_19F48
 		move.w	#$300,d0
 		btst	#0,obStatus(a0)
@@ -185,7 +186,7 @@ loc_19F50:
 		neg.w	d0
 
 loc_19F6A:
-		move.w	d0,(v_player+obVelX).w
+		move.w	d0,(o_player+obVelX).w
 		tst.b	$35(a0)
 		bne.s	loc_19F88
 		subq.b	#1,obColProp(a0)
@@ -292,7 +293,7 @@ loc_1A074:
 loc_1A09A:
 		move.w	#$400,obVelX(a0)
 		move.w	obX(a0),d0
-		sub.w	(v_player+obX).w,d0
+		sub.w	(o_player+obX).w,d0
 		bpl.s	loc_1A0B4
 		move.w	#$500,obVelX(a0)
 		bra.w	loc_1A0F2
@@ -417,19 +418,19 @@ loc_1A210:
 		move.b	#$F,obColType(a0)
 
 loc_1A216:
-		cmpi.w	#$2790,(v_player+obX).w
+		cmpi.w	#$2790,(o_player+obX).w
 		blt.s	loc_1A23A
 		move.b	#1,(f_lockctrl).w
 		move.w	#0,(v_jpadhold2).w
-		clr.w	(v_player+obInertia).w
+		clr.w	(o_player+obInertia).w
 		tst.w	obVelY(a0)
 		bpl.s	loc_1A248
 		move.w	#$100,(v_jpadhold2).w
 
 loc_1A23A:
-		cmpi.w	#$27E0,(v_player+obX).w
+		cmpi.w	#$27E0,(o_player+obX).w
 		blt.s	loc_1A248
-		move.w	#$27E0,(v_player+obX).w
+		move.w	#$27E0,(o_player+obX).w
 
 loc_1A248:
 		cmpi.w	#$2900,obX(a0)
@@ -543,7 +544,7 @@ loc_1A38A:
 
 loc_1A38E:	; Routine $A
 		move.b	#$B,obFrame(a0)
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcs.s	loc_1A3A6
 		tst.b	obRender(a0)

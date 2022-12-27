@@ -36,7 +36,7 @@ Sign_Main:	; Routine 0
 		move.b	#-1,sign_prevframe(a0)
 
 Sign_Touch:	; Routine 2
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcs.s	.notouch
 		cmpi.w	#$20,d0		; is Sonic within $20 pixels of	the signpost?
@@ -103,15 +103,15 @@ Sign_SparkPos:	dc.b -$18,-$10		; x-position, y-position
 Sign_SonicRun:	; Routine 6
 		tst.w	(v_debuguse).w	; is debug mode	on?
 		bne.w	locret_ECEE	; if yes, branch
-		btst	#1,(v_player+obStatus).w
+		btst	#1,(o_player+obStatus).w
 		bne.s	loc_EC70
 		move.b	#1,(f_lockctrl).w ; lock controls
 		move.w	#btnR<<8,(v_jpadhold2).w ; make Sonic run to the right
 
 loc_EC70:
-		tst.b	(v_player).w
+		tst.b	(o_player).w
 		beq.s	loc_EC86
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		move.w	(v_limitright2).w,d1
 		addi.w	#$128,d1
 		cmp.w	d1,d0
@@ -129,12 +129,12 @@ loc_EC86:
 
 
 GotThroughAct:
-		tst.b	(v_objspace+$5C0).w
+		tst.b	(o_result).w
 		bne.s	locret_ECEE
 		move.w	(v_limitright2).w,(v_limitleft2).w
 		clr.b	(v_invinc).w	; disable invincibility
 		clr.b	(f_timecount).w	; stop time counter
-		move.b	#id_GotThroughCard,(v_objspace+$5C0).w
+		move.b	#id_GotThroughCard,(o_result).w
 		moveq	#plcid_TitleCard,d0
 		jsr	(NewPLC).l	; load title card patterns
 		move.b	#1,(f_endactbonus).w

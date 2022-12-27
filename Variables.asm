@@ -21,8 +21,24 @@ waterValues	= ramaddr ( $FFFFC900 ) ; DynaWater
 v_tracksonic	= ramaddr ( $FFFFCB00 )	; position tracking data for Sonic ($100 bytes)
 v_hscrolltablebuffer	= ramaddr ( $FFFFCC00 )	; scrolling table data (actually $380 bytes, but $400 is reserved for it)
 v_objspace	= ramaddr ( $FFFFD000 )	; object variable space ($40 bytes per object) ($2000 bytes)
-v_player	= v_objspace	; object variable space for Sonic ($40 bytes)
-v_busterfx	= ramaddr ( $FFFFD1C0 )	; object variable space for the buster effect ($40 bytes)
+; reserved object slots
+o_player	= v_objspace	; object variable space for Sonic ($40 bytes)
+o_hud	= ramaddr ( $FFFFD040 )
+o_titlecard1	= ramaddr ( $FFFFD080 )
+o_titlecard2	= ramaddr ( $FFFFD0C0 )
+o_titlecard3	= ramaddr ( $FFFFD100 )
+o_titlecard4	= ramaddr ( $FFFFD140 )
+o_shield	= ramaddr ( $FFFFD180 )
+o_busterfx	= ramaddr ( $FFFFD1C0 )	; object variable space for the buster effect ($40 bytes)
+o_stars1	= ramaddr ( $FFFFD200 )
+o_stars2	= ramaddr ( $FFFFD240 )
+o_stars3	= ramaddr ( $FFFFD280 )
+o_stars4	= ramaddr ( $FFFFD2C0 )
+o_objectsmashingshot	= ramaddr ( $FFFFD300 ) ; reserved slot for shots that can break walls (green wrecker and charged mega buster)
+o_splash	= ramaddr ( $FFFFD340 )
+o_result	= ramaddr ( $FFFFD5C0 )
+o_watersurface1	= ramaddr ( $FFFFD780 )
+o_watersurface2	= ramaddr ( $FFFFD7C0 )
 v_lvlobjspace	= ramaddr ( $FFFFD800 )	; level object variable space ($1800 bytes)
 
 v_snddriver_ram	= ramaddr ( $FFFFF000 )	; start of RAM for the sound driver data ($5C0 bytes)
@@ -213,8 +229,8 @@ v_sonspeedacc	= ramaddr ( $FFFFF762 )	; Sonic's acceleration (2 bytes)
 v_sonspeeddec	= ramaddr ( $FFFFF764 )	; Sonic's deceleration (2 bytes)
 v_sonframenum	= ramaddr ( $FFFFF766 )	; frame to display for Sonic
 v_bulletsonscreen	= ramaddr ( $FFFFF767 )	; used to be f_sonframechg
-v_anglebuffer	= ramaddr ( $FFFFF768 )	; angle of collision block that Sonic or object is standing on
-
+v_anglebuffer	= ramaddr ( $FFFFF768 )	; angle of collision block at Sonic's left collision sensor
+v_anglebuffer2	= ramaddr ( $FFFFF76A )	; angle of collision block at Sonic's left collision sensor
 v_opl_routine	= ramaddr ( $FFFFF76C )	; ObjPosLoad - routine counter
 v_opl_screen	= ramaddr ( $FFFFF76E )	; ObjPosLoad - screen variable
 v_opl_data	= ramaddr ( $FFFFF770 )	; ObjPosLoad - data buffer ($10 bytes)
@@ -259,6 +275,7 @@ f_jumponly	= ramaddr ( $FFFFF7CA )	; flag set to lock controls apart from jumpin
 v_obj6B	= ramaddr ( $FFFFF7CB )	; object 6B (SBZ stomper) variable
 f_lockctrl	= ramaddr ( $FFFFF7CC )	; flag set to lock controls during ending sequence
 f_bigring	= ramaddr ( $FFFFF7CD )	; flag set when Sonic collects the giant ring
+f_obj56	= ramaddr ( $FFFFF7CE ) ; object 56 (SYZ/SLZ floating block) flag
 v_itembonus	= ramaddr ( $FFFFF7D0 )	; item bonus from broken enemies, blocks etc. (2 bytes)
 v_timebonus	= ramaddr ( $FFFFF7D2 )	; time bonus at the end of an act (2 bytes)
 v_ringbonus	= ramaddr ( $FFFFF7D4 )	; ring bonus at the end of an act (2 bytes)
@@ -313,19 +330,26 @@ v_shield	= ramaddr ( $FFFFFE2C )	; shield status (00 = no; 01 = yes)
 v_invinc	= ramaddr ( $FFFFFE2D )	; invinciblity status (00 = no; 01 = yes)
 v_shoes	= ramaddr ( $FFFFFE2E )	; speed shoes status (00 = no; 01 = yes)
 v_lastlamp	= ramaddr ( $FFFFFE30 )	; number of the last lamppost you hit
+v_lamp_last	= v_lastlamp+1	; copy of lamppost counter (1 byte)
 v_lamp_xpos	= v_lastlamp+2	; x-axis for Sonic to respawn at lamppost (2 bytes)
 v_lamp_ypos	= v_lastlamp+4	; y-axis for Sonic to respawn at lamppost (2 bytes)
 v_lamp_rings	= v_lastlamp+6	; rings stored at lamppost (2 bytes)
 v_lamp_time	= v_lastlamp+8	; time stored at lamppost (2 bytes)
-v_lamp_dle	= v_lastlamp+$C	; dynamic level event routine counter at lamppost
+v_lamp_dle	= v_lastlamp+$C	; dynamic level event routine counter at lamppost (2 bytes)
 v_lamp_limitbtm	= v_lastlamp+$E	; level bottom boundary at lamppost (2 bytes)
 v_lamp_scrx	= v_lastlamp+$10 ; x-axis screen at lamppost (2 bytes)
 v_lamp_scry	= v_lastlamp+$12 ; y-axis screen at lamppost (2 bytes)
-
+v_lamp_bgx	= v_lastlamp+$14 ; background section 1 x-axis position (2 bytes)
+v_lamp_bgy	= v_lastlamp+$16 ; background section 1 y-axis position (2 bytes)
+v_lamp_bg2x	= v_lastlamp+$18 ; background section 1 x-axis position (2 bytes)
+v_lamp_bg2y	= v_lastlamp+$1A ; background section 1 y-axis position (2 bytes)
+v_lamp_bg3x	= v_lastlamp+$1C ; background section 1 x-axis position (2 bytes)
+v_lamp_bg3y	= v_lastlamp+$1E ; background section 1 y-axis position (2 bytes)
 v_lamp_wtrpos	= v_lastlamp+$20 ; water position at lamppost (2 bytes)
-v_lamp_wtrrout	= v_lastlamp+$22 ; water routine at lamppost
-v_lamp_wtrstat	= v_lastlamp+$23 ; water state at lamppost
-v_lamp_lives	= v_lastlamp+$24 ; lives counter at lamppost
+v_lamp_wtrrout	= v_lastlamp+$22 ; water routine at lamppost (1 byte)
+v_lamp_wtrstat	= v_lastlamp+$23 ; water state at lamppost (1 byte)
+v_lamp_lives	= v_lastlamp+$24 ; lives counter at lamppost (1 byte)
+
 v_emeralds	= ramaddr ( $FFFFFE57 )	; number of chaos emeralds
 v_emldlist	= ramaddr ( $FFFFFE58 )	; which individual emeralds you have (00 = no; 01 = yes) (6 bytes)
 v_oscillate	= ramaddr ( $FFFFFE5E )	; values which oscillate - for swinging platforms, et al ($42 bytes)

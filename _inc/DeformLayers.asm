@@ -685,7 +685,7 @@ ScrollHoriz:
 
 
 MoveScreenHoriz:
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	(v_screenposx).w,d0 ; Sonic's distance from left edge of screen
 		subi.w	#144,d0		; is distance less than 144px?
 		bcs.s	SH_BehindMid	; if yes, branch
@@ -742,14 +742,14 @@ loc_6610:
 
 ScrollVertical:
 		moveq	#0,d1
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obY).w,d0
 		sub.w	(v_screenposy).w,d0 ; Sonic's distance from top of screen
-		btst	#2,(v_player+obStatus).w ; is Sonic rolling?
+		btst	#2,(o_player+obStatus).w ; is Sonic rolling?
 		beq.s	SV_NotRolling	; if not, branch
 		subq.w	#5,d0
 
 SV_NotRolling:
-		btst	#1,(v_player+obStatus).w ; is Sonic jumping?
+		btst	#1,(o_player+obStatus).w ; is Sonic jumping?
 		beq.s	loc_664A	; if not, branch
 
 		addi.w	#32,d0
@@ -776,7 +776,7 @@ loc_6656:
 loc_665C:
 		cmpi.w	#$60,(v_lookshift).w
 		bne.s	loc_6684
-		move.w	(v_player+obInertia).w,d1
+		move.w	(o_player+obInertia).w,d1
 		bpl.s	loc_666C
 		neg.w	d1
 
@@ -835,7 +835,7 @@ loc_66CC:
 		cmpi.w	#-$100,d1
 		bgt.s	loc_66F0
 		andi.w	#$7FF,d1
-		andi.w	#$7FF,(v_player+obY).w
+		andi.w	#$7FF,(o_player+obY).w
 		andi.w	#$7FF,(v_screenposy).w
 		andi.w	#$3FF,(v_bgscreenposy).w
 		bra.s	loc_6724
@@ -857,7 +857,7 @@ loc_6700:
 		blt.s	loc_6724
 		subi.w	#$800,d1
 		bcs.s	loc_6720
-		andi.w	#$7FF,(v_player+obY).w
+		andi.w	#$7FF,(o_player+obY).w
 		subi.w	#$800,(v_screenposy).w
 		andi.w	#$3FF,(v_bgscreenposy).w
 		bra.s	loc_6724

@@ -48,7 +48,7 @@ LWall_Main:	; Routine 0
 		move.b	#4,obFrame(a1)
 
 LWall_Action:	; Routine 4
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	.rangechk
 		neg.w	d0
@@ -56,7 +56,7 @@ LWall_Action:	; Routine 4
 .rangechk:
 		cmpi.w	#$C0,d0		; is Sonic within $C0 pixels (x-axis)?
 		bcc.s	.movewall	; if not, branch
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obY).w,d0
 		sub.w	obY(a0),d0
 		bcc.s	.rangechk2
 		neg.w	d0
@@ -93,7 +93,7 @@ LWall_Solid:	; Routine 2
 .animate:
 		lea	(Ani_LWall).l,a1
 		bsr.w	AnimateSprite
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcc.s	.rangechk
 		bsr.w	SpeedToPos
 

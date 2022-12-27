@@ -41,7 +41,7 @@ Bas_Action:	; Routine 2
 		move.w	#$80,d2
 		bsr.w	.chkdistance	; is Sonic < $80 pixels from basaran?
 		bcc.s	.nodrop		; if not, branch
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obY).w,d0
 		move.w	d0,$36(a0)
 		sub.w	obY(a0),d0
 		bcs.s	.nodrop
@@ -94,7 +94,7 @@ Bas_Action:	; Routine 2
 
 .nosound:
 		bsr.w	SpeedToPos
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	.isright	; if Sonic is right of basaran, branch
 		neg.w	d0
@@ -141,7 +141,7 @@ Bas_Action:	; Routine 2
 .chkdistance:
 		move.w	#$100,d1
 		bset	#0,obStatus(a0)
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	.right		; if Sonic is right of basaran, branch
 		neg.w	d0
@@ -150,11 +150,4 @@ Bas_Action:	; Routine 2
 
 .right:
 		cmp.w	d2,d0
-		rts	
-; ===========================================================================
-; unused crap
-		bsr.w	SpeedToPos
-		bsr.w	DisplaySprite
-		tst.b	obRender(a0)
-		bpl.w	DeleteObject
-		rts	
+		rts

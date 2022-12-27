@@ -261,3 +261,23 @@ sfx:	macro snd
 		move.w	snd,d0
 		jsr		(PlaySound_Special).l
 		endm
+
+; macro to replace the destination with its absolute value
+abs macro destination
+	tst.ATTRIBUTE	destination
+	bpl.s	.skip
+	neg.ATTRIBUTE	destination
+.skip:
+    endm
+
+absw macro destination	; use a short branch instead
+	abs.ATTRIBUTE	destination
+    endm
+
+; macro to move the absolute value of the source in the destination
+mvabs macro source,destination
+	move.ATTRIBUTE	source,destination
+	bpl.s	.skip
+	neg.ATTRIBUTE	destination
+.skip:
+    endm

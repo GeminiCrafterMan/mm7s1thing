@@ -7,12 +7,12 @@ BusterEffects:
 	; frankly so simple i don't need routines for it
 		ori.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
-		move.w	#$79A,obGfx(a0)
+		move.w	#$799,obGfx(a0)
 		move.l	#Map_MegaBusterFX,obMap(a0)
-		move.w	(v_player+obX).w,obX(a0)
-		move.w	(v_player+obY).w,obY(a0)
+		move.w	(o_player+obX).w,obX(a0)
+		move.w	(o_player+obY).w,obY(a0)
 	; maybe add custom x/y offsets per frame of Mega's sprites...?
-		btst	#0,(v_player+obStatus).w
+		btst	#0,(o_player+obStatus).w
 		beq.s	.notFlipped
 		bset	#0,obStatus(a0)
 		subi.w	#25,obX(a0)

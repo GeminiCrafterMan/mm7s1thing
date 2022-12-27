@@ -66,7 +66,7 @@ SEgg_EggIndex:	dc.w SEgg_ChkSonic-SEgg_EggIndex
 
 SEgg_ChkSonic:
 		move.w	obX(a0),d0
-		sub.w	(v_player+obX).w,d0
+		sub.w	(o_player+obX).w,d0
 		cmpi.w	#128,d0		; is Sonic within 128 pixels of	Eggman?
 		bcc.s	loc_19934	; if not, branch
 		addq.b	#2,ob2ndRout(a0)

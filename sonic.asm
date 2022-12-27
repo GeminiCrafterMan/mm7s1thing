@@ -2091,7 +2091,7 @@ Tit_ClrPal:
 
 		moveq	#palid_MegaMan,d0	; load Sonic's palette
 		bsr.w	PalLoad1
-		move.b	#id_CreditsText,(v_objspace+$80).w ; load "SONIC TEAM PRESENTS" object
+		move.b	#id_CreditsText,(o_titlecard1).w ; load "SONIC TEAM PRESENTS" object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn
@@ -2152,11 +2152,11 @@ Tit_LoadText:
 		moveq	#palid_Title,d0	; load title screen palette
 		bsr.w	PalLoad1
 	;blep
-;		move.b	#bgm_Title,d0
-;		bsr.w	PlaySound_Special	; play title screen music
+		move.b	#bgm_Title,d0
+		bsr.w	PlaySound_Special	; play title screen music
 		move.b	#0,(f_debugmode).w ; disable debug mode
 		move.w	#$178,(v_demolength).w ; run title screen for $178 frames
-		lea	(v_objspace+$80).w,a1
+		lea	(o_titlecard1).w,a1
 		moveq	#0,d0
 		move.w	#7,d1
 
@@ -2164,15 +2164,15 @@ Tit_ClrObj2:
 		move.l	d0,(a1)+
 		dbf	d1,Tit_ClrObj2
 
-		move.b	#id_TitleSonic,(v_objspace+$40).w ; load big Sonic object
-		move.b	#id_PSBTM,(v_objspace+$80).w ; load "PRESS START BUTTON" object
-		clr.b	(v_objspace+$80+obRoutine).w ; The 'Mega Games 10' version of Sonic 1 added this line, to fix the 'PRESS START BUTTON' object not appearing
+		move.b	#id_TitleSonic,(o_hud).w ; load big Sonic object
+		move.b	#id_PSBTM,(o_titlecard1).w ; load "PRESS START BUTTON" object
+		clr.b	(o_titlecard1+obRoutine).w ; The 'Mega Games 10' version of Sonic 1 added this line, to fix the 'PRESS START BUTTON' object not appearing
 
-		move.b	#id_PSBTM,(v_objspace+$C0).w ; load "TM" object
-		move.b	#3,(v_objspace+$C0+obFrame).w
+		move.b	#id_PSBTM,(o_titlecard2).w ; load "TM" object
+		move.b	#3,(o_titlecard2+obFrame).w
 
-		move.b	#id_PSBTM,(v_objspace+$100).w ; load object which hides part of Sonic
-		move.b	#2,(v_objspace+$100+obFrame).w
+		move.b	#id_PSBTM,(o_titlecard3).w ; load object which hides part of Sonic
+		move.b	#2,(o_titlecard3+obFrame).w
 		jsr	(ExecuteObjects).l
 		bsr.w	DeformLayers
 		jsr	(BuildSprites).l
@@ -2754,7 +2754,7 @@ Level_LoadPal:
 		jsr		loadWaterShift
 		tst.b	(v_lastlamp).w
 		beq.s	Level_GetBgm
-		move.b	($FFFFFE53).w,(f_wtr_state).w
+		move.b	(v_lamp_wtrstat).w,(f_wtr_state).w
 
 Level_GetBgm:
 		tst.w	(f_demo).w
@@ -2774,7 +2774,7 @@ Level_PlayBgm:
 		lea	(MusicList).l,a1 ; load	music playlist
 		move.b	(a1,d0.w),d0
 		bsr.w	PlaySound	; play music
-		move.b	#id_TitleCard,(v_objspace+$80).w ; load title card object
+		move.b	#id_TitleCard,(o_titlecard1).w ; load title card object
 
 Level_TtlCardLoop:
 		move.b	#$C,(v_vbla_routine).w
@@ -2782,8 +2782,8 @@ Level_TtlCardLoop:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	RunPLC
-		move.w	(v_objspace+$108).w,d0
-		cmp.w	(v_objspace+$130).w,d0 ; has title card sequence finished?
+		move.w	(o_titlecard3+obX).w,d0
+		cmp.w	(o_titlecard3+card_mainX).w,d0 ; has title card sequence finished?
 		bne.s	Level_TtlCardLoop ; if not, branch
 		tst.l	(v_plc_buffer).w ; are there any items in the pattern load cue?
 		bne.s	Level_TtlCardLoop ; if yes, branch
@@ -2799,10 +2799,10 @@ Level_SkipTtlCard:
 		bsr.w	LoadTilesFromStart
 		bsr.w	ColIndexLoad
 		bsr.w	LZWaterFeatures
-		move.b	#id_MegaManPlayer,(v_player).w ; load Sonic object
+		move.b	#id_MegaManPlayer,(o_player).w ; load Sonic object
 		tst.w	(f_demo).w
 		bmi.s	Level_ChkDebug
-		move.b	#id_HUD,(v_objspace+$40).w ; load HUD object
+		move.b	#id_HUD,(o_hud).w ; load HUD object
 
 Level_ChkDebug:
 		tst.b	(f_debugcheat).w ; has debug cheat been entered?
@@ -2816,10 +2816,10 @@ Level_ChkWater:
 		move.w	#0,(v_jpadhold1).w
 		cmpi.b	#id_LZ,(v_zone).w ; is level LZ?
 		bne.s	Level_LoadObj	; if not, branch
-		move.b	#id_WaterSurface,(v_objspace+$780).w ; load water surface object
-		move.w	#$60,(v_objspace+$780+obX).w
-		move.b	#id_WaterSurface,(v_objspace+$7C0).w
-		move.w	#$120,(v_objspace+$7C0+obX).w
+		move.b	#id_WaterSurface,(o_watersurface1).w ; load water surface object
+		move.w	#$60,(o_watersurface1+obX).w
+		move.b	#id_WaterSurface,(o_watersurface2).w
+		move.w	#$120,(o_watersurface2+obX).w
 
 Level_LoadObj:
 		jsr	(ObjPosLoad).l
@@ -2882,10 +2882,10 @@ Level_DelayLoop:
 		bsr.w	PalFadeIn_Alt
 		tst.w	(f_demo).w	; is an ending sequence demo running?
 		bmi.s	Level_ClrCardArt ; if yes, branch
-		addq.b	#2,(v_objspace+$80+obRoutine).w ; make title card move
-		addq.b	#4,(v_objspace+$C0+obRoutine).w
-		addq.b	#4,(v_objspace+$100+obRoutine).w
-		addq.b	#4,(v_objspace+$140+obRoutine).w
+		addq.b	#2,(o_titlecard1+obRoutine).w ; make title card move
+		addq.b	#4,(o_titlecard2+obRoutine).w
+		addq.b	#4,(o_titlecard3+obRoutine).w
+		addq.b	#4,(o_titlecard4+obRoutine).w
 		bra.s	Level_StartGame
 ; ===========================================================================
 
@@ -2916,7 +2916,7 @@ Level_MainLoop:
 		bne     GM_Level
 		tst.w	(v_debuguse).w	; is debug mode being used?
 		bne.s	Level_DoScroll	; if yes, branch
-		cmpi.b	#6,(v_player+obRoutine).w ; has Sonic just died?
+		cmpi.b	#6,(o_player+obRoutine).w ; has Sonic just died?
 		bhs.s	Level_SkipScroll ; if yes, branch
 
 Level_DoScroll:
@@ -3168,7 +3168,7 @@ SS_ClrNemRam:
 		jsr	(SS_Load).l		; load SS layout data
 		move.l	#0,(v_screenposx).w
 		move.l	#0,(v_screenposy).w
-		move.b	#id_SonicSpecial,(v_player).w ; load special stage Sonic object
+		move.b	#id_SonicSpecial,(o_player).w ; load special stage Sonic object
 		bsr.w	PalCycle_SS
 		clr.w	(v_ssangle).w	; set stage angle to "upright"
 		move.w	#$40,(v_ssrotate).w ; set stage rotation speed
@@ -3282,7 +3282,7 @@ SS_EndClrObjRam:
 		move.l	d0,(a1)+
 		dbf	d1,SS_EndClrObjRam ; clear object RAM
 
-		move.b	#id_SSResult,(v_objspace+$5C0).w ; load results screen object
+		move.b	#id_SSResult,(o_result).w ; load results screen object
 
 SS_NormalExit:
 		bsr.w	PauseGame
@@ -3637,13 +3637,13 @@ Cont_ClrObjRam:
 		move.w	#659,(v_demolength).w ; set time delay to 11 seconds
 		clr.l	(v_screenposx).w
 		move.l	#$1000000,(v_screenposy).w
-		move.b	#id_ContSonic,(v_player).w ; load Sonic object
-		move.b	#id_ContScrItem,(v_objspace+$40).w ; load continue screen objects
-		move.b	#id_ContScrItem,(v_objspace+$80).w
-		move.b	#3,(v_objspace+$80+obPriority).w
-		move.b	#4,(v_objspace+$80+obFrame).w
-		move.b	#id_ContScrItem,(v_objspace+$C0).w
-		move.b	#4,(v_objspace+$C0+obRoutine).w
+		move.b	#id_ContSonic,(o_player).w ; load Sonic object
+		move.b	#id_ContScrItem,(o_hud).w ; load continue screen objects
+		move.b	#id_ContScrItem,(o_titlecard1).w
+		move.b	#3,(o_titlecard1+obPriority).w
+		move.b	#4,(o_titlecard1+obFrame).w
+		move.b	#id_ContScrItem,(o_titlecard2).w
+		move.b	#4,(o_titlecard2+obRoutine).w
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		move.w	(v_vdp_buffer1).w,d0
@@ -3658,7 +3658,7 @@ Cont_ClrObjRam:
 Cont_MainLoop:
 		move.b	#$16,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		cmpi.b	#6,(v_player+obRoutine).w
+		cmpi.b	#6,(o_player+obRoutine).w
 		bhs.s	loc_4DF2
 		disable_ints
 		move.w	(v_demolength).w,d1
@@ -3670,9 +3670,9 @@ Cont_MainLoop:
 loc_4DF2:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
-		cmpi.w	#$180,(v_player+obX).w ; has Sonic run off screen?
+		cmpi.w	#$180,(o_player+obX).w ; has Sonic run off screen?
 		bhs.s	Cont_GotoLevel	; if yes, branch
-		cmpi.b	#6,(v_player+obRoutine).w
+		cmpi.b	#6,(o_player+obRoutine).w
 		bhs.s	Cont_MainLoop
 		tst.w	(v_demolength).w
 		bne.w	Cont_MainLoop
@@ -3784,12 +3784,12 @@ End_LoadData:
 		move.b	#1,(f_debugmode).w ; enable debug mode
 
 End_LoadSonic:
-		move.b	#id_MegaManPlayer,(v_player).w ; load Sonic object
-		bset	#0,(v_player+obStatus).w ; make Sonic face left
+		move.b	#id_MegaManPlayer,(o_player).w ; load Sonic object
+		bset	#0,(o_player+obStatus).w ; make Sonic face left
 		move.b	#1,(f_lockctrl).w ; lock controls
 		move.w	#(btnL<<8),(v_jpadhold2).w ; move Sonic to the left
-		move.w	#$F800,(v_player+obInertia).w ; set Sonic's speed
-		move.b	#id_HUD,(v_objspace+$40).w ; load HUD object
+		move.w	#$F800,(o_player+obInertia).w ; set Sonic's speed
+		move.b	#id_HUD,(o_hud).w ; load HUD object
 		jsr	(ObjPosLoad).l
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
@@ -3895,7 +3895,7 @@ End_SlowFade:
 End_MoveSonic:
 		move.b	(v_sonicend).w,d0
 		bne.s	End_MoveSon2
-		cmpi.w	#$90,(v_player+obX).w ; has Sonic passed $90 on x-axis?
+		cmpi.w	#$90,(o_player+obX).w ; has Sonic passed $90 on x-axis?
 		bhs.s	End_MoveSonExit	; if not, branch
 
 		addq.b	#2,(v_sonicend).w
@@ -3907,18 +3907,18 @@ End_MoveSonic:
 End_MoveSon2:
 		subq.b	#2,d0
 		bne.s	End_MoveSon3
-		cmpi.w	#$A0,(v_player+obX).w ; has Sonic passed $A0 on x-axis?
+		cmpi.w	#$A0,(o_player+obX).w ; has Sonic passed $A0 on x-axis?
 		blo.s	End_MoveSonExit	; if not, branch
 
 		addq.b	#2,(v_sonicend).w
 		moveq	#0,d0
 		move.b	d0,(f_lockctrl).w
 		move.w	d0,(v_jpadhold2).w ; stop Sonic moving
-		move.w	d0,(v_player+obInertia).w
+		move.w	d0,(o_player+obInertia).w
 		move.b	#$81,(f_lockmulti).w ; lock controls & position
-		move.b	#fr_Blink2,(v_player+obFrame).w
-		move.w	#(id_Wait<<8)+id_Wait,(v_player+obAnim).w ; use "standing" animation
-		move.b	#3,(v_player+obTimeFrame).w
+		move.b	#fr_Blink2,(o_player+obFrame).w
+		move.w	#(id_Wait<<8)+id_Wait,(o_player+obAnim).w ; use "standing" animation
+		move.b	#3,(o_player+obTimeFrame).w
 		rts	
 ; ===========================================================================
 
@@ -3926,9 +3926,9 @@ End_MoveSon3:
 		subq.b	#2,d0
 		bne.s	End_MoveSonExit
 		addq.b	#2,(v_sonicend).w
-		move.w	#$A0,(v_player+obX).w
-		move.b	#id_EndSonic,(v_player).w ; load Sonic ending sequence object
-		clr.w	(v_player+obRoutine).w
+		move.w	#$A0,(o_player+obX).w
+		move.b	#id_EndSonic,(o_player).w ; load Sonic ending sequence object
+		clr.w	(o_player+obRoutine).w
 
 End_MoveSonExit:
 		rts	
@@ -3983,7 +3983,7 @@ Cred_ClrPal:
 
 		moveq	#palid_MegaMan,d0
 		bsr.w	PalLoad1	; load Sonic's palette
-		move.b	#id_CreditsText,(v_objspace+$80).w ; load credits object
+		move.b	#id_CreditsText,(o_titlecard1).w ; load credits object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	EndingDemoLoad
@@ -4112,7 +4112,7 @@ TryAg_ClrPal:
 		moveq	#palid_Ending,d0
 		bsr.w	PalLoad1	; load ending palette
 		clr.w	(v_pal_dry_dup+$40).w
-		move.b	#id_EndEggman,(v_objspace+$80).w ; load Eggman object
+		move.b	#id_EndEggman,(o_titlecard1).w ; load Eggman object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		move.w	#1800,(v_demolength).w ; show screen for 30 seconds
@@ -5058,7 +5058,7 @@ LevLoad_Row:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 PlatformObject:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		tst.w	obVelY(a1)	; is Sonic moving up/jumping?
 		bmi.w	Plat_Exit	; if yes, branch
 
@@ -5142,7 +5142,7 @@ Plat_Exit:
 
 
 SlopeObject:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		tst.w	obVelY(a1)
 		bmi.w	Plat_Exit
 		move.w	obX(a1),d0
@@ -5171,7 +5171,7 @@ loc_754A:
 
 
 Swing_Solid:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		tst.w	obVelY(a1)
 		bmi.w	Plat_Exit
 		move.w	obX(a1),d0
@@ -5202,7 +5202,7 @@ ExitPlatform:
 
 ExitPlatform2:
 		add.w	d2,d2
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		btst	#1,obStatus(a1)
 		bne.s	loc_75E0
 		move.w	obX(a1),d0
@@ -5234,7 +5234,7 @@ Map_Bri:	include	"_maps/Bridge.asm"
 
 
 MvSonicOnPtfm:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obY(a0),d0
 		sub.w	d3,d0
 		bra.s	MvSonic2
@@ -5248,14 +5248,14 @@ MvSonicOnPtfm:
 
 
 MvSonicOnPtfm2:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obY(a0),d0
 		subi.w	#9,d0
 
 MvSonic2:
 		tst.b	(f_lockmulti).w
 		bmi.s	locret_7B62
-		cmpi.b	#6,(v_player+obRoutine).w
+		cmpi.b	#6,(o_player+obRoutine).w
 		bhs.s	locret_7B62
 		tst.w	(v_debuguse).w
 		bne.s	locret_7B62
@@ -5280,7 +5280,7 @@ Map_Plat_Unused:include	"_maps/Platforms (unused).asm"
 Map_Plat_GHZ:	include	"_maps/Platforms (GHZ).asm"
 Map_Plat_SYZ:	include	"_maps/Platforms (SYZ).asm"
 Map_Plat_SLZ:	include	"_maps/Platforms (SLZ).asm"
-		include	"_incObj/19.asm"
+		include	"_incObj/Player/19 Death Orbs.asm"
 Map_GBall:	include	"_maps/GHZ Ball.asm"
 		include	"_incObj/1A Collapsing Ledge (part 1).asm"
 		include	"_incObj/53 Collapsing Floors.asm"
@@ -5353,7 +5353,7 @@ CFlo_Data3:	dc.b $16, $1E, $1A, $12, 6, $E,	$A, 2
 
 
 SlopeObject2:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		btst	#3,obStatus(a1)
 		beq.s	locret_856E
 		move.w	obX(a1),d0
@@ -5464,7 +5464,7 @@ locret_8AD8:
 
 
 Obj44_SolidWall2:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a1),d0
 		sub.w	obX(a0),d0
 		add.w	d1,d0
@@ -5486,7 +5486,7 @@ Obj44_SolidWall2:
 		bhs.s	loc_8B48
 		tst.b	(f_lockmulti).w
 		bmi.s	loc_8B48
-		cmpi.b	#6,(v_player+obRoutine).w
+		cmpi.b	#6,(o_player+obRoutine).w
 		bhs.s	loc_8B48
 		tst.w	(v_debuguse).w
 		bne.s	loc_8B48
@@ -5914,7 +5914,7 @@ ExecuteObjects:
 		lea	(v_objspace).w,a0 ; set address for object RAM
 		moveq	#$7F,d7
 		moveq	#0,d0
-;		cmpi.b	#6,(v_player+obRoutine).w
+;		cmpi.b	#6,(o_player+obRoutine).w
 ;		bhs.s	loc_D362
 
 loc_D348:
@@ -5964,6 +5964,7 @@ Obj_Index:
 		include	"_incObj/sub SpeedToPos.asm"
 		include	"_incObj/sub DisplaySprite.asm"
 		include	"_incObj/sub DeleteObject.asm"
+		include "_incObj/sub GetOrientationTo.asm"
 
 ; ===========================================================================
 BldSpr_ScrPos:	dc.l 0				; blank
@@ -6510,7 +6511,7 @@ Map_Bump:	include	"_maps/Bumper.asm"
 		include	"_incObj/0D Signpost.asm" ; includes "GotThroughAct" subroutine
 		include	"_anim/Signpost.asm"
 Map_Sign:	include	"_maps/Signpost.asm"
-SignDynPLC:	include	"_maps/Signpost - Dynamic Gfx Script.asm"
+SignDynPLC:	include	"_dplcs/Signpost.asm"
 
 		include	"_incObj/4C & 4D Lava Geyser Maker.asm"
 		include	"_incObj/4E Wall of Lava.asm"
@@ -6638,7 +6639,7 @@ Sonic_Main:	; Routine 0
 		moveq	#plcid_Buster,d0
 		jsr		(AddPLC).l	; load buster shot patterns
 		clr.b	(v_weapon).w ; reset weapon
-		move.b	#id_BusterEffects,(v_busterfx).w
+		move.b	#id_BusterEffects,(o_busterfx).w
 	.setWeaponEnergy:
 		move.b	#32,(v_weapon1energy).w	; Green Wrecker
 		move.b	#32,(v_weapon2energy).w	; Marble Blazer
@@ -6678,7 +6679,7 @@ loc_12C7E:
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Water
 		move.b	(v_anglebuffer).w,$36(a0)
-		move.b	($FFFFF76A).w,$37(a0)
+		move.b	(v_anglebuffer2).w,$37(a0)
 		tst.b	(f_wtunnelmode).w
 		beq.s	loc_12CA6
 		tst.b	obAnim(a0)
@@ -6852,53 +6853,16 @@ loc_12EA6:
 
 		include	"_incObj/0A Drowning Countdown.asm"
 
-
-; ---------------------------------------------------------------------------
-; Subroutine to	play music for LZ/SBZ3 after a countdown
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-ResumeMusic:
-		cmpi.w	#12,(v_air).w	; more than 12 seconds of air left?
-		bhi.s	.over12		; if yes, branch
-		move.w	#bgm_LZ,d0	; play LZ music
-		cmpi.w	#(id_LZ<<8)+3,(v_zone).w ; check if level is 0103 (SBZ3)
-		bne.s	.notsbz
-		move.w	#bgm_SBZ,d0	; play SBZ music
-
-.notsbz:
-		tst.b	(v_invinc).w ; is Sonic invincible?
-		beq.s	.notinvinc ; if not, branch
-		move.w	#bgm_Invincible,d0
-
-.notinvinc:
-		tst.b	(f_lockscreen).w ; is Sonic at a boss?
-		beq.s	.playselected ; if not, branch
-		move.w	#bgm_Boss,d0
-
-.playselected:
-		jsr	(PlaySound).l
-
-.over12:
-		move.w	#30,(v_air).w	; reset air to 30 seconds
-		clr.b	(v_objspace+$340+$32).w
-		rts	
-; End of function ResumeMusic
-
 ; ===========================================================================
 
 		include	"_anim/Drowning Countdown.asm"
 Map_Drown:	include	"_maps/Drowning Countdown.asm"
 
 		include	"_incObj/38 Shield and Invincibility.asm"
-		include	"_incObj/4A Special Stage Entry (Unused).asm"
 		include	"_incObj/08 Water Splash.asm"
 		include	"_anim/Shield and Invincibility.asm"
-Map_Shield:	include	"_maps/Shield and Invincibility.asm"
-		include	"_anim/Special Stage Entry (Unused).asm"
-Map_Vanish:	include	"_maps/Special Stage Entry (Unused).asm"
+Map_ShieldAndStars:	include	"_maps/Shield and Invincibility.asm"
+ShieldAndStarsDynPLC:	include	"_dplcs/Shield and Invincibility.asm"
 		include	"_anim/Water Splash.asm"
 Map_Splash:	include	"_maps/Water Splash.asm"
 
@@ -6925,7 +6889,7 @@ Sonic_WalkSpeed:
 		swap	d2
 		swap	d3
 		move.b	d0,(v_anglebuffer).w
-		move.b	d0,($FFFFF76A).w
+		move.b	d0,(v_anglebuffer2).w
 		move.b	d0,d1
 		addi.b	#$20,d0
 		bpl.s	loc_14D1A
@@ -6968,7 +6932,7 @@ loc_14D3C:
 
 sub_14D48:
 		move.b	d0,(v_anglebuffer).w
-		move.b	d0,($FFFFF76A).w
+		move.b	d0,(v_anglebuffer2).w
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -7012,7 +6976,7 @@ Sonic_HitFloor:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer2).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -7021,7 +6985,7 @@ Sonic_HitFloor:
 		move.b	#0,d2
 
 loc_14DD0:
-		move.b	($FFFFF76A).w,d3
+		move.b	(v_anglebuffer2).w,d3
 		cmp.w	d0,d1
 		ble.s	loc_14DDE
 		move.b	(v_anglebuffer).w,d3
@@ -7090,7 +7054,7 @@ sub_14E50:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer2).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -7182,7 +7146,7 @@ Sonic_DontRunOnWalls:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer2).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -7261,7 +7225,7 @@ loc_14FD6:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer2).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -7974,8 +7938,8 @@ SS_ChkEmldRepeat:
 SS_LoadData:
 		lsl.w	#2,d0
 		lea	SS_StartLoc(pc,d0.w),a1
-		move.w	(a1)+,(v_player+obX).w
-		move.w	(a1)+,(v_player+obY).w
+		move.w	(a1)+,(o_player+obX).w
+		move.w	(a1)+,(o_player+obY).w
 		movea.l	SS_LayoutIndex(pc,d0.w),a0
 		lea	($FF4000).l,a1
 		move.w	#0,d0
@@ -8035,8 +7999,6 @@ Map_SS_Down:	include	"_maps/SS DOWN Block.asm"
 		include	"_maps/SS Chaos Emeralds.asm"
 
 		include	"_incObj/09 Sonic in Special Stage.asm"
-
-		include	"_incObj/10.asm"
 
 		include	"_inc/AnimateLevelGfx.asm"
 
@@ -8163,16 +8125,16 @@ Nem_JapNames:	binclude	"artnem/Hidden Japanese Credits.bin"
 		even
 
 Map_MegaMan:	include	"_maps/Mega Man.asm"
-MegaManDynPLC:	include	"_maps/Mega Man - Dynamic Gfx Script.asm"
+MegaManDynPLC:	include	"_dplcs/Mega Man.asm"
 
 Map_MegaBusterFX:	include	"_maps/Mega Buster Effects.asm"
-MegaBusterFXDynPLC:	include	"_maps/Mega Buster Effects - Dynamic Gfx Script.asm"
+MegaBusterFXDynPLC:	include	"_dplcs/Mega Buster Effects.asm"
 
 Map_BusterCharges:	include	"_maps/Buster Charges.asm"
-BusterChargesDynPLC:	include	"_maps/Buster Charges - Dynamic Gfx Script.asm"
+BusterChargesDynPLC:	include	"_dplcs/Buster Charges.asm"
 
 Map_SpecialWeapons:	include	"_maps/Special Weapons.asm"
-SpecialWeaponsDynPLC:	include	"_maps/Special Weapons - Dynamic Gfx Script.asm"
+SpecialWeaponsDynPLC:	include	"_dplcs/Special Weapons.asm"
 
 Map_SSWalls:	include	"_maps/SS Walls.asm"
 ; ---------------------------------------------------------------------------
@@ -8187,16 +8149,11 @@ Art_BusterCharges:	binclude	"artunc/Buster Charges.bin"	; Mega Buster charged sh
 Art_SpecialWeapons:	binclude	"artunc/Special Weapons.bin" ; special weapons
 		even
 ; ---------------------------------------------------------------------------
-; Uncompressed graphics - Signpost
+; Uncompressed graphics - various
 ; ---------------------------------------------------------------------------
 Art_SignPost:	binclude	"artunc/Signpost.bin"	; end of level signpost
 		even
-; ---------------------------------------------------------------------------
-; Compressed graphics - various
-; ---------------------------------------------------------------------------
-Nem_Shield:	binclude	"artnem/Shield.bin"
-		even
-Nem_Stars:	binclude	"artnem/Invincibility Stars.bin"
+Art_ShieldAndStars:	binclude	"artunc/ShieldAndStars.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage

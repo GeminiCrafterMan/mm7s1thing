@@ -14,7 +14,6 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.w	#$700,obVelX(a1)
-		move.b	#1,(v_busterfx+obAnim).w
 ;		bra.w	.objectLoadedJumpPoint
 	.objectLoadedJumpPoint:
 		jsr		FireWeapon

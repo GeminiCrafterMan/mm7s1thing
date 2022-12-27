@@ -41,7 +41,7 @@ Pole_Action:	; Routine 2
 ; ===========================================================================
 
 .moveup:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obY(a0),d0
 		subi.w	#$18,d0
 		btst	#bitUp,(v_jpadhold1).w ; is "up" pressed?
@@ -77,7 +77,7 @@ Pole_Action:	; Routine 2
 .grab:
 		tst.b	obColProp(a0)	; has Sonic touched the	pole?
 		beq.s	Pole_Display	; if not, branch
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a0),d0
 		addi.w	#$14,d0
 		cmp.w	obX(a1),d0

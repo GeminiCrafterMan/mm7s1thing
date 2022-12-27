@@ -57,13 +57,13 @@ FBlock_Main:	; Routine 0
 		bne.s	.dontdelete
 		cmpi.w	#$1BB8,obX(a0)
 		bne.s	.notatpos
-		tst.b	($FFFFF7CE).w
+		tst.b	(f_obj56).w
 		beq.s	.dontdelete
 		jmp	(DeleteObject).l
 
 .notatpos:
 		clr.b	obSubtype(a0)
-		tst.b	($FFFFF7CE).w
+		tst.b	(f_obj56).w
 		bne.s	.dontdelete
 		jmp	(DeleteObject).l
 
@@ -216,7 +216,7 @@ FBlock_Action:	; Routine 2
 		cmpi.b	#3,fb_type(a0)
 		bne.s	.aaa
 		clr.b	(f_wtunnelallow).w
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		cmp.w	obX(a0),d0
 		bcc.s	.aaa
 		move.b	#1,(f_wtunnelallow).w
@@ -321,7 +321,7 @@ FBlock_Action:	; Routine 2
 		addq.w	#1,fb_height(a0)
 		cmpi.w	#$380,fb_height(a0)
 		bne.s	.locret_10578
-		move.b	#1,($FFFFF7CE).w
+		move.b	#1,(f_obj56).w
 		clr.b	$38(a0)
 		clr.b	obSubtype(a0)
 

@@ -53,7 +53,7 @@ Obj77_LoadBoss:
 		dbf	d1,Obj77_Loop
 
 Obj77_ShipMain:	; Routine 2
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		moveq	#0,d0
 		move.b	ob2ndRout(a0),d0
 		move.w	Obj77_ShipIndex(pc,d0.w),d1
@@ -209,7 +209,7 @@ loc_1806C:
 		swap	d0
 		move.w	d0,obX(a0)
 		move.w	obVelY(a0),d0
-		move.w	(v_player+obY).w,d1
+		move.w	(o_player+obY).w,d1
 		sub.w	obY(a0),d1
 		bcs.s	loc_180A2
 		subi.w	#$48,d1
@@ -337,7 +337,7 @@ loc_1818C:
 ; ===========================================================================
 
 loc_18196:
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcs.s	loc_181A0
 		moveq	#4,d1
 

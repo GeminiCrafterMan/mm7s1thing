@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "Mega Man in Sonic 1",
-    "node": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
+    "node": "3fd70d6d-9cd8-465f-b147-929999eaa239",
     "objects": [
         {
             "name": "Mega Man's Weapons",
@@ -25,7 +25,7 @@
                             },
                             "dplcs": {
                                 "enabled": true,
-                                "path": "_maps/Mega Buster Effects - Dynamic Gfx Script.asm",
+                                "path": "_dplcs/Mega Buster Effects.asm",
                                 "label": ""
                             }
                         },
@@ -65,13 +65,13 @@
                             },
                             "dplcs": {
                                 "enabled": true,
-                                "path": "_maps/Buster Charges - Dynamic Gfx Script.asm",
+                                "path": "_dplcs/Buster Charges.asm",
                                 "label": ""
                             }
                         }
                     ],
                     "isDirectory": true,
-                    "expanded": false,
+                    "expanded": true,
                     "uuid": "6d691513-6222-4bde-8313-061fd6f7dfc5"
                 }
             ],
@@ -95,7 +95,7 @@
             },
             "dplcs": {
                 "enabled": true,
-                "path": "_maps/Special Weapons - Dynamic Gfx Script.asm",
+                "path": "_dplcs/Special Weapons.asm",
                 "label": ""
             }
         },
@@ -122,7 +122,7 @@
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "_maps/Mega Man - Dynamic Gfx Script.asm",
+                        "path": "_dplcs/Mega Man.asm",
                         "label": "MegaMan_PLC"
                     },
                     "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
@@ -151,7 +151,7 @@
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "_maps/Signpost - Dynamic Gfx Script.asm",
+                        "path": "_dplcs/Signpost.asm",
                         "label": ""
                     },
                     "uuid": "472ab9f3-6355-46ce-a3a8-3fd70d6d9cd8"
@@ -205,6 +205,26 @@
                         "label": ""
                     },
                     "uuid": "b9f36355-e6ce-43a8-bfd7-0d6d9cd8865f"
+                },
+                {
+                    "uuid": "43ea722b-5e79-4a94-8287-4c3ca68d373e",
+                    "format": "Sonic 1.js",
+                    "name": "Shield and Stars",
+                    "palettes": [],
+                    "art": {
+                        "path": "artunc/ShieldAndStars.bin",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Shield and Invincibility.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "_dplcs/Shield and Invincibility.asm",
+                        "label": ""
+                    }
                 },
                 {
                     "name": "Spikes",

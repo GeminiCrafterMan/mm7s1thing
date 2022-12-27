@@ -26,29 +26,47 @@ Smash_Main:	; Routine 0
 		move.b	obSubtype(a0),obFrame(a0)
 
 Smash_Solid:	; Routine 2
-		move.w	(v_player+obVelX).w,smash_speed(a0) ; load Sonic's horizontal speed
+		move.w	(o_objectsmashingshot+obVelX).w,smash_speed(a0) ; load the shot's horizontal speed
 		move.w	#$1B,d1
 		move.w	#$20,d2
 		move.w	#$20,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
-		btst	#5,obStatus(a0)	; is Sonic pushing against the wall?
-		bne.s	.chkroll	; if yes, branch
+;		btst	#5,obStatus(a0)	; is Sonic pushing against the wall?
+;		bne.s	.chkroll	; if yes, branch
+		lea		(o_objectsmashingshot).w,a1
+		jsr		Obj_GetOrientationToA1
+	.testDistance:
+		addi.w	#$20,d3
+		cmpi.w	#$40,d3	; is the shot too low?
+		bhs.s	.donothing
+		tst.w	d2
+		bge.s	.contTestDistance
+		neg.w	d2
+	.contTestDistance:
+		cmpi.w	#$1B,d2	; is the shot too far away?
+		bgt.s	.donothing
+		bra.s	.chkroll
 
 .donothing:
-		rts	
+		rts
 ; ===========================================================================
 
 .chkroll:
-		cmpi.b	#id_Roll,obAnim(a1) ; is Sonic rolling?
-		bne.s	.donothing	; if not, branch
+		cmpi.b	#2,obSubtype(a1) ; is it a charge shot?
+		beq.s	.dothing	; if so, branch
+;		cmpi.b	#3,obSubtype(a1) ; is it the Green Wrecker ball?
+;		beq.s	.dothing	; if so, branch
+		bra.s	.donothing
+	.dothing:
 		move.w	smash_speed(a0),d0
 		bpl.s	.chkspeed
 		neg.w	d0
 
 .chkspeed:
-		cmpi.w	#$480,d0	; is Sonic's speed $480 or higher?
-		bcs.s	.donothing	; if not, branch
+;		cmpi.w	#$480,d0	; is Sonic's speed $480 or higher?
+;		bcs.s	.donothing	; if not, branch
+	; doesn't matter, uncle ben, charge shot's stronger than both of em
 		move.w	smash_speed(a0),obVelX(a1)
 		addq.w	#4,obX(a1)
 		lea	(Smash_FragSpd1).l,a4 ;	use fragments that move	right

@@ -74,7 +74,7 @@ ptr_MarbleBrick:	dc.l MarbleBrick
 ptr_Bumper:		dc.l Bumper
 ptr_BossBall:		dc.l BossBall		; $48
 ptr_WaterSound:		dc.l WaterSound
-ptr_VanishSonic:	dc.l VanishSonic
+ptr_Obj4A:	dc.l NullObject
 ptr_GiantRing:		dc.l GiantRing
 ptr_GeyserMaker:	dc.l GeyserMaker
 ptr_LavaGeyser:		dc.l LavaGeyser
@@ -212,7 +212,6 @@ id_MarbleBrick:		equ ((ptr_MarbleBrick-Obj_Index)/4)+1
 id_Bumper:		equ ((ptr_Bumper-Obj_Index)/4)+1
 id_BossBall:		equ ((ptr_BossBall-Obj_Index)/4)+1		; $48
 id_WaterSound:		equ ((ptr_WaterSound-Obj_Index)/4)+1
-id_VanishSonic:		equ ((ptr_VanishSonic-Obj_Index)/4)+1
 id_GiantRing:		equ ((ptr_GiantRing-Obj_Index)/4)+1
 id_GeyserMaker:		equ ((ptr_GeyserMaker-Obj_Index)/4)+1
 id_LavaGeyser:		equ ((ptr_LavaGeyser-Obj_Index)/4)+1

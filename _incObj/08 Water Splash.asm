@@ -20,7 +20,7 @@ Spla_Main:	; Routine 0
 		move.b	#1,obPriority(a0)
 		move.b	#$10,obActWid(a0)
 		move.w	#$4259,obGfx(a0)
-		move.w	(v_player+obX).w,obX(a0) ; copy x-position from Sonic
+		move.w	(o_player+obX).w,obX(a0) ; copy x-position from Sonic
 
 Spla_Display:	; Routine 2
 		move.w	(v_waterpos1).w,obY(a0) ; copy y-position from water height

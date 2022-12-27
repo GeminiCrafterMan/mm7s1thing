@@ -7,7 +7,7 @@ LZWaterFeatures:
 		bne.s	.notlabyrinth	; if not, branch
 		tst.b   (f_nobgscroll).w
 		bne.s	.setheight
-		cmpi.b	#6,(v_player+obRoutine).w ; has Sonic just died?
+		cmpi.b	#6,(o_player+obRoutine).w ; has Sonic just died?
 		bcc.s	.setheight	; if yes, skip other effects
 
 		bsr.w	LZWindTunnels
@@ -89,7 +89,7 @@ DynWater_LZ1:
 		cmpi.w	#$600,d0	; has screen reached next position?
 		bcs.s	.setwater	; if not, branch
 		move.w	#$108,d1
-		cmpi.w	#$200,(v_player+obY).w ; is Sonic above $200 y-axis?
+		cmpi.w	#$200,(o_player+obY).w ; is Sonic above $200 y-axis?
 		bcs.s	.sonicishigh	; if yes, branch
 		cmpi.w	#$C00,d0
 		bcs.s	.setwater
@@ -123,7 +123,7 @@ DynWater_LZ1:
 .routine2:
 		subq.b	#1,d2
 		bne.s	.skip
-		cmpi.w	#$2E0,(v_player+obY).w ; is Sonic above $2E0 y-axis?
+		cmpi.w	#$2E0,(o_player+obY).w ; is Sonic above $2E0 y-axis?
 		bcc.s	.skip		; if not, branch
 		move.w	#$3A8,d1
 		cmpi.w	#$1300,d0
@@ -161,9 +161,9 @@ DynWater_LZ3:
 		move.w	#$900,d1
 		cmpi.w	#$600,d0	; has screen reached position?
 		bcs.s	.setwaterlz3	; if not, branch
-		cmpi.w	#$3C0,(v_player+obY).w
+		cmpi.w	#$3C0,(o_player+obY).w
 		bcs.s	.setwaterlz3
-		cmpi.w	#$600,(v_player+obY).w ; is Sonic in a y-axis range?
+		cmpi.w	#$600,(o_player+obY).w ; is Sonic in a y-axis range?
 		bcc.s	.setwaterlz3	; if not, branch
 
 		move.w	#$4C8,d1	; set new water height
@@ -189,9 +189,9 @@ DynWater_LZ3:
 		bcs.s	.setwater2
 		cmpi.w	#$508,(v_waterpos3).w
 		beq.s	.sonicislow
-		cmpi.w	#$600,(v_player+obY).w ; is Sonic below $600 y-axis?
+		cmpi.w	#$600,(o_player+obY).w ; is Sonic below $600 y-axis?
 		bcc.s	.sonicislow	; if yes, branch
-		cmpi.w	#$280,(v_player+obY).w
+		cmpi.w	#$280,(o_player+obY).w
 		bcc.s	.setwater2
 
 .sonicislow:
@@ -289,7 +289,7 @@ LZWindTunnels:
 		subq.w	#8,a2		; use different data for act 1
 
 .notact1:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 
 .chksonic:
 		move.w	obX(a1),d0
@@ -376,7 +376,7 @@ LZWind_Data:	dc.w $A80, $300, $C10,  $380 ; act 1 values (set 1)
 
 
 LZWaterSlides:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		btst	#1,obStatus(a1)	; is Sonic jumping?
 		bne.s	loc_3F6A	; if not, branch
 		move.w	obY(a1),d0

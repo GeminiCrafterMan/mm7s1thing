@@ -67,8 +67,8 @@ Pri_BodyMain:	; Routine 2
 		tst.b	ob2ndRout(a0)	; has the prison been opened?
 		beq.s	.open		; if yes, branch
 		clr.b	ob2ndRout(a0)
-		bclr	#3,(v_player+obStatus).w
-		bset	#1,(v_player+obStatus).w
+		bclr	#3,(o_player+obStatus).w
+		bset	#1,(o_player+obStatus).w
 
 .open:
 		move.b	#2,obFrame(a0)	; use frame number 2 (destroyed	prison)
@@ -95,8 +95,8 @@ Pri_Switched:	; Routine 4
 		move.b	#1,(f_lockctrl).w ; lock controls
 		move.w	#(btnR<<8),(v_jpadhold2).w ; make Sonic run to the right
 		clr.b	ob2ndRout(a0)
-		bclr	#3,(v_player+obStatus).w
-		bset	#1,(v_player+obStatus).w
+		bclr	#3,(o_player+obStatus).w
+		bset	#1,(o_player+obStatus).w
 
 .open2:
 		rts	
@@ -187,7 +187,7 @@ Pri_EndAct:	; Routine $E
 		moveq	#$3E,d0
 		moveq	#id_Animals,d1
 		moveq	#$40,d2
-		lea	(v_objspace+$40).w,a1 ; load object RAM
+		lea	(o_hud).w,a1 ; load object RAM
 
 .findanimal:
 		cmp.b	(a1),d1		; is object $28	(animal) loaded?

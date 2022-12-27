@@ -18,7 +18,7 @@ Debug_Main:	; Routine 0
 		move.w	(v_limitbtm1).w,(v_limitbtmdb).w ; buffer level y-boundary
 		move.w	#0,(v_limittop2).w
 		move.w	#$720,(v_limitbtm1).w
-		andi.w	#$7FF,(v_player+obY).w
+		andi.w	#$7FF,(o_player+obY).w
 		andi.w	#$7FF,(v_screenposy).w
 		andi.w	#$3FF,(v_bgscreenposy).w
 		move.b	#0,obFrame(a0)
@@ -180,9 +180,9 @@ Debug_ChgItem:
 		beq.s	.stayindebug	; if not, branch
 		moveq	#0,d0
 		move.w	d0,(v_debuguse).w ; deactivate debug mode
-		move.l	#Map_MegaMan,(v_player+obMap).w
-		move.w	#$780,(v_player+obGfx).w
-		move.b	d0,(v_player+obAnim).w
+		move.l	#Map_MegaMan,(o_player+obMap).w
+		move.w	#$780,(o_player+obGfx).w
+		move.b	d0,(o_player+obAnim).w
 		move.w	d0,obX+2(a0)
 		move.w	d0,obY+2(a0)
 		move.w	(v_limittopdb).w,(v_limittop2).w ; restore level boundaries
@@ -192,11 +192,11 @@ Debug_ChgItem:
 
 		clr.w	(v_ssangle).w
 		move.w	#$40,(v_ssrotate).w ; set new level rotation speed
-		move.l	#Map_MegaMan,(v_player+obMap).w
-		move.w	#$780,(v_player+obGfx).w
-		move.b	#id_Roll,(v_player+obAnim).w
-		bset	#2,(v_player+obStatus).w
-		bset	#1,(v_player+obStatus).w
+		move.l	#Map_MegaMan,(o_player+obMap).w
+		move.w	#$780,(o_player+obGfx).w
+		move.b	#id_Roll,(o_player+obAnim).w
+		bset	#2,(o_player+obStatus).w
+		bset	#1,(o_player+obStatus).w
 
 .stayindebug:
 		rts	

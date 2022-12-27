@@ -32,7 +32,7 @@ Tele_Main:	; Routine 0
 		move.w	(a2)+,$38(a0)
 
 loc_166C8:	; Routine 2
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a1),d0
 		sub.w	obX(a0),d0
 		btst	#0,obStatus(a0)
@@ -75,7 +75,7 @@ locret_1675C:
 ; ===========================================================================
 
 loc_1675E:	; Routine 4
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.b	$32(a0),d0
 		addq.b	#2,$32(a0)
 		jsr	(CalcSine).l
@@ -96,7 +96,7 @@ locret_16796:
 
 loc_16798:	; Routine 6
 		addq.l	#4,sp
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		subq.b	#1,$2E(a0)
 		bpl.s	loc_167DA
 		move.w	$36(a0),obX(a1)

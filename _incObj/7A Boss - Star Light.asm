@@ -54,7 +54,7 @@ Obj7A_LoadBoss:
 		dbf	d1,Obj7A_Loop	; repeat sequence 3 more times
 
 loc_1895C:
-		lea	(v_objspace+$40).w,a1
+		lea	(o_hud).w,a1
 		lea	$2A(a0),a2
 		moveq	#$5E,d0
 		moveq	#$3E,d1
@@ -218,7 +218,7 @@ Obj7A_MakeBall:
 		lea	$2A(a0),a1
 		move.w	(a1,d0.w),d0
 		movea.l	d0,a2
-		lea	(v_objspace+$40).w,a1
+		lea	(o_hud).w,a1
 		moveq	#$3E,d1
 
 loc_18AFA:
@@ -345,7 +345,7 @@ loc_18C06:
 ; ===========================================================================
 
 loc_18C10:
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcs.s	loc_18C1A
 		moveq	#4,d1
 

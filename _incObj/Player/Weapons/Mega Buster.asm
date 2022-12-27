@@ -45,7 +45,6 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.w	#$700,obVelX(a1)
-		move.b	#1,(v_busterfx+obAnim).w
 		bra.w	.objectLoadedJumpPoint
 	.fireMediumCharge:
 		addq.b	#1,(v_bulletsonscreen).w
@@ -54,17 +53,15 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.b	#1,obSubtype(a1)
-		move.b	#2,(v_busterfx+obAnim).w
 		move.w	#$740,obVelX(a1)
 		bra.s	.objectLoadedJumpPoint
 	.fireFullCharge:
 		addq.b	#3,(v_bulletsonscreen).w
 		move.w	#sfx_BusterShot,d0
 		jsr		(PlaySound_Special).l	; play shooting sound
-		jsr		FindFreeObj
+		lea		(o_objectsmashingshot).w,a1
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.b	#2,obSubtype(a1)
-		move.b	#3,(v_busterfx+obAnim).w
 		move.w	#$780,obVelX(a1)
 	; god damn this is nasty
 		move.w	#$222,d0

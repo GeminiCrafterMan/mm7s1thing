@@ -6,6 +6,7 @@ bshot_dplcAddr = $30 ; longword
 bshot_artAddr = $34 ; longword
 bshot_animAddr = $38 ; longword
 bshot_yoffset = $3C ; byte
+bshot_properties = $3D
 
 BusterShot:
 		moveq	#0,d0
@@ -26,8 +27,8 @@ BShot_Init:	; Routine 0
 	; stolen from scenery object
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
-		mulu.w	#22,d0	; god i hope this works
-	; 4+4+4+4 = 16, 16+2+1+1+1+1 = 22
+		mulu.w	#24,d0	; god i hope this works
+	; 4+4+4+4+2+1+1+1+1+1+1 = 24
 		lea		bshot_Values(pc,d0.w),a1
 		move.l	(a1)+,obMap(a0)			; 4
 		move.l	(a1)+,bshot_dplcAddr(a0); 4
@@ -39,39 +40,80 @@ BShot_Init:	; Routine 0
 		move.b	obWidth(a0),obActWid(a0)
 		move.b	(a1)+,obColProp(a0)		; 1
 		move.b	(a1)+,obAnim(a0)		; 1
+		move.b	(a1)+,(o_busterfx+obAnim).w
+		clr.b	(o_busterfx+obAniFrame).w
+		move.b	(a1)+,bshot_properties(a0)	; 1
 		rts
 	
 	bshot_Values:
 	; Buster
 		dc.l	Map_BusterLemon, 0, 0, Ani_BusterLemon	; mappings/dplcs/art/animations
 		dc.w	$6BA	; VRAM tile
-		dc.b	6, 8, 1, 0	; height, width/sprite width, health, initial animation
+		dc.b	6, 8, 1, 0, 1, %00000000	; height, width, health, initial animation, buster fx animation, properties
 		dc.l	Map_BusterCharges, BusterChargesDynPLC, Art_BusterCharges, Ani_BusterMid
-		dc.w	$7A2
-		dc.b	12, 16, 2, 0
+		dc.w	$7A1
+		dc.b	12, 16, 2, 0, 2, %00000000
 		dc.l	Map_BusterCharges, BusterChargesDynPLC, Art_BusterCharges, Ani_BusterFull
-		dc.w	$7A2
-		dc.b	24, 32, 3, 0
+		dc.w	$7A1
+		dc.b	24, 32, 3, 0, 3, %00000000
+	; Marble Blazer
+		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
+		dc.w	$79D
+		dc.b	8, 8, 2, 2, 2, %00000000
+		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
+		dc.w	$79D
+		dc.b	19, 8, 4, 3, 0, %00000000
 	; Labyrinth Spear
 		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
-		dc.w	$7A2
-		dc.b	5, 16, 2, 4
+		dc.w	$79D
+		dc.b	5, 16, 2, 5, 2, %00000000
 		even
 
 ; ===========================================================================
 BShot_Main:	; Routine 2
 		cmpi.b	#1,obAnim(a0)
-		beq.s	.animate
+		beq.w	.animate
 		btst	#7,obStatus(a0)
-		bne.s	.explode
+		bne.w	.explode
 		jsr		(ChkObjectVisible).l	; is the projectile off-screen?
 		bne.w	BShot_Delete			; if so, branch and just delete it
-;		jsr		ObjFloorDist
-;		tst.w	d1
-;		bpl.s	.nah
-;		bset	#7,obStatus(a0)
-;	.nah:
 		jsr		(ReactToItem).l
+	.mBlazer:
+		cmpi.b	#3,obSubtype(a0)	; marble blazer air?
+		bne.s	.mbGrndChk		; if not, check for the ground variant
+		jsr		(ObjectFall).l
+		jsr		ObjFloorDist		; check floor dist
+		tst.w	d1					; check d1
+		bpl.s	.animate			; if positive, gtfo
+		jsr		FindFreeObj
+	; maybe add a fail routine
+	; spawn grounded marble blazer
+		move.b	#id_BusterShot,0(a1)
+		move.b	#4,obSubtype(a1)
+		move.w	obX(a0),obX(a1)
+		move.w	obY(a0),obY(a1)
+		subi.w	#12,obY(a1)	; since it's taller
+		moveq	#0,d0
+		mvabs.w	obVelX(a0),d0
+		lsr.w	#2,d0
+		btst	#0,obStatus(a0)
+		beq.s	.mbSpawnVelX
+		neg.w	d0
+	.mbSpawnVelX:
+		move.w	d0,obVelX(a1)
+		move.w	#sfx_Flamethrower,d0
+		jsr	(PlaySound_Special).l	; play collapsing sound
+		bra.w	BShot_Delete.justDelete
+	.mbGrndChk:
+		cmpi.b	#4,obSubtype(a0)
+		bne.s	.nah
+		jsr		(ObjectFall).l
+		jsr		ObjFloorDist		; check floor dist
+		tst.w	d1					; check d1
+		bpl.s	.animate			; if not, gtfo
+		add.w	d1,obY(a0)
+		bra.s	.animate
+	.nah:
 		jsr		(SpeedToPos).l
 .animate:
 		movea.l	bshot_animAddr(a0),a1
@@ -84,8 +126,6 @@ BShot_Main:	; Routine 2
 		beq.w	BShot_Delete
 		move.b	#1,obAnim(a0)
 		clr.w	obVelX(a0)
-;		move.w	#sfx_Lamppost,d0
-;		jsr	(PlaySound_Special).l	; play collapsing sound
 		rts
 
 	.loadGfx:
@@ -135,6 +175,7 @@ BShot_Delete: ; Routine 4
 		subq.b	#2,(v_bulletsonscreen).w	; subtract 2
 	.onlyOne:
 		subq.b	#1,(v_bulletsonscreen).w	; subtract 1
+	.justDelete:
 		jmp		(DeleteObject).l
 
 Ani_BusterLemon:
@@ -167,7 +208,8 @@ Ani_BusterFull:
 Ani_SpecialWeapons:
 		dc.w .gwChain-Ani_SpecialWeapons	; probably won't be using this, but who cares
 		dc.w .gwBall-Ani_SpecialWeapons		; bleh
-		dc.w .mbPHolder-Ani_SpecialWeapons	; marble blazer placeholder
+		dc.w .mbAir-Ani_SpecialWeapons	; marble blazer placeholder
+		dc.w .mbGround-Ani_SpecialWeapons
 		dc.w .syzPHolder-Ani_SpecialWeapons ; spring yard weapon placeholder
 		dc.w .lsSpike-Ani_SpecialWeapons	; labyrinth spear spike
 		dc.w .slzPHolder-Ani_SpecialWeapons	; star light weapon placeholder
@@ -177,13 +219,15 @@ Ani_SpecialWeapons:
 		even
 	.gwBall:	dc.b 0, 2, 3, 2, 4, 2, 5, 2, 4, afEnd
 		even
-	.mbPHolder:	dc.b 0, 6, afEnd
+	.mbAir:	dc.b 0, 6, 7, 8, afEnd
 		even
-	.syzPHolder:	dc.b 0, 7, afEnd
+	.mbGround:	dc.b 2, 9, 10, 11, 12, 13, 12, 13, 12, 11, 10, 9, 0, afRoutine
 		even
-	.lsSpike:	dc.b 0, 8, afEnd
+	.syzPHolder:	dc.b 0, 14, afEnd
 		even
-	.slzPHolder:	dc.b 0, 9, afEnd
+	.lsSpike:	dc.b 0, 15, afEnd
 		even
-	.sbzPHolder:	dc.b 0, 10, afEnd
+	.slzPHolder:	dc.b 0, 16, afEnd
+		even
+	.sbzPHolder:	dc.b 0, 17, afEnd
 		even

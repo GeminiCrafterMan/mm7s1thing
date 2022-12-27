@@ -70,7 +70,7 @@ See_Slope:	; Routine 2
 		lea	(See_DataFlat).l,a2
 
 .notflat:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obVelY(a1),see_speed(a0)
 		move.w	#$30,d1
 		jsr	(SlopeObject).l
@@ -95,7 +95,7 @@ See_Slope2:	; Routine 4
 
 See_ChkSide:
 		moveq	#2,d1
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a0),d0
 		sub.w	obX(a1),d0	; is Sonic on the left side of the seesaw?
 		bcc.s	.leftside	; if yes, branch
@@ -160,7 +160,7 @@ loc_117FC:
 		beq.s	loc_11822
 		move.w	#-$AF0,d1
 		move.w	#-$CC,d2
-		cmpi.w	#$A00,$38(a1)
+		cmpi.w	#$A00,see_speed(a1)
 		blt.s	loc_11822
 		move.w	#-$E00,d1
 		move.w	#-$A0,d2
@@ -239,7 +239,7 @@ loc_118BA:
 		moveq	#0,d1
 
 See_Spring:
-		move.b	d1,$3A(a1)
+		move.b	d1,see_frame(a1)
 		move.b	d1,see_frame(a0)
 		cmp.b	obFrame(a1),d1
 		beq.s	loc_1192C
@@ -247,12 +247,12 @@ See_Spring:
 		beq.s	loc_1192C
 		clr.b	ob2ndRout(a1)
 		move.b	#2,obRoutine(a1)
-		lea	(v_player).w,a2
+		lea	(o_player).w,a2
 		move.w	obVelY(a0),obVelY(a2)
 		neg.w	obVelY(a2)
 		bset	#1,obStatus(a2)
 		bclr	#3,obStatus(a2)
-		clr.b	$3C(a2)
+		clr.b	see_parent(a2)
 		move.b	#id_Jump,obAnim(a2) ; change Sonic's animation to "spring" ($10)
 		move.b	#2,obRoutine(a2)
 		move.w	#sfx_Spring,d0

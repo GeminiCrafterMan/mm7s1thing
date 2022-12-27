@@ -220,7 +220,7 @@ loc_9212:
 
 loc_9224:
 		move.w	obX(a0),d0
-		sub.w	(v_player+obX).w,d0
+		sub.w	(o_player+obX).w,d0
 		bcs.s	loc_923C
 		subi.w	#$180,d0
 		bpl.s	loc_923C
@@ -387,7 +387,7 @@ locret_93EA:
 loc_93EC:
 		bset	#0,obRender(a0)
 		move.w	obX(a0),d0
-		sub.w	(v_player+obX).w,d0
+		sub.w	(o_player+obX).w,d0
 		bcc.s	locret_9402
 		bclr	#0,obRender(a0)
 
@@ -398,7 +398,7 @@ locret_9402:
 
 
 sub_9404:
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		subi.w	#$B8,d0
 		rts	

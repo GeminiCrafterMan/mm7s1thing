@@ -198,7 +198,7 @@ Bub_BblTypes:	dc.b 0,	1, 0, 0, 0, 0, 1, 0, 0,	0, 0, 1, 0, 1, 0, 0, 1,	0
 Bub_ChkSonic:
 		tst.b	(f_lockmulti).w
 		bmi.s	.loc_12998
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a1),d0
 		move.w	obX(a0),d1
 		subi.w	#$10,d1

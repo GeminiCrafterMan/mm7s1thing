@@ -17,7 +17,7 @@
 		jsr		(PlaySound_Special).l	; play shooting sound
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
-		move.b	#3,obSubtype(a1)
+		move.b	#5,obSubtype(a1)
 		move.w	#$7C0,obVelX(a1)
 		move.w	#$40,d0
 		moveq	#0,d1	; blue
@@ -31,7 +31,6 @@
 		lea		(v_pal_dry+14).w,a3	; first blue
 		move.l	(a2,d1.w),(a3)+ ; write first two palette entries
 		move.w	4(a2,d1.w),(a3)+ ; write last palette entry
-		move.b	#2,(v_busterfx+obAnim).w
 		bra.s	.objectLoadedJumpPoint
 	.fireLemon:
 		addq.b	#1,(v_bulletsonscreen).w
@@ -40,7 +39,6 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.w	#$700,obVelX(a1)
-		move.b	#1,(v_busterfx+obAnim).w
 ;		bra.s	.objectLoadedJumpPoint
 	.objectLoadedJumpPoint:
 		jsr		FireWeapon

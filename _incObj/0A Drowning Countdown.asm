@@ -36,6 +36,8 @@ Drown_Main:	; Routine 0
 		move.b	#$10,obActWid(a0)
 		move.b	#1,obPriority(a0)
 		move.b	obSubtype(a0),d0 ; get bubble type
+		bpl.s	.smallbubble	; branch if $00-$7F
+		rts
 ; ===========================================================================
 
 .smallbubble:

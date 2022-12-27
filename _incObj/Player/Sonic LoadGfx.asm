@@ -48,8 +48,8 @@ Sonic_LoadGfx:
 ; End of function Sonic_LoadGfx
 
 LoadMegaManMap:
-		cmpi.l	#Map_MegaMan,(v_player+obMap).w
+		cmpi.l	#Map_MegaMan,(o_player+obMap).w
 		beq.s	.skip
-		move.l	#Map_MegaMan,(v_player+obMap).w
+		move.l	#Map_MegaMan,(o_player+obMap).w
 	.skip:
 		rts

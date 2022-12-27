@@ -7,10 +7,6 @@
 
 LevelSizeLoad:
 		moveq	#0,d0
-		move.b	d0,($FFFFF740).w
-		move.b	d0,($FFFFF741).w
-		move.b	d0,($FFFFF746).w
-		move.b	d0,($FFFFF748).w
 		move.b	d0,(v_dle_routine).w
 		move.w	(v_zone).w,d0
 		lsl.b	#6,d0
@@ -20,7 +16,6 @@ LevelSizeLoad:
 		add.w	d1,d0
 		lea	LevelSizeArray(pc,d0.w),a0 ; load level	boundaries
 		move.w	(a0)+,d0
-		move.w	d0,($FFFFF730).w
 		move.l	(a0)+,d0
 		move.l	d0,(v_limitleft2).w
 		move.l	d0,(v_limitleft1).w
@@ -30,7 +25,7 @@ LevelSizeLoad:
 		move.w	(v_limitleft2).w,d0
 		addi.w	#$240,d0
 		move.w	d0,(v_limitleft3).w
-		move.w	#$1010,($FFFFF74A).w
+		move.w	#$1010,(v_fg_xblock).w
 		move.w	(a0)+,d0
 		move.w	d0,(v_lookshift).w
 		bra.w	LevSz_ChkLamp
@@ -89,8 +84,8 @@ LevSz_ChkLamp:
 		beq.s	LevSz_StartLoc	; if not, branch
 
 		jsr	(Lamp_LoadInfo).l
-		move.w	(v_player+obX).w,d1
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obX).w,d1
+		move.w	(o_player+obY).w,d0
 		bra.s	LevSz_SkipStartPos
 ; ===========================================================================
 
@@ -110,10 +105,10 @@ LevSz_StartLoc:
 LevSz_SonicPos:
 		moveq	#0,d1
 		move.w	(a1)+,d1
-		move.w	d1,(v_player+obX).w ; set Sonic's position on x-axis
+		move.w	d1,(o_player+obX).w ; set Sonic's position on x-axis
 		moveq	#0,d0
 		move.w	(a1),d0
-		move.w	d0,(v_player+obY).w ; set Sonic's position on y-axis
+		move.w	d0,(o_player+obY).w ; set Sonic's position on y-axis
 
 SetScreen:
 LevSz_SkipStartPos:
@@ -209,7 +204,7 @@ BgScroll_GHZ:
 		clr.l	(v_bgscreenposy).w
 		clr.l	(v_bg2screenposy).w
 		clr.l	(v_bg3screenposy).w
-		lea	($FFFFA800).w,a2
+		lea	(v_bgscroll_buffer).w,a2
 		clr.l	(a2)+
 		clr.l	(a2)+
 		clr.l	(a2)+
@@ -267,7 +262,7 @@ BgScroll_End:
 		clr.l	(v_bgscreenposy).w
 		clr.l	(v_bg2screenposy).w
 		clr.l	(v_bg3screenposy).w
-		lea	($FFFFA800).w,a2
+		lea	(v_bgscroll_buffer).w,a2
 		clr.l	(a2)+
 		clr.l	(a2)+
 		clr.l	(a2)+

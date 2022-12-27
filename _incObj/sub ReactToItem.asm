@@ -24,7 +24,7 @@ ReactToItem:
 .notsliding:
 		move.w	#$10,d4
 		add.w	d5,d5
-		lea	(v_objspace+$800).w,a1 ; set object RAM start address
+		lea	(v_lvlobjspace).w,a1 ; set object RAM start address
 		move.w	#$5F,d6
 
 .loop:
@@ -376,14 +376,14 @@ KillSonic:
 		tst.w	(v_debuguse).w	; is debug mode	active?
 		bne.w	.dontdie	; if yes, branch
 		moveq	#12-1,d1	; 12 total, counting the first
-		lea		(DeathOrbs_VelTbl).l,a2
+		lea		(DeathOrbs_VelTbl).l,a3
 	.spawnOrbs:
 		jsr		FindFreeObj	; uses a1
 		move.b	#id_DeathOrbs,0(a1)
-		move.w	(v_player+obX).w,obX(a1)
-		move.w	(v_player+obY).w,obY(a1)
-		move.w	(a2)+,obVelX(a1)
-		move.w	(a2)+,obVelY(a1)
+		move.w	(o_player+obX).w,obX(a1)
+		move.w	(o_player+obY).w,obY(a1)
+		move.w	(a3)+,obVelX(a1)
+		move.w	(a3)+,obVelY(a1)
 		dbf		d1,.spawnOrbs
 	.done:
 		move.b	#0,(v_invinc).w	; remove invincibility

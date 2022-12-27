@@ -54,7 +54,7 @@ Disc_MoveSonic:
 		move.b	$38(a0),d2
 		move.w	d2,d3
 		add.w	d3,d3
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		move.w	obX(a1),d0
 		sub.w	disc_origX(a0),d0
 		add.w	d2,d0

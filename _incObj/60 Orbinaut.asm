@@ -83,7 +83,7 @@ Orb_Main:	; Routine 0
 ; ===========================================================================
 
 Orb_ChkSonic:	; Routine 2
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0	; is Sonic to the right of the orbinaut?
 		bcc.s	.isright	; if yes, branch
 		neg.w	d0
@@ -91,7 +91,7 @@ Orb_ChkSonic:	; Routine 2
 .isright:
 		cmpi.w	#$A0,d0		; is Sonic within $A0 pixels of	orbinaut?
 		bcc.s	.animate	; if not, branch
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obY).w,d0
 		sub.w	obY(a0),d0	; is Sonic above the orbinaut?
 		bcc.s	.isabove	; if yes, branch
 		neg.w	d0

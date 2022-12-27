@@ -363,7 +363,7 @@ loc_185DA:
 ; ===========================================================================
 
 loc_185E4:
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcs.s	loc_185EE
 		moveq	#4,d1
 

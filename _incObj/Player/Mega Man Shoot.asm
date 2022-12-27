@@ -7,14 +7,14 @@ MegaMan_Shoot:
 		movea.l	.weaponLUT(pc,d0.w),a1
 		jmp		(a1)
 	.weaponLUT:
-		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_LabyrinthSpear, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
+		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_MarbleBlazer, Weapon_Test, Weapon_LabyrinthSpear, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
 	.ret:
 		rts
 	
 	FireWeapon:
-		move.w	(v_busterfx+obX).w,obX(a1)
-		move.w	(v_busterfx+obY).w,obY(a1)
-		btst	#0,(v_busterfx+obStatus).w
+		move.w	(o_busterfx+obX).w,obX(a1)
+		move.w	(o_busterfx+obY).w,obY(a1)
+		btst	#0,(o_busterfx+obStatus).w
 		beq.s	.notFlipped
 		neg.w	obVelX(a1)
 		bset	#0,obStatus(a1)
@@ -42,4 +42,5 @@ MegaMan_Shoot:
 ; Weapon includes
 	include	"_incObj/Player/Weapons/Mega Buster.asm"
 	include	"_incObj/Player/Weapons/Test.asm"
+	include "_incObj/Player/Weapons/Marble Blazer.asm"
 	include "_incObj/Player/Weapons/Labyrinth Spear.asm"

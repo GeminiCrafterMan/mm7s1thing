@@ -22,7 +22,7 @@ PushB_Main:	; Routine 0
 		move.b	#$F,obWidth(a0)
 		move.l	#Map_Push,obMap(a0)
 		move.w	#$42B8,obGfx(a0) ; MZ specific code
-		cmpi.b	#1,(v_zone).w
+		cmpi.b	#id_LZ,(v_zone).w
 		bne.s	.notLZ
 		move.w	#$43DE,obGfx(a0) ; LZ specific code
 
@@ -187,7 +187,7 @@ loc_C0E6:
 
 loc_C104:
 		move.w	(sp)+,d4
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		bclr	#3,obStatus(a1)
 		bclr	#3,obStatus(a0)
 		bra.w	loc_ppppp
@@ -332,7 +332,7 @@ loc_C268:
 		move.w	#-$40,d1
 
 loc_C294:
-		lea	(v_player).w,a1
+		lea	(o_player).w,a1
 		add.w	d0,obX(a1)
 		move.w	d1,obInertia(a1)
 		move.w	#0,obVelX(a1)

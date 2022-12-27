@@ -163,7 +163,7 @@ loc_192AE:
 		bgt.s	loc_192E8
 		tst.b	standonobject(a0)
 		bne.s	loc_192E8
-		move.w	(v_player+obX).w,d1
+		move.w	(o_player+obX).w,d1
 		subi.w	#$2C00,d1
 		asr.w	#5,d1
 		cmp.b	$34(a0),d1
@@ -339,7 +339,7 @@ loc_19446:
 
 Obj75_FindBlocks:
 		clr.w	$36(a0)
-		lea	(v_objspace+$40).w,a1
+		lea	(o_hud).w,a1
 		moveq	#$3E,d0
 		moveq	#$76,d1
 		move.b	$34(a0),d2
@@ -500,7 +500,7 @@ loc_19574:
 ; ===========================================================================
 
 loc_1957E:
-		cmpi.b	#4,(v_player+obRoutine).w
+		cmpi.b	#4,(o_player+obRoutine).w
 		bcs.s	locret_19588
 		moveq	#4,d1
 

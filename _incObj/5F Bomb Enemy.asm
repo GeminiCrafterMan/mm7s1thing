@@ -92,7 +92,7 @@ Bom_Action:	; Routine 2
 ; ===========================================================================
 
 .chksonic:
-		move.w	(v_player+obX).w,d0
+		move.w	(o_player+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	.isleft
 		neg.w	d0
@@ -100,7 +100,7 @@ Bom_Action:	; Routine 2
 .isleft:
 		cmpi.w	#$60,d0		; is Sonic within $60 pixels?
 		bcc.s	.outofrange	; if not, branch
-		move.w	(v_player+obY).w,d0
+		move.w	(o_player+obY).w,d0
 		sub.w	obY(a0),d0
 		bcc.s	.isabove
 		neg.w	d0

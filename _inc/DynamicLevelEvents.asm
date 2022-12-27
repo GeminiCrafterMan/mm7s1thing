@@ -37,7 +37,7 @@ loc_6DAC:
 		addq.w	#8,d0
 		cmp.w	(v_limitbtm2).w,d0
 		bcs.s	loc_6DC4
-		btst	#1,(v_player+obStatus).w
+		btst	#1,(o_player+obStatus).w
 		beq.s	loc_6DC4
 		add.w	d1,d1
 		add.w	d1,d1
@@ -233,7 +233,7 @@ locret_6F64:
 DLE_SBZ3:
 		cmpi.w	#$D00,(v_screenposx).w
 		bcs.s	locret_6F8C
-		cmpi.w	#$18,(v_player+obY).w ; has Sonic reached the top of the level?
+		cmpi.w	#$18,(o_player+obY).w ; has Sonic reached the top of the level?
 		bcc.s	locret_6F8C	; if not, branch
 		clr.b	(v_lastlamp).w
 		move.w	#1,(f_restart).w ; restart level
@@ -499,7 +499,7 @@ DLE_SYZ2:
 		cmpi.w	#$25A0,(v_screenposx).w
 		bcs.s	locret_71A2
 		move.w	#$420,(v_limitbtm1).w
-		cmpi.w	#$4D0,(v_player+obY).w
+		cmpi.w	#$4D0,(o_player+obY).w
 		bcs.s	locret_71A2
 		move.w	#$520,(v_limitbtm1).w
 
