@@ -241,14 +241,22 @@ React_Enemy:
 		bsr.w	AddPoints
 		_move.b	#id_ExplosionItem,0(a1) ; change object to explosion
 		move.b	#0,obRoutine(a1)
+		move.w	obX(a1),d1
+		move.w	obY(a1),d2
 		cmpi.b	#id_BusterShot,0(a0)
-		beq.s	.ret
+		beq.s	.spawnItem
 		tst.w	obVelY(a0)
 		bmi.s	.bouncedown
 		move.w	obY(a0),d0
 		cmp.w	obY(a1),d0
 		bcc.s	.bounceup
 		neg.w	obVelY(a0)
+	.spawnItem:
+		jsr		FindFreeObj
+		move.b	#id_Items,0(a1)	; i'm aware this will only spawn 1ups right now
+		move.w	d1,obX(a1)
+		move.w	d2,obY(a1)
+		move.b	#8,obSubtype(a1)
 	.ret:
 		rts	
 ; ===========================================================================

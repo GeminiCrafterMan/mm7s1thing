@@ -5613,6 +5613,10 @@ Map_Flash:	include	"_maps/Ring Flash.asm"
 		include	"_anim/Monitor.asm"
 Map_Monitor:	include	"_maps/Monitor.asm"
 
+		include	"_incObj/03 Items.asm"
+		include	"_anim/Items.asm"
+Map_Items:		include	"_maps/Items.asm"
+
 		include	"_incObj/0E Title Screen Sonic.asm"
 		include	"_incObj/0F Press Start and TM.asm"
 
