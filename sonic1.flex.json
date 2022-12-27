@@ -1,7 +1,7 @@
 {
     "Flex": 2,
     "name": "Mega Man in Sonic 1",
-    "node": "3fd70d6d-9cd8-465f-b147-929999eaa239",
+    "node": "74df8152-d479-4dcb-b776-5347a7f3145f",
     "objects": [
         {
             "name": "Mega Man's Weapons",
@@ -126,6 +126,26 @@
                         "label": "MegaMan_PLC"
                     },
                     "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
+                },
+                {
+                    "uuid": "74df8152-d479-4dcb-b776-5347a7f3145f",
+                    "format": "Sonic 1.js",
+                    "name": "Items",
+                    "palettes": [],
+                    "art": {
+                        "path": "artnem/Items.bin",
+                        "compression": "Nemesis",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "_maps/Items.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": false,
+                        "path": "",
+                        "label": ""
+                    }
                 },
                 {
                     "name": "Signpost",

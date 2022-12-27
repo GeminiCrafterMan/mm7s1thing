@@ -56,7 +56,7 @@ Orb_Main:	; Routine 0
 		ori.b	#4,obRender(a1)
 		move.b	#4,obPriority(a1)
 		move.b	#8,obActWid(a1)
-		move.b	#3,obFrame(a1)
+		move.b	#2,obFrame(a1)
 		move.b	#$98,obColType(a1)
 		move.b	d2,obAngle(a1)
 		addi.b	#$40,d2
@@ -90,7 +90,7 @@ Orb_ChkSonic:	; Routine 2
 
 .isright:
 		cmpi.w	#$A0,d0		; is Sonic within $A0 pixels of	orbinaut?
-		bcc.s	.animate	; if not, branch
+		bcc.s	Orb_ChkDel	; if not, branch
 		move.w	(o_player+obY).w,d0
 		sub.w	obY(a0),d0	; is Sonic above the orbinaut?
 		bcc.s	.isabove	; if yes, branch
@@ -98,15 +98,11 @@ Orb_ChkSonic:	; Routine 2
 
 .isabove:
 		cmpi.w	#$50,d0		; is Sonic within $50 pixels of	orbinaut?
-		bcc.s	.animate	; if not, branch
+		bcc.s	Orb_ChkDel	; if not, branch
 		tst.w	(v_debuguse).w	; is debug mode	on?
-		bne.s	.animate	; if yes, branch
-		move.b	#1,obAnim(a0)	; use "angry" animation
-
-.animate:
-		lea	(Ani_Orb).l,a1
-		bsr.w	AnimateSprite
-		bra.w	Orb_ChkDel
+		bne.s	Orb_ChkDel	; if yes, branch
+		move.b	#1,obFrame(a0)	; use "angry" frame
+		bra.s	Orb_ChkDel
 ; ===========================================================================
 
 Orb_Display:	; Routine 4
@@ -147,7 +143,7 @@ Orb_MoveOrb:	; Routine 6
 		movea.l	orb_parent(a0),a1
 		_cmpi.b	#id_Orbinaut,0(a1) ; does parent object still exist?
 		bne.w	DeleteObject	; if not, delete
-		cmpi.b	#2,obFrame(a1)	; is orbinaut angry?
+		cmpi.b	#1,obFrame(a1)	; is orbinaut angry?
 		bne.s	.circle		; if not, branch
 		cmpi.b	#$40,obAngle(a0) ; is spikeorb directly under the orbinaut?
 		bne.s	.circle		; if not, branch

@@ -1328,6 +1328,7 @@ Qplc_Loop:
 
 		include	"_inc/Enigma Decompression.asm"
 		include	"_inc/Kosinski Decompression.asm"
+		include "_inc/KosinskiPlus Decompression.asm"
 
 		include	"_inc/PaletteCycle.asm"
 		include "_inc/DynaWater.asm"
@@ -2096,28 +2097,10 @@ Tit_ClrPal:
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn
 		disable_ints
-		locVRAM	$4000
-		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
-		bsr.w	NemDec
-		locVRAM	$6000
-		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
-		bsr.w	NemDec
-		locVRAM	$A200
-		lea	(Nem_TitleTM).l,a0 ; load "TM" patterns
-		bsr.w	NemDec
-		lea	(vdp_data_port).l,a6
-		locVRAM	$D000,4(a6)
-		lea	(Art_Text).l,a5	; load level select font
-		move.w	#$28F,d1
-
-Tit_LoadText:
-		move.w	(a5)+,(a6)
-		dbf	d1,Tit_LoadText	; load level select font
 
 		move.b	#0,(v_lastlamp).w ; clear lamppost counter
 		move.w	#0,(v_debuguse).w ; disable debug item placement mode
 		move.w	#0,(f_demo).w	; disable debug mode
-		move.w	#0,($FFFFFFEA).w ; unused variable
 		move.w	#(id_GHZ<<8),(v_zone).w	; set level to GHZ (00)
 		move.w	#0,(v_pcyc_time).w ; disable palette cycling
 		bsr.w	LevelSizeLoad
@@ -2128,8 +2111,13 @@ Tit_LoadText:
 		bsr.w	EniDec
 		lea	(Blk256_GHZ).l,a0 ; load GHZ 256x256 mappings
 		lea	(v_256x256).l,a1
-		bsr.w	KosDec
+		bsr.w	KosPlusDec
 		bsr.w	LevelLayoutLoad
+		move.w	#60,d0
+	.wait:
+		move.b	#$C,(v_vbla_routine).w
+		jsr		WaitForVBla
+		dbf	d0,.wait
 		bsr.w	PaletteFadeOut
 		disable_ints
 		bsr.w	ClearScreen
@@ -2147,8 +2135,24 @@ Tit_LoadText:
 		copyTilemap	$FF0000,$C206,$21,$15
 
 		locVRAM	0
-		lea	(Nem_GHZ_1st).l,a0 ; load GHZ patterns
+		jsr		LoadZoneTiles
+		locVRAM	$4000
+		lea	(Nem_TitleFg).l,a0 ; load title	screen patterns
 		bsr.w	NemDec
+		locVRAM	$6000
+		lea	(Nem_TitleSonic).l,a0 ;	load Sonic title screen	patterns
+		bsr.w	NemDec
+		locVRAM	$A200
+		lea	(Nem_TitleTM).l,a0 ; load "TM" patterns
+		bsr.w	NemDec
+		lea	(vdp_data_port).l,a6
+		locVRAM	$D000,4(a6)
+		lea	(Art_Text).l,a5	; load level select font
+		move.w	#$28F,d1
+
+Tit_LoadText:
+		move.w	(a5)+,(a6)
+		dbf	d1,Tit_LoadText	; load level select font
 		moveq	#palid_Title,d0	; load title screen palette
 		bsr.w	PalLoad1
 	;blep
@@ -2744,7 +2748,6 @@ Level_ClrVars3:
 		move.b	#1,(f_water).w	; enable water
 
 Level_LoadPal:
-		move.w	#30,(v_air).w
 		enable_ints
 		moveq	#palid_MegaMan,d0
 		bsr.w	PalLoad2	; load Sonic's palette
@@ -2795,6 +2798,7 @@ Level_SkipTtlCard:
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		bset	#2,(v_fg_scroll_flags).w
+		bsr.w	LoadZoneTiles
 		bsr.w	LevelDataLoad ; load block mappings and palettes
 		bsr.w	LoadTilesFromStart
 		bsr.w	ColIndexLoad
@@ -3101,6 +3105,51 @@ Demo_MZ:	binclude	"demodata/Intro - MZ.bin"
 Demo_SYZ:	binclude	"demodata/Intro - SYZ.bin"
 Demo_SS:	binclude	"demodata/Intro - Special Stage.bin"
 ; ===========================================================================
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+
+
+;sub_4E98:
+LoadZoneTiles:
+		moveq	#0,d0
+		move.b	(v_zone).w,d0
+		lsl.w	#4,d0
+		lea	(LevelHeaders).l,a2
+		lea	(a2,d0.w),a2
+		move.l	(a2)+,d0
+
+		andi.l	#$FFFFFF,d0	; 8x8 tile pointer
+		movea.l	d0,a0
+		lea	(v_256x256).l,a1
+		bsr.w	KosPlusDec
+
+		move.w	a1,d3
+		move.w	d3,d7
+
+		andi.w	#$FFF,d3
+		lsr.w	#1,d3
+
+		rol.w	#4,d7
+		andi.w	#$F,d7
+
+	.transfer:
+		move.w	d7,d2
+		lsl.w	#7,d2
+		lsl.w	#5,d2
+
+		move.l	#$FFFFFF,d1
+		move.w	d2,d1
+
+		jsr	(QueueDMATransfer).l
+		move.w	d7,-(sp)
+		jsr		ProcessDMAQueue
+		move.w	(sp)+,d7
+		move.w	#$800,d3
+		dbf	d7,.transfer
+
+		rts
+; End of function LoadZoneTiles
 
 ; ---------------------------------------------------------------------------
 ; Special Stage
@@ -3755,7 +3804,6 @@ End_ClrRam3:
 		move.w	#$8720,(a6)		; set background colour (line 3; colour 0)
 		move.w	#$8A00+223,(v_hbla_hreg).w ; set palette change position (for water)
 		move.w	(v_hbla_hreg).w,(a6)
-		move.w	#30,(v_air).w
 		move.w	#id_EndZ<<8,(v_zone).w ; set level number to 0600 (extra flowers)
 		cmpi.b	#6,(v_emeralds).w ; do you have all 6 emeralds?
 		beq.s	End_LoadData	; if yes, branch
@@ -3768,13 +3816,14 @@ End_LoadData:
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		bset	#2,(v_fg_scroll_flags).w
+		bsr.w	LoadZoneTiles
 		bsr.w	LevelDataLoad
 		bsr.w	LoadTilesFromStart
 		move.l	#Col_GHZ,(v_collindex).w ; load collision index
 		enable_ints
-		lea	(Kos_EndFlowers).l,a0 ;	load extra flower patterns
+		lea	(KosPlus_EndFlowers).l,a0 ;	load extra flower patterns
 		lea	($FFFF9400).w,a1 ; RAM address to buffer the patterns
-		bsr.w	KosDec
+		bsr.w	KosPlusDec
 		moveq	#palid_MegaMan,d0
 		bsr.w	PalLoad1	; load Sonic's palette
 		move.w	#bgm_Ending,d0
@@ -4960,7 +5009,7 @@ LevelDataLoad:
 		bsr.w	EniDec
 		movea.l	(a2)+,a0
 		lea	(v_256x256).l,a1 ; RAM address for 256x256 mappings
-		bsr.w	KosDec
+		bsr.w	KosPlusDec
 		bsr.w	LevelLayoutLoad
 		move.w	(a2)+,d0
 		move.w	(a2),d0
@@ -6581,7 +6630,6 @@ Map_SSawBall:	include	"_maps/Seesaw Ball.asm"
 Map_Bomb:	include	"_maps/Bomb Enemy.asm"
 
 		include	"_incObj/60 Orbinaut.asm"
-		include	"_anim/Orbinaut.asm"
 Map_Orb:	include	"_maps/Orbinaut.asm"
 
 		include	"_incObj/16 Harpoon.asm"
@@ -6641,6 +6689,7 @@ Sonic_Main:	; Routine 0
 		clr.b	(v_weapon).w ; reset weapon
 		move.b	#id_BusterEffects,(o_busterfx).w
 	.setWeaponEnergy:
+		move.b	#32,(v_health).w		; this isn't used yet, but i'd like it to be here just in case.
 		move.b	#32,(v_weapon1energy).w	; Green Wrecker
 		move.b	#32,(v_weapon2energy).w	; Marble Blazer
 		move.b	#32,(v_weapon3energy).w	; SYZ
@@ -8380,6 +8429,8 @@ Nem_Ring:	binclude	"artnem/Rings.bin"
 		even
 Nem_Monitors:	binclude	"artnem/Monitors.bin"
 		even
+Nem_Items:	binclude	"artnem/Items.bin"
+		even
 Nem_Explode:	binclude	"artnem/Explosion.bin"
 		even
 Nem_Points:	binclude	"artnem/Points.bin"	; points from destroyed enemy or object
@@ -8423,39 +8474,37 @@ Nem_Squirrel:	binclude	"artnem/Animal Squirrel.bin"
 ; ---------------------------------------------------------------------------
 Blk16_GHZ:	binclude	"map16/GHZ.bin"
 		even
-Nem_GHZ_1st:	binclude	"artnem/8x8 - GHZ1.bin"	; GHZ primary patterns
-		even
-Nem_GHZ_2nd:	binclude	"artnem/8x8 - GHZ2.bin"	; GHZ secondary patterns
+KosPlus_GHZ:	binclude	"artkosplus/8x8 - GHZ.bin"	; GHZ primary patterns
 		even
 Blk256_GHZ:	binclude	"map256/GHZ.bin"
 		even
 Blk16_LZ:	binclude	"map16/LZ.bin"
 		even
-Nem_LZ:		binclude	"artnem/8x8 - LZ.bin"	; LZ primary patterns
+KosPlus_LZ:		binclude	"artkosplus/8x8 - LZ.bin"	; LZ primary patterns
 		even
 Blk256_LZ:	binclude	"map256/LZ.bin"
 		even
 Blk16_MZ:	binclude	"map16/MZ.bin"
 		even
-Nem_MZ:		binclude	"artnem/8x8 - MZ.bin"	; MZ primary patterns
+KosPlus_MZ:		binclude	"artkosplus/8x8 - MZ.bin"	; MZ primary patterns
 		even
 Blk256_MZ:	binclude	"map256/MZ.bin"
 		even
 Blk16_SLZ:	binclude	"map16/SLZ.bin"
 		even
-Nem_SLZ:	binclude	"artnem/8x8 - SLZ.bin"	; SLZ primary patterns
+KosPlus_SLZ:	binclude	"artkosplus/8x8 - SLZ.bin"	; SLZ primary patterns
 		even
 Blk256_SLZ:	binclude	"map256/SLZ.bin"
 		even
 Blk16_SYZ:	binclude	"map16/SYZ.bin"
 		even
-Nem_SYZ:	binclude	"artnem/8x8 - SYZ.bin"	; SYZ primary patterns
+KosPlus_SYZ:	binclude	"artkosplus/8x8 - SYZ.bin"	; SYZ primary patterns
 		even
 Blk256_SYZ:	binclude	"map256/SYZ.bin"
 		even
 Blk16_SBZ:	binclude	"map16/SBZ.bin"
 		even
-Nem_SBZ:	binclude	"artnem/8x8 - SBZ.bin"	; SBZ primary patterns
+KosPlus_SBZ:	binclude	"artkosplus/8x8 - SBZ.bin"	; SBZ primary patterns
 		even
 Blk256_SBZ:	binclude	"map256/SBZ.bin"
 		even
@@ -8482,7 +8531,7 @@ Nem_EndSonic:	binclude	"artnem/Ending - Sonic.bin"
 		even
 Nem_TryAgain:	binclude	"artnem/Ending - Try Again.bin"
 		even
-Kos_EndFlowers:	binclude	"artkos/Flowers at Ending.bin" ; ending sequence animated flowers
+KosPlus_EndFlowers:	binclude	"artkosplus/Flowers at Ending.bin" ; ending sequence animated flowers
 		even
 Nem_EndFlower:	binclude	"artnem/Ending - Flowers.bin"
 		even
@@ -8491,9 +8540,6 @@ Nem_CreditText:	binclude	"artnem/Ending - Credits.bin"
 Nem_EndStH:	binclude	"artnem/Ending - StH Logo.bin"
 		even
 
-		rept $40
-		dc.b $FF
-		endm
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -8793,10 +8839,7 @@ ObjPos_SBZ1pf6:	binclude	"objpos/sbz1pf6.bin"
 ObjPos_End:	binclude	"objpos/ending.bin"
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
-
-		rept $63C
-		dc.b $FF
-		endm
+		even
 
 SoundDriver:	include "s1.sounddriver.asm"
 

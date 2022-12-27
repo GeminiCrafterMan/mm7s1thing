@@ -22,6 +22,10 @@ BusterEffects:
 		bclr	#0,obStatus(a0)
 		addi.w	#25,obX(a0)
 	.doneFlipChk:
+		btst	#1,(o_player+obStatus).w
+		beq.s	.onGround
+		subq.w	#4,obY(a0)
+	.onGround:
 		lea		(Ani_MegaBusterFX).l,a1
 		jsr		AnimateSprite
 		bsr.s	.loadGfx

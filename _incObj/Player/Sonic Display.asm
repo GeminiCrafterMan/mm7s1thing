@@ -13,10 +13,10 @@ Sonic_Display:
 		beq.s	.noDecSlide
 		subq.b	#1,slidetimer(a0)
 	.noDecSlide:
-		move.w	flashtime(a0),d0
+		move.b	flashtime(a0),d0
 		beq.s	.display
-		subq.w	#1,flashtime(a0)
-		lsr.w	#3,d0
+		subq.b	#1,flashtime(a0)
+		lsr.b	#3,d0
 		bcc.s	.chkinvincible
 
 .display:
@@ -31,8 +31,6 @@ Sonic_Display:
 		bne.s	.chkshoes
 		tst.b	(f_lockscreen).w
 		bne.s	.removeinvincible
-		cmpi.w	#$C,(v_air).w
-		bcs.s	.removeinvincible
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		cmpi.w	#(id_LZ<<8)+3,(v_zone).w ; check if level is SBZ3

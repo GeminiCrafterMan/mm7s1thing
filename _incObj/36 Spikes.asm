@@ -87,7 +87,7 @@ Spik_Hurt:
 		cmpi.b	#4,obRoutine(a0)
 		bcc.s	loc_CF20
 		; This fixes the infamous "spike bug"
-		tst.w	flashtime(a0)	; Is Sonic flashing after being hurt?
+		tst.b	flashtime(a0)	; Is Sonic flashing after being hurt?
 		bne.s	loc_CF20	; If so, skip getting hurt
 		move.l	obY(a0),d3
 		move.w	obVelY(a0),d0

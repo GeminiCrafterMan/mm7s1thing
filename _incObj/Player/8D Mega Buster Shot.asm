@@ -48,7 +48,7 @@ BShot_Init:	; Routine 0
 	bshot_Values:
 	; Buster
 		dc.l	Map_BusterLemon, 0, 0, Ani_BusterLemon	; mappings/dplcs/art/animations
-		dc.w	$6BA	; VRAM tile
+		dc.w	$57A	; VRAM tile
 		dc.b	6, 8, 1, 0, 1, %00000000	; height, width, health, initial animation, buster fx animation, properties
 		dc.l	Map_BusterCharges, BusterChargesDynPLC, Art_BusterCharges, Ani_BusterMid
 		dc.w	$7A1
