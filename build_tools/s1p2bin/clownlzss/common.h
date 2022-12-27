@@ -1,16 +1,21 @@
 /*
-Copyright (c) 2018-2022 Clownacy
+	(C) 2018-2021 Clownacy
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+	This software is provided 'as-is', without any express or implied
+	warranty.  In no event will the authors be held liable for any damages
+	arising from the use of this software.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+	1. The origin of this software must not be misrepresented; you must not
+	   claim that you wrote the original software. If you use this software
+	   in a product, an acknowledgment in the product documentation would be
+	   appreciated but is not required.
+	2. Altered source versions must be plainly marked as such, and must not be
+	   misrepresented as being the original software.
+	3. This notice may not be removed or altered from any source distribution.
 */
 
 #ifndef COMMON_H
@@ -18,16 +23,9 @@ PERFORMANCE OF THIS SOFTWARE.
 
 #include <stddef.h>
 
-#include "clowncommon.h"
+#include "memory_stream.h"
 
-typedef struct ClownLZSS_Callbacks
-{
-	void *user_data;
-	void (*write)(void *user_data, unsigned char byte);
-	void (*seek)(void *user_data, size_t position);
-	size_t (*tell)(void *user_data);
-} ClownLZSS_Callbacks;
-
-cc_bool ClownLZSS_ModuledCompressionWrapper(const unsigned char *data, size_t data_size, const ClownLZSS_Callbacks *callbacks, cc_bool (*compression_function)(const unsigned char *data, size_t data_size, const ClownLZSS_Callbacks *callbacks), size_t module_size, size_t module_alignment);
+unsigned char* RegularWrapper(const unsigned char *data, size_t data_size, size_t *compressed_size, void *user_data, void (*function)(const unsigned char *data, size_t data_size, MemoryStream *output_stream, void *user_data));
+unsigned char* ModuledCompressionWrapper(const unsigned char *data, size_t data_size, size_t *compressed_size, void *user_data, void (*function)(const unsigned char *data, size_t data_size, MemoryStream *output_stream, void *user_data), size_t module_size, size_t module_alignment);
 
 #endif /* COMMON_H */

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Name="Items" Image="1up" RememberState="true">
+  <Images>
+    <ImageFromMappings id="1up">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="1" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="etank">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="3" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="wtank">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="4" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="mtank">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="5" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="lhealth">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="6" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="shealth">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="8" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="lenergy">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="10" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="senergy">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="12" startpal="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="score">
+      <ArtFile filename="../artnem/Items.bin" />
+      <MapFile type="ASM" filename="../_maps/Items.asm" frame="14" startpal="0" />
+    </ImageFromMappings>
+  </Images>
+  <Subtypes>
+    <Subtype id="00" name="Extra Life" image="1up" />
+    <Subtype id="01" name="Energy Tank" image="etank" />
+    <Subtype id="02" name="Weapon Tank" image="wtank" />
+    <Subtype id="03" name="Mystery Tank" image="mtank" />
+    <Subtype id="04" name="Large Health" image="lhealth" />
+    <Subtype id="05" name="Small Health" image="shealth" />
+    <Subtype id="06" name="Large Energy" image="lenergy" />
+    <Subtype id="07" name="Small Energy" image="senergy" />
+    <Subtype id="08" name="Score Ball" image="score" />
+  </Subtypes>
+  <Properties>
+    <BitsProperty name="Type" type="ItemType" startbit="0" length="4" />
+  </Properties>
+  <Enums>
+    <Enum name="ItemType">
+      <EnumMember name="Extra Life" />
+      <EnumMember name="Energy Tank" />
+      <EnumMember name="Weapon Tank" />
+      <EnumMember name="Mystery Tank" />
+      <EnumMember name="Large Health" />
+      <EnumMember name="Small Health" />
+      <EnumMember name="Large Energy" />
+      <EnumMember name="Small Energy" />
+      <EnumMember name="Score Ball" />
+    </Enum>
+  </Enums>
+</ObjDef>

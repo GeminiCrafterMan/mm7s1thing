@@ -222,23 +222,7 @@ React_Enemy:
 
 .breakenemy:
 		bset	#7,obStatus(a1)
-		moveq	#0,d0
-		move.w	(v_itembonus).w,d0
-		addq.w	#2,(v_itembonus).w ; add 2 to item bonus counter
-		cmpi.w	#6,d0
-		bcs.s	.bonusokay
-		moveq	#6,d0		; max bonus is lvl6
 
-.bonusokay:
-		move.w	d0,$3E(a1)
-		move.w	.points(pc,d0.w),d0
-		cmpi.w	#$20,(v_itembonus).w ; have 16 enemies been destroyed?
-		bcs.s	.lessthan16	; if not, branch
-		move.w	#1000,d0	; fix bonus to 10000
-		move.w	#$A,$3E(a1)
-
-.lessthan16:
-		bsr.w	AddPoints
 		_move.b	#id_ExplosionItem,0(a1) ; change object to explosion
 		move.b	#0,obRoutine(a1)
 		move.w	obX(a1),d1
@@ -253,7 +237,7 @@ React_Enemy:
 		neg.w	obVelY(a0)
 	.spawnItem:
 		jsr		FindFreeObj
-		move.b	#id_Items,0(a1)	; i'm aware this will only spawn 1ups right now
+		move.b	#id_Items,0(a1)	; i'm aware this will only spawn one type of item right now
 		move.w	d1,obX(a1)
 		move.w	d2,obY(a1)
 		move.b	#8,obSubtype(a1)
