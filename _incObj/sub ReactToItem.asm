@@ -6,7 +6,7 @@
 
 
 ReactToItem:
-		nop	
+		nop
 		move.w	obX(a0),d2	; load Sonic's x-axis position
 		move.w	obY(a0),d3	; load Sonic's y-axis position
 		subq.w	#8,d2
@@ -38,7 +38,7 @@ ReactToItem:
 		dbf	d6,.loop	; repeat $5F more times
 
 		moveq	#0,d0
-		rts	
+		rts
 ; ===========================================================================
 .sizes:		;   width, height
 		dc.b  $14, $14		; $01
@@ -141,7 +141,7 @@ ReactToItem:
 		addq.b	#2,obRoutine(a1) ; advance the object's routine counter
 
 .invincible:
-		rts	
+		rts
 ; ===========================================================================
 
 React_Monitor:
@@ -165,7 +165,7 @@ React_Monitor:
 		tst.b	ob2ndRout(a1)
 		bne.s	.donothing
 		addq.b	#4,ob2ndRout(a1) ; advance the monitor's routine counter
-		rts	
+		rts
 ; ===========================================================================
 
 .movingdown:
@@ -176,7 +176,7 @@ React_Monitor:
 		addq.b	#2,obRoutine(a1) ; advance the monitor's routine counter
 
 .donothing:
-		rts	
+		rts
 ; ===========================================================================
 
 React_Enemy:
@@ -211,7 +211,7 @@ React_Enemy:
 
 .flagnotclear:
 		rts
-	
+
 .hpChecksDHS:
 		move.b	obColProp(a0),d0
 		subi.b	d0,obColProp(a1)	; subtract buster shot HP from enemy's...
@@ -223,6 +223,8 @@ React_Enemy:
 .breakenemy:
 		bset	#7,obStatus(a1)
 
+		move.w	#50,d0
+		bsr.w	AddPoints
 		_move.b	#id_ExplosionItem,0(a1) ; change object to explosion
 		move.b	#0,obRoutine(a1)
 		move.w	obX(a1),d1
@@ -236,24 +238,34 @@ React_Enemy:
 		bcc.s	.bounceup
 		neg.w	obVelY(a0)
 	.spawnItem:
+	; Create a random drop!
+	; From a disassembly of Mega Man 1, the rates are...
+	;
+	; Nothing = 24/128
+	; 1 Up = 1/128
+	; Bonus Ball = 69/128
+	; Small Weapon = 15/128
+	; Small Health = 15/128
+	; Large Weapon = 2/128
+	; Large Health = 2/128
+	;
+	; I don't actually want to work on this at the moment, so it just spawns a score ball instead.
 		jsr		FindFreeObj
-		move.b	#id_Items,0(a1)	; i'm aware this will only spawn one type of item right now
+		move.b	#id_Items,0(a1)
 		move.w	d1,obX(a1)
 		move.w	d2,obY(a1)
 		move.b	#8,obSubtype(a1)
 	.ret:
-		rts	
+		rts
 ; ===========================================================================
 
 .bouncedown:
 		addi.w	#$100,obVelY(a0)
-		rts	
+		rts
 
 .bounceup:
 		subi.w	#$100,obVelY(a0)
-		rts	
-
-.points:	dc.w 10, 20, 50, 100	; points awarded div 10
+		rts
 
 ; ===========================================================================
 
@@ -274,11 +286,11 @@ React_ChkHurt:
 
 .isflashing:
 		moveq	#-1,d0
-		rts	
+		rts
 ; ===========================================================================
 
 .notinvincible:
-		nop	
+		nop
 		tst.b	flashtime(a0)		; is Sonic flashing?
 		bne.s	.isflashing	; if yes, branch
 		movea.l	a1,a2
@@ -342,7 +354,7 @@ HurtSonic:
 .sound:
 		jsr	(PlaySound_Special).l
 		moveq	#-1,d0
-		rts	
+		rts
 ; ===========================================================================
 
 .norings:
@@ -405,7 +417,7 @@ KillSonic:
 
 .dontdie:
 		moveq	#-1,d0
-		rts	
+		rts
 ; End of function KillSonic
 
 
@@ -432,7 +444,7 @@ React_Special:
 		cmpi.b	#$21,d1		; is collision type $E1	?
 		beq.s	.D7orE1		; if yes, branch
 	.return:
-		rts	
+		rts
 ; ===========================================================================
 
 .caterkiller:
@@ -471,5 +483,5 @@ React_Special:
 
 .D7orE1:
 		addq.b	#1,obColProp(a1)
-		rts	
+		rts
 ; End of function React_Special

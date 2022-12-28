@@ -116,6 +116,7 @@ CollectItem:
 		move.w	#sfx_Ring,d0 ; play extra life sound
 		bra.s	.playsnd
 	.scr:	; change this later to add these to the tally at the end of the level.
+		; Something about results card subroutines, and a byte in RAM for the amount of score balls collected
 		move.w	#100,d0
 		jsr		AddPoints
 		move.w	#sfx_Ring,d0 ; play extra life sound

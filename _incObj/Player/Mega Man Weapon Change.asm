@@ -1,4 +1,14 @@
 MegaMan_WeaponChange:
+		tst.b	(f_jpad_6button).w
+		beq.s	.3btn
+	; check for Up press
+		btst	#bitY,(v_jpadpress2_6btn).w
+		bne.s	.upWep
+	; check for Down press
+		btst	#bitZ,(v_jpadpress2_6btn).w
+		bne.s	.downWep
+		rts
+	.3btn:
 	; check for A hold
 		btst	#bitA,(v_jpadhold2).w
 		beq.s	.ret
