@@ -3,3 +3,4 @@
 REM // This file has been gutted and replaced with the Lua build script.
 REM // It has been kept around for ease-of-use for Windows users.
 "build_tools/Lua/lua.exe" build.lua
+"error/ConvSym.exe" sonic.lst s1built.gen -input as_lst -a

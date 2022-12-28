@@ -77,6 +77,20 @@ loc_14630:
 		moveq	#$D,d5
 		bsr.w	FindFloor
 		move.w	(sp)+,d0
+
+	; Sonic CD (PC, 1996) - Port by Ralakimus (from @SCDDeconstruct)
+		cmpi.b	#-1,(a4)	; Is the left sensor's angle set to snap to a flat surface?
+		beq.s	.noFix		; If so, branch
+		move.w	d0,d2		; Are we on a completely flat surface?
+		or.w	d1,d2
+		bne.s	.noFix		; If not, branch
+		cmpi.b	#-$10,(a4)	; Is the left sensor's angle set to a steep enough angle?
+		bge.s	.noFix		; If it's not steep enough, branch
+		cmpi.b	#-$40,(a4)
+		blt.s	.noFix		; If it's too steep/out of range, branch
+		st		(a4)		; Force left sensor's angle to snap to a flat surface
+	
+	.noFix:
 		bsr.w	Sonic_Angle
 		tst.w	d1
 		beq.s	locret_146BE

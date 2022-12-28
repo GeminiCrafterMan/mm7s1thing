@@ -1,11 +1,11 @@
 MegaMan_WeaponChange:
-		tst.b	(f_jpad_6button).w
-		beq.s	.3btn
-	; check for Up press
-		btst	#bitY,(v_jpadpress2_6btn).w
+		tst.b	(f_jpad_6button).w	; is it a 3-button controller?
+		beq.s	.3btn				; if so, i ain't havin that shit
+		btst	#bitX,(v_jpadpress2_6btn).w	; X check
 		bne.s	.upWep
-	; check for Down press
-		btst	#bitZ,(v_jpadpress2_6btn).w
+		btst	#bitY,(v_jpadpress2_6btn).w	; Y check
+		bne.s	.resetWep
+		btst	#bitZ,(v_jpadpress2_6btn).w	; Z check
 		bne.s	.downWep
 		rts
 	.3btn:
@@ -30,6 +30,7 @@ MegaMan_WeaponChange:
 		addq.b	#1,(v_weapon).w	; add 1
 		cmpi.b	#9,(v_weapon).w	; if below 9
 		blt.s	.loadWepPal			; return
+	.resetWep:
 		clr.b	(v_weapon).w	; wrap back around if above
 	; continue into .loadWepPal
 	.loadWepPal:
