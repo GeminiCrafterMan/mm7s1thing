@@ -6778,6 +6778,7 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		rts
 		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
 		bsr.w	Sonic_Roll
