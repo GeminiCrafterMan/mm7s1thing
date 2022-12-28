@@ -139,15 +139,44 @@ v_weapon	= ramaddr ( $FFFFF5CA ) ; Current weapon, ranges from 0 (buster) to 8 (
 v_chargecyctimer	= ramaddr ( $FFFFF5CB ) ; Charge shot - Palette cycle timer, byte
 v_chargecycnum	= ramaddr ( $FFFFF5CC ) ; Charge shot - Palette cycle number, byte
 
-; F5CD - F5FF are unused
+
+; F5CD is unused because these seem to all be words...?
+
+MEM_DEBUG_CYCLE1_INIT	= ramaddr ( $FFFFF5CE )
+MEM_DEBUG_CYCLE2_INIT	= ramaddr ( $FFFFF5D0 )
+MEM_DEBUG_CYCLE3_INIT	= ramaddr ( $FFFFF5D2 )
+MEM_DEBUG_CYCLE4_INIT	= ramaddr ( $FFFFF5D4 )
+MEM_DEBUG_CYCLE5_INIT	= ramaddr ( $FFFFF5D6 )
+MEM_DEBUG_CYCLE6_INIT	= ramaddr ( $FFFFF5D8 )
+MEM_DEBUG_CYCLE7_INIT	= ramaddr ( $FFFFF5DA )
+MEM_DEBUG_CYCLE8_INIT	= ramaddr ( $FFFFF5DC )
+MEM_DEBUG_CYCLE9_INIT	= ramaddr ( $FFFFF5DE )
+MEM_DEBUG_CYCLE1_VBLANK	= ramaddr ( $FFFFF5E0 )
+MEM_DEBUG_CYCLE2_VBLANK	= ramaddr ( $FFFFF5E2 )
+MEM_DEBUG_CYCLE3_VBLANK	= ramaddr ( $FFFFF5E4 )
+MEM_DEBUG_CYCLE4_VBLANK	= ramaddr ( $FFFFF5E6 )
+MEM_DEBUG_CYCLE5_VBLANK	= ramaddr ( $FFFFF5E8 )
+MEM_DEBUG_CYCLE6_VBLANK	= ramaddr ( $FFFFF5EA )
+MEM_DEBUG_CYCLE7_VBLANK	= ramaddr ( $FFFFF5EC )
+MEM_DEBUG_CYCLE8_VBLANK	= ramaddr ( $FFFFF5EE )
+MEM_DEBUG_CYCLE9_VBLANK	= ramaddr ( $FFFFF5F0 )
+
+; F5F2 - F5FF are unused
 
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
-v_jpadhold2	= ramaddr ( $FFFFF602 )	; joypad input - held, duplicate
-v_jpadpress2	= ramaddr ( $FFFFF603 )	; joypad input - pressed, duplicate
-v_jpadhold1	= ramaddr ( $FFFFF604 )	; joypad input - held
-v_jpadpress1	= ramaddr ( $FFFFF605 )	; joypad input - pressed
-; v_jpad2hold1
-; v_jpad2press1
+f_jpad_6button = ramaddr ( $FFFFF601 ) ; 6-button flag
+
+v_jpad2	= ramaddr ( $FFFFF602 )
+v_jpadhold2	= v_jpad2 ; joypad input - held, duplicate
+v_jpadpress2	= v_jpad2+1	; joypad input - pressed, duplicate
+v_jpadhold2_6btn	= v_jpad2+2
+v_jpadpress2_6btn	= v_jpad2+3
+
+v_jpad1	= ramaddr ( $FFFFF606 )
+v_jpadhold1	= v_jpad1 ; joypad input - held
+v_jpadpress1	= v_jpad1+1	; joypad input - pressed
+v_jpadhold1_6btn	= v_jpad1+2
+v_jpadpress1_6btn	= v_jpad1+3
 
 v_vdp_buffer1	= ramaddr ( $FFFFF60C )	; VDP instruction buffer (2 bytes)
 

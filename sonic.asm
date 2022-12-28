@@ -878,14 +878,64 @@ loc_119E:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
+; InitController
 JoypadInit:
 		stopZ80
 		waitZ80
-		moveq	#$40,d0
-		move.b	d0,($A10009).l	; init port 1 (joypad 1)
-		move.b	d0,($A1000B).l	; init port 2 (joypad 2)
-		move.b	d0,($A1000D).l	; init port 3 (expansion/extra)
+		move.b	#$40,(ctrl_1_control).l
+		lea	(ctrl_1_data).l,a0
+	; set counter to 1 + TH high
+		move.b #$40,(a0)
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE1_INIT)
+	; set counter to 2 + TH low
+		move.b (a0),d0
+		move.b #$00,(a0)
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE2_INIT)
+	; set counter to 3 + TH high
+		move.b #$40,(a0)
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE3_INIT)
+	; set counter to 4 + TH low
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE4_INIT)
+	; set counter to 5 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE5_INIT)
+	; set counter to 6 + TH low
+	; 6 button id is in counter 6
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),d0 ; copy controller data to d0
+		move.b d0,(MEM_DEBUG_CYCLE6_INIT)
+		cmpi.b #%00110011,d0 ; 00110011 = 3 button controller
+		beq.s .not6btn
+		move.b #%111111,(f_jpad_6button)
+	.not6btn:
+	; set counter to 7 + TH high
+		move.b #$40,(a0)
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE7_INIT)
+	; set counter to 8 + TH low
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE8_INIT)
+	; set counter to 9 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE9_INIT)
 		startZ80
 		rts	
 ; End of function JoypadInit
@@ -897,31 +947,94 @@ JoypadInit:
 
 
 ReadJoypads:
-		lea	(v_jpadhold1).w,a0 ; address where joypad states are written
-		lea	($A10003).l,a1	; first	joypad port
-		bsr.s	.read		; do the first joypad
-		addq.w	#2,a1		; do the second	joypad
-
-.read:
-		move.b	#0,(a1)
-		nop	
-		nop	
-		move.b	(a1),d0
-		lsl.b	#2,d0
-		andi.b	#$C0,d0
-		move.b	#$40,(a1)
-		nop	
-		nop	
-		move.b	(a1),d1
-		andi.b	#$3F,d1
-		or.b	d1,d0
-		not.b	d0
-		move.b	(a0),d1
-		eor.b	d0,d1
-		move.b	d0,(a0)+
-		and.b	d0,d1
-		move.b	d1,(a0)+
-		rts	
+		disable_ints
+		lea	(ctrl_1_data).l,a0
+		bsr.s	.read
+		enable_ints
+		rts
+	.read:
+	; set counter to 1 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),d0 ; get joypad data - C/B/Dpad
+		move.b d0,(MEM_DEBUG_CYCLE1_VBLANK)
+		andi.b #%00111111,d0 ; C/B/Dpad in low 6 bits
+	; set counter to 2 + TH low
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),d1 ; get joypad data - Start/A
+		move.b d1,(MEM_DEBUG_CYCLE2_VBLANK)
+		lsl.b #2,d1 ; shift them so they are at the 2 highest bits
+		andi.b #%11000000,d1 ; Start/A in high 2 bits - clear others
+		or.b d1,d0 ; merge values from both registers
+		not.b d0 ; flip bits so 0 means not pressed, and 1 means pressed
+		move.b d0,d1 ; copy current buttons to d1
+		move.b (v_jpadhold1),d2 ; copy the last previously read buttons
+		eor.b d2,d0 ; flip buttons being pressed now
+		move.b d1,(v_jpadhold1) ; store held buttons
+		and.b d1,d0 ; AND with current buttons
+		move.b d0,(v_jpadpress1) ; store pressed buttons
+		; if this is a 3 button controller skip the remaining steps
+		move.b (f_jpad_6button),d0 ; save the value
+		tst.b d0 ; is this zero?
+		beq.w ExitReadJoypad ; zero means 3 button controller
+	; set counter to 3 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE3_VBLANK)
+	; set counter to 4 + TH low
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE4_VBLANK)
+	; set counter to 5 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE5_VBLANK)
+	; set counter to 6 + TH low
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE6_VBLANK)
+	; set counter to 7 + TH high
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),d0 ; get joypad data - x/y/z/mode
+		move.b d0,(MEM_DEBUG_CYCLE7_VBLANK)
+		not.b d0  ; flip bits so 0 means not pressed, and 1 means pressed
+		and.b #%00001111,d0 ; x/y/z/mode are in lowest 4 bits
+		move.b d0,d1 ; copy current buttons to d1
+		move.b (v_jpadhold1_6btn),d2 ; copy the last previously read buttons
+		eor.b d2,d0 ; flip buttons being pressed now
+		move.b d1,(v_jpadhold1_6btn) ; store held buttons
+		and.b d1,d0 ; AND with current buttons
+		move.b d0,(v_jpadpress1_6btn) ; store pressed buttons
+		;---------------------------------
+		; set counter to 8 + TH low
+		; just for demo purposes - not needed
+		;--------------------------------- 
+		move.b #$00,(a0) ; set TH low
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE8_VBLANK)
+		;---------------------------------
+		; set counter to 9 + TH high
+		; just for demo purposes - not needed
+		;---------------------------------
+		move.b #$40,(a0) ; set TH high
+		nop ; bus synchronization
+		nop ; bus synchronization
+		move.b (a0),(MEM_DEBUG_CYCLE9_VBLANK)
+		;---------------------------------
+		; done reading controller
+		;---------------------------------
+ExitReadJoypad:
+		rts
 ; End of function ReadJoypads
 
 
@@ -2816,8 +2929,8 @@ Level_ChkDebug:
 		move.b	#1,(f_debugmode).w ; enable debug mode
 
 Level_ChkWater:
-		move.w	#0,(v_jpadhold2).w
-		move.w	#0,(v_jpadhold1).w
+		move.l	#0,(v_jpadhold2).w
+		move.l	#0,(v_jpadhold1).w
 		cmpi.b	#id_LZ,(v_zone).w ; is level LZ?
 		bne.s	Level_LoadObj	; if not, branch
 		move.b	#id_WaterSurface,(o_watersurface1).w ; load water surface object
@@ -3255,7 +3368,7 @@ SS_MainLoop:
 		move.b	#$A,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.w	MoveSonicInDemo
-		move.w	(v_jpadhold1).w,(v_jpadhold2).w
+		move.l	(v_jpad1).w,(v_jpad2).w
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		jsr	(SS_ShowLayout).l
@@ -3285,7 +3398,7 @@ SS_FinLoop:
 		move.b	#$16,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.w	MoveSonicInDemo
-		move.w	(v_jpadhold1).w,(v_jpadhold2).w
+		move.l	(v_jpad1).w,(v_jpad2).w
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		jsr	(SS_ShowLayout).l
@@ -3962,7 +4075,7 @@ End_MoveSon2:
 		addq.b	#2,(v_sonicend).w
 		moveq	#0,d0
 		move.b	d0,(f_lockctrl).w
-		move.w	d0,(v_jpadhold2).w ; stop Sonic moving
+		move.l	d0,(v_jpad2).w ; stop Sonic moving
 		move.w	d0,(o_player+obInertia).w
 		move.b	#$81,(f_lockmulti).w ; lock controls & position
 		move.b	#fr_Blink2,(o_player+obFrame).w
@@ -6716,7 +6829,7 @@ Sonic_Control:	; Routine 2
 loc_12C58:
 		tst.b	(f_lockctrl).w	; are controls locked?
 		bne.s	loc_12C64	; if yes, branch
-		move.w	(v_jpadhold1).w,(v_jpadhold2).w ; enable joypad control
+		move.l	(v_jpad1).w,(v_jpad2).w ; enable joypad control
 
 loc_12C64:
 		btst	#0,(f_lockmulti).w ; are controls locked?
@@ -6778,7 +6891,6 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
-		rts
 		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
 		bsr.w	Sonic_Roll

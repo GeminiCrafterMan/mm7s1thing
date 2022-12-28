@@ -32,6 +32,10 @@ ym2612_d1:		equ $A04003
 
 security_addr:		equ $A14000
 
+; 6-button constants
+ctrl_1_data:	equ $A10003
+ctrl_1_control:	equ $A10009
+
 ; Sound driver constants
 TrackPlaybackControl:	equ 0		; All tracks
 TrackVoiceControl:	equ 1		; All tracks
@@ -120,6 +124,15 @@ bitR:		equ 3
 bitL:		equ 2
 bitDn:		equ 1
 bitUp:		equ 0
+; holy shit six whole buttons
+btnZ:		equ btnUp
+btnY:		equ btnDn
+btnX:		equ btnL
+btnMode:	equ btnR
+bitZ:		equ bitUp
+bitY:		equ bitDn
+bitX:		equ bitL
+bitMode:	equ bitR
 
 ; Object variables
 obRender:	equ 1	; bitfield for x/y flip, display mode
