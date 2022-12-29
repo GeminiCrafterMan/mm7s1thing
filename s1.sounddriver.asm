@@ -2504,7 +2504,7 @@ Music8C:	include	"sound/music/Mus8C - Boss.asm"
 		even
 Music8D:	include	"sound/music/Mus8D - FZ.asm"
 		even
-Music8E:	include	"sound/music/Mus8E - Sonic Got Through.asm"
+Music8E:	binclude "sound/music/Stage_Clear_RM2.smp"
 		even
 Music8F:	include	"sound/music/Mus8F - Game Over.asm"
 		even

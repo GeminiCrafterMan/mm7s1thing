@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Object 04 - Items, placed in the level or dropped by enemies
+; ---------------------------------------------------------------------------
 ; uses flashtime from Sonic's SSTs, if dropped by an enemy.
 Items:
 		moveq	#0,d0

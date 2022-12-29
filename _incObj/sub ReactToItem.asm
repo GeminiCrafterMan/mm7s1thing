@@ -379,6 +379,8 @@ DeathOrbs_VelTbl:	; okay this kind of makes no sense but it also works to help v
 KillSonic:
 		tst.w	(v_debuguse).w	; is debug mode	active?
 		bne.w	.dontdie	; if yes, branch
+		move.b	#0,(v_shield).w	; remove shield
+		move.b	#0,(v_invinc).w	; remove invincibility
 		moveq	#12-1,d1	; 12 total, counting the first
 		lea		(DeathOrbs_VelTbl).l,a3
 	.spawnOrbs:
@@ -390,7 +392,6 @@ KillSonic:
 		move.w	(a3)+,obVelY(a1)
 		dbf		d1,.spawnOrbs
 	.done:
-		move.b	#0,(v_invinc).w	; remove invincibility
 		move.b	#6,obRoutine(a0)
 ;		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)

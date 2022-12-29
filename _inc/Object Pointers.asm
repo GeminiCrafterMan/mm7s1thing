@@ -3,8 +3,8 @@
 ; ---------------------------------------------------------------------------
 ptr_MegaManPlayer:	dc.l MegaManPlayer	; $01
 ptr_BusterEffects:	dc.l BusterEffects
+ptr_PathSwapper:	dc.l PathSwapper
 ptr_Items:		dc.l Items
-ptr_Obj04:		dc.l NullObject
 ptr_Obj05:		dc.l NullObject
 ptr_Obj06:		dc.l NullObject
 ptr_Obj07:		dc.l NullObject
@@ -148,6 +148,7 @@ NullObject:
 
 id_MegaManPlayer:		equ ((ptr_MegaManPlayer-Obj_Index)/4)+1		; $01
 id_BusterEffects:		equ ((ptr_BusterEffects-Obj_Index)/4)+1
+id_PathSwapper:			equ	((ptr_PathSwapper-Obj_Index)/4)+1
 id_Items:		equ ((ptr_Items-Obj_Index)/4)+1
 id_Splash:		equ ((ptr_Splash-Obj_Index)/4)+1		; $08
 id_SonicSpecial:	equ ((ptr_SonicSpecial-Obj_Index)/4)+1
