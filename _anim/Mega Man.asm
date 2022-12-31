@@ -172,7 +172,7 @@ MegaAni_Victory:	dc.b 3, fr_Victory1, fr_Victory2, fr_Victory2, fr_Victory3, fr_
 		even
 MegaAni_Intro:		dc.b 3, fr_Tele2, fr_Tele3, fr_Tele4, fr_Tele5, fr_Intro1, fr_Intro2, fr_Intro3, fr_Intro4, fr_Intro5, fr_Intro6, fr_Intro7, afChange, id_Wait
 		even
-MegaAni_Teleport:	dc.b $77, fr_Tele1, afEnd
+MegaAni_TeleportBeam:	dc.b $77, fr_Tele1, afEnd
 		even
 MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit6, fr_Exit7, afChange, id_TeleportBeam
 		even
