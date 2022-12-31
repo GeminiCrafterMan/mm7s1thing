@@ -6,6 +6,19 @@
 
 
 Sonic_Move:
+		cmpi.b	#id_ChargeShot,obAnim(a0)
+		beq.s	.cantMove
+		cmpi.b	#id_PickUpStanding,obAnim(a0)
+		beq.s	.cantMove
+		cmpi.b	#id_ThrowStanding,obAnim(a0)
+		blt.s	.canMove
+		cmpi.b	#id_ShieldStanding,obAnim(a0)
+		bgt.s	.canMove
+	.cantMove:
+		clr.w	obVelX(a0)
+		clr.w	obInertia(a0)
+		bra.w	locret_1307C
+	.canMove:
 		move.w	(v_sonspeedmax).w,d6
 		move.w	(v_sonspeedacc).w,d5
 		move.w	(v_sonspeeddec).w,d4
@@ -30,11 +43,16 @@ Sonic_Move:
 		tst.w	obInertia(a0)	; is Sonic moving?
 		bne.w	Sonic_ResetScr	; if yes, branch
 		bclr	#5,obStatus(a0)
+		tst.b	(f_victory).w	; victory?
+		beq.s	.iDidntWinOhNo
+		move.b	#id_Victory,obAnim(a0)
+		bra.s	.notInPain
+	.iDidntWinOhNo:
 		move.b	#id_Wait,obAnim(a0) ; use "standing" animation
-	.addShoot:
+	.shootAnim:
 		btst	#7,obStatus(a0)
 		beq.s	.painCheck
-		addq.b	#1,obAnim(a0)
+		jsr		SetShootingAnim
 		bra.s	Sonic_ResetScr
 	.painCheck:
 		tst.w	(v_rings).w	; change to low health check later...
@@ -151,7 +169,7 @@ Sonic_MoveLeft:
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
 	.cont:
-		cmpi.b	#id_WalkingShoot,obAnim(a0)
+		cmpi.b	#id_WalkingHold,obAnim(a0)
 		ble.s	.cont2
 		move.b	#id_Tiptoe,obAnim(a0)
 	.cont2:
@@ -197,7 +215,7 @@ Sonic_MoveRight:
 		move.w	d0,obInertia(a0)
 		move.w	d0,obVelX(a0)
 	.cont:
-		cmpi.b	#id_WalkingShoot,obAnim(a0)
+		cmpi.b	#id_WalkingHold,obAnim(a0)
 		ble.s	.cont2
 		move.b	#id_Tiptoe,obAnim(a0)
 	.cont2:

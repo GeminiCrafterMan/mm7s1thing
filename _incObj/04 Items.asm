@@ -113,9 +113,13 @@ CollectItem:
 		move.w	#sfx_Ring,d0 ; play extra life sound
 		bra.s	.playsnd
 	.lEn:
+		tst.b	(v_weapon).w
+		beq.s	.ret
 		move.w	#sfx_Ring,d0 ; play extra life sound
 		bra.s	.playsnd
 	.sEn:
+		tst.b	(v_weapon).w
+		beq.s	.ret
 		move.w	#sfx_Ring,d0 ; play extra life sound
 		bra.s	.playsnd
 	.scr:	; change this later to add these to the tally at the end of the level.
@@ -127,3 +131,6 @@ CollectItem:
 
 .playsnd:
 		jmp	(PlaySound_Special).l
+
+.ret:
+		rts

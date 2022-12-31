@@ -91,9 +91,7 @@ Pri_Switched:	; Routine 4
 		move.b	#$A,obRoutine(a0)
 		move.w	#60,obTimeFrame(a0) ; set time between animal spawns
 		clr.b	(f_timecount).w	; stop time counter
-		clr.b	(f_lockscreen).w ; lock screen position
-		move.b	#1,(f_lockctrl).w ; lock controls
-		move.w	#(btnR<<8),(v_jpadhold2).w ; make Sonic run to the right
+		move.b	#1,(f_lockscreen).w ; lock screen position
 		clr.b	ob2ndRout(a0)
 		bclr	#3,(o_player+obStatus).w
 		bset	#1,(o_player+obStatus).w
@@ -195,6 +193,9 @@ Pri_EndAct:	; Routine $E
 		adda.w	d2,a1		; next object RAM
 		dbf	d0,.findanimal	; repeat $3E times
 
+		move.b	#1,(f_victory).w
+		move.b	#1,(f_lockctrl).w ; lock controls
+		move.w	#0,(v_jpadhold2).w ; make Sonic run to the right
 		jsr	(GotThroughAct).l
 		jmp	(DeleteObject).l
 

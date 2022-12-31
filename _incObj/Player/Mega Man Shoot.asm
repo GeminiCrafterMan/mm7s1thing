@@ -25,9 +25,7 @@ MegaMan_Shoot:
 	;	addi.w	#15,obX(a1)
 	;.doneFlipChk:
 		bset	#7,obStatus(a0)		; set 'shooting' flag in status
-		move.b	#13,shoottimer(a0)
-		cmpi.b	#id_Wait,obAnim(a0)
-		beq.s	.shootAnim
+		bsr.s	SetShootingAnim
 		cmpi.b	#id_Shoot,obAnim(a0)
 		beq.s	.shootAnim
 		bra.s	.ret
@@ -38,6 +36,47 @@ MegaMan_Shoot:
 		move.b	#id_Shoot,obAnim(a0)
     .ret:
 		rts
+
+SetShootingAnim:
+		moveq	#0,d0
+		move.b	(v_shottype).w,d0
+		mulu.w	#6,d0
+		cmpi.b	#id_TiptoeHold,obAnim(a0)
+		bgt.s	.notTiptoe
+		bra.s	.notLanding
+	.notTiptoe:
+		cmpi.b	#id_WalkingHold,obAnim(a0)
+		bgt.s	.notWalking
+		addq.b	#1,d0
+		bra.s	.notLanding
+	.notWalking:
+		cmpi.b	#id_PainIdle,obAnim(a0)
+		bgt.s	.notIdle
+		addq.b	#2,d0
+		bra.s	.notLanding
+	.notIdle:
+		cmpi.b	#id_JumpHold,obAnim(a0)
+		bgt.s	.notJumping
+		addq.b	#3,d0
+		move.b	.animLUT(pc,d0.w),obNextAni(a0)
+		bra.s	.notLanding
+	.notJumping:
+		cmpi.b	#id_FallHold,obAnim(a0)
+		bgt.s	.notFalling
+		addq.b	#4,d0
+		move.b	.animLUT(pc,d0.w),obNextAni(a0)
+		bra.s	.notLanding
+	.notFalling:
+		cmpi.b	#id_LandHold,obAnim(a0)
+		bgt.s	.notLanding
+		addq.b	#5,d0
+		move.b	.animLUT(pc,d0.w),obNextAni(a0)
+	.notLanding:
+		move.b	.animLUT(pc,d0.w),obAnim(a0)
+		rts
+	.animLUT:	; tiptoe, walking, standing, jumping, falling, landing
+		dc.b	id_TiptoeShoot, id_WalkingShoot, id_Shoot, id_JumpShoot, id_FallShoot, id_LandShoot
+		dc.b	id_TiptoeShoot, id_WalkingShoot, id_ChargeShot, id_JumpShoot, id_FallShoot, id_LandShoot
 
 ; Weapon includes
 	include	"_incObj/Player/Weapons/Mega Buster.asm"

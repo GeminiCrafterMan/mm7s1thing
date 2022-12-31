@@ -18,6 +18,8 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.b	#5,obSubtype(a1)
+		clr.b	(v_shottype).w
+		move.b	#13,shoottimer(a0)
 		move.w	#$7C0,obVelX(a1)
 		move.w	#$40,d0
 		moveq	#0,d1	; blue
@@ -38,6 +40,8 @@
 		jsr		(PlaySound_Special).l	; play shooting sound
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
+		clr.b	(v_shottype).w
+		move.b	#13,shoottimer(a0)
 		move.w	#$700,obVelX(a1)
 ;		bra.s	.objectLoadedJumpPoint
 	.objectLoadedJumpPoint:

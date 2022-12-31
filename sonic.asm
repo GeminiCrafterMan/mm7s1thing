@@ -724,35 +724,29 @@ JoypadInit:
 		move.b #$40,(a0)
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE1_INIT)
 	; set counter to 2 + TH low
 		move.b (a0),d0
 		move.b #$00,(a0)
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE2_INIT)
 	; set counter to 3 + TH high
 		move.b #$40,(a0)
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE3_INIT)
 	; set counter to 4 + TH low
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE4_INIT)
 	; set counter to 5 + TH high
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE5_INIT)
 	; set counter to 6 + TH low
 	; 6 button id is in counter 6
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
 		move.b (a0),d0 ; copy controller data to d0
-		move.b d0,(MEM_DEBUG_CYCLE6_INIT)
 		cmpi.b #%00110011,d0 ; 00110011 = 3 button controller
 		beq.s .not6btn
 		move.b #%111111,(f_jpad_6button)
@@ -761,17 +755,14 @@ JoypadInit:
 		move.b #$40,(a0)
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE7_INIT)
 	; set counter to 8 + TH low
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE8_INIT)
 	; set counter to 9 + TH high
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE9_INIT)
 		startZ80
 		rts	
 ; End of function JoypadInit
@@ -794,14 +785,12 @@ ReadJoypads:
 		nop ; bus synchronization
 		nop ; bus synchronization
 		move.b (a0),d0 ; get joypad data - C/B/Dpad
-		move.b d0,(MEM_DEBUG_CYCLE1_VBLANK)
 		andi.b #%00111111,d0 ; C/B/Dpad in low 6 bits
 	; set counter to 2 + TH low
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
 		move.b (a0),d1 ; get joypad data - Start/A
-		move.b d1,(MEM_DEBUG_CYCLE2_VBLANK)
 		lsl.b #2,d1 ; shift them so they are at the 2 highest bits
 		andi.b #%11000000,d1 ; Start/A in high 2 bits - clear others
 		or.b d1,d0 ; merge values from both registers
@@ -820,28 +809,23 @@ ReadJoypads:
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE3_VBLANK)
 	; set counter to 4 + TH low
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE4_VBLANK)
 	; set counter to 5 + TH high
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE5_VBLANK)
 	; set counter to 6 + TH low
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE6_VBLANK)
 	; set counter to 7 + TH high
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
 		move.b (a0),d0 ; get joypad data - x/y/z/mode
-		move.b d0,(MEM_DEBUG_CYCLE7_VBLANK)
 		not.b d0  ; flip bits so 0 means not pressed, and 1 means pressed
 		and.b #%00001111,d0 ; x/y/z/mode are in lowest 4 bits
 		move.b d0,d1 ; copy current buttons to d1
@@ -857,7 +841,6 @@ ReadJoypads:
 		move.b #$00,(a0) ; set TH low
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE8_VBLANK)
 		;---------------------------------
 		; set counter to 9 + TH high
 		; just for demo purposes - not needed
@@ -865,7 +848,6 @@ ReadJoypads:
 		move.b #$40,(a0) ; set TH high
 		nop ; bus synchronization
 		nop ; bus synchronization
-		move.b (a0),(MEM_DEBUG_CYCLE9_VBLANK)
 		;---------------------------------
 		; done reading controller
 		;---------------------------------
@@ -6605,6 +6587,7 @@ Sonic_Main:	; Routine 0
 		move.w	#$400,(v_sonspeedmax).w ; Sonic's top speed
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
+		clr.b	(f_victory).w
 		moveq	#plcid_Buster,d0
 		jsr		(AddPLC).l	; load buster shot patterns
 		clr.b	(v_weapon).w ; reset weapon
@@ -6712,18 +6695,6 @@ Sonic_MdNormal:
 Sonic_MdJump:
 		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
-		btst	#7,obStatus(a0)
-		beq.s	.notShooting
-		tst.b	obVelY(a0)
-		blt.s	.risingS
-		move.b	#id_FallShoot,obAnim(a0)
-		move.b	#id_FallShoot,obNextAni(a0)
-		bra.s	.done
-	.risingS:
-		move.b	#id_JumpShoot,obAnim(a0)
-		move.b	#id_JumpShoot,obNextAni(a0)
-		bra.s	.done
-	.notShooting:
 		tst.b	obVelY(a0)
 		blt.s	.rising
 		move.b	#id_Fall,obAnim(a0)
@@ -6733,6 +6704,10 @@ Sonic_MdJump:
 		move.b	#id_Jump,obAnim(a0)
 		move.b	#id_Jump,obNextAni(a0)
 	.done:
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		jsr		SetShootingAnim
+	.notShooting:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6764,18 +6739,6 @@ Sonic_MdRoll:
 Sonic_MdJump2:
 		bsr.w	MegaMan_WeaponChange
 		bsr.w	MegaMan_Shoot
-		btst	#7,obStatus(a0)
-		beq.s	.notShooting
-		tst.b	obVelY(a0)
-		blt.s	.risingS
-		move.b	#id_FallShoot,obAnim(a0)
-		move.b	#id_FallShoot,obNextAni(a0)
-		bra.s	.done
-	.risingS:
-		move.b	#id_JumpShoot,obAnim(a0)
-		move.b	#id_JumpShoot,obNextAni(a0)
-		bra.s	.done
-	.notShooting:
 		tst.b	obVelY(a0)
 		blt.s	.rising
 		move.b	#id_Fall,obAnim(a0)
@@ -6785,6 +6748,10 @@ Sonic_MdJump2:
 		move.b	#id_Jump,obAnim(a0)
 		move.b	#id_Jump,obNextAni(a0)
 	.done:
+		btst	#7,obStatus(a0)
+		beq.s	.notShooting
+		jsr		SetShootingAnim
+	.notShooting:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound

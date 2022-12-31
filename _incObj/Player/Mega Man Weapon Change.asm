@@ -1,4 +1,6 @@
 MegaMan_WeaponChange:
+		tst.b	(v_bulletsonscreen).w
+		bne.s	.ret
 		tst.b	(f_jpad_6button).w	; is it a 3-button controller?
 		beq.s	.3btn				; if so, i ain't havin that shit
 		btst	#bitX,(v_jpadpress2_6btn).w	; X check
@@ -34,6 +36,7 @@ MegaMan_WeaponChange:
 		clr.b	(v_weapon).w	; wrap back around if above
 	; continue into .loadWepPal
 	.loadWepPal:
+		bclr	#4,obStatus(a0)	; used by a couple weapons to determine which shot you're on (LSpear's switching, SYZWep's picking up/throwing)
 		moveq	#0,d0
 		move.b	(v_weapon).w,d0
 		mulu.w	#6,d0	; multiply by 6
@@ -57,7 +60,7 @@ MegaMan_WeaponChange:
 		dc.w	$624,$846,$A68, $0AE,$46E,$22C	; Marble Blazer
 		dc.w	$004,$028,$24A, $8AE,$66C,$648	; SYZ
 		dc.w	$026,$048,$28C, $EEE,$EAA,$A66	; Labyrinth Spear (Blue)
-		dc.w	$620,$C40,$E60, $ECA,$EA6,$E84	; SLZ
+		dc.w	$042,$264,$486, $CCC,$888,$666	; SLZ (Orbit Shield...?)
 		dc.w	$620,$C40,$E60, $ECA,$EA6,$E84	; SBZ
 		dc.w	$206,$20A,$42E, $ECE,$CAE,$86E	; Rush Coil
 		dc.w	$206,$20A,$42E, $ECE,$CAE,$86E	; Rush Jet (same as above)

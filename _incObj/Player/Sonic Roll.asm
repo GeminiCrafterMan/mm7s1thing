@@ -6,6 +6,17 @@
 
 
 Sonic_Roll:
+		cmpi.b	#id_ChargeShot,obAnim(a0)
+		beq.s	.cantMove
+		cmpi.b	#id_PickUpStanding,obAnim(a0)
+		beq.s	.cantMove
+		cmpi.b	#id_ThrowStanding,obAnim(a0)
+		blt.s	.canMove
+		cmpi.b	#id_ShieldStanding,obAnim(a0)
+		bgt.s	.canMove
+	.cantMove:
+		rts
+	.canMove:
 		tst.b	(f_jumponly).w
 		bne.s	Sonic_ChkRoll.ret
 		btst	#2,obStatus(a0)

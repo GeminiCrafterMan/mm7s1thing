@@ -15,6 +15,8 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.b	#3,obSubtype(a1)
+		clr.b	(v_shottype).w
+		move.b	#13,shoottimer(a0)
 		move.w	#$500,obVelX(a1)
 		bra.s	.objectLoadedJumpPoint
 	.outofenergy:
@@ -27,6 +29,8 @@
 		jsr		FindFreeObj
 		move.b	#id_BusterShot,0(a1)	; load missile object
 		move.w	#$700,obVelX(a1)
+		clr.b	(v_shottype).w
+		move.b	#13,shoottimer(a0)
 ;		bra.s	.objectLoadedJumpPoint
 	.objectLoadedJumpPoint:
 		jsr		FireWeapon

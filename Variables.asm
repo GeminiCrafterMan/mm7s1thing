@@ -140,29 +140,11 @@ v_weapon	= ramaddr ( $FFFFF5CA ) ; Current weapon, ranges from 0 (buster) to 8 (
 v_chargecyctimer	= ramaddr ( $FFFFF5CB ) ; Charge shot - Palette cycle timer, byte
 v_chargecycnum	= ramaddr ( $FFFFF5CC ) ; Charge shot - Palette cycle number, byte
 
+f_victory	= ramaddr ( $FFFFF5CD ) ; victory animation flag
 
-; F5CD is unused because these seem to all be words...?
+v_shottype	= ramaddr ( $FFFFF5CE ) ; What type of animation to use for the player when firing
 
-MEM_DEBUG_CYCLE1_INIT	= ramaddr ( $FFFFF5CE )
-MEM_DEBUG_CYCLE2_INIT	= ramaddr ( $FFFFF5D0 )
-MEM_DEBUG_CYCLE3_INIT	= ramaddr ( $FFFFF5D2 )
-MEM_DEBUG_CYCLE4_INIT	= ramaddr ( $FFFFF5D4 )
-MEM_DEBUG_CYCLE5_INIT	= ramaddr ( $FFFFF5D6 )
-MEM_DEBUG_CYCLE6_INIT	= ramaddr ( $FFFFF5D8 )
-MEM_DEBUG_CYCLE7_INIT	= ramaddr ( $FFFFF5DA )
-MEM_DEBUG_CYCLE8_INIT	= ramaddr ( $FFFFF5DC )
-MEM_DEBUG_CYCLE9_INIT	= ramaddr ( $FFFFF5DE )
-MEM_DEBUG_CYCLE1_VBLANK	= ramaddr ( $FFFFF5E0 )
-MEM_DEBUG_CYCLE2_VBLANK	= ramaddr ( $FFFFF5E2 )
-MEM_DEBUG_CYCLE3_VBLANK	= ramaddr ( $FFFFF5E4 )
-MEM_DEBUG_CYCLE4_VBLANK	= ramaddr ( $FFFFF5E6 )
-MEM_DEBUG_CYCLE5_VBLANK	= ramaddr ( $FFFFF5E8 )
-MEM_DEBUG_CYCLE6_VBLANK	= ramaddr ( $FFFFF5EA )
-MEM_DEBUG_CYCLE7_VBLANK	= ramaddr ( $FFFFF5EC )
-MEM_DEBUG_CYCLE8_VBLANK	= ramaddr ( $FFFFF5EE )
-MEM_DEBUG_CYCLE9_VBLANK	= ramaddr ( $FFFFF5F0 )
-
-; F5F2 - F5FF are unused
+; F5CF - F5FF are unused
 
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
 f_jpad_6button = ramaddr ( $FFFFF601 ) ; 6-button flag

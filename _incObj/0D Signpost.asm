@@ -45,6 +45,7 @@ Sign_Touch:	; Routine 2
 		jsr	(PlaySound).l	; play signpost sound
 		clr.b	(f_timecount).w	; stop time counter
 		move.w	(v_limitright2).w,(v_limitleft2).w ; lock screen position
+		move.b	#1,(f_lockscreen).w	; lock the screen
 		addq.b	#2,obRoutine(a0)
 
 .notouch:
@@ -103,21 +104,11 @@ Sign_SparkPos:	dc.b -$18,-$10		; x-position, y-position
 Sign_SonicRun:	; Routine 6
 		tst.w	(v_debuguse).w	; is debug mode	on?
 		bne.w	locret_ECEE	; if yes, branch
-		btst	#1,(o_player+obStatus).w
-		bne.s	loc_EC70
+		move.b	#1,(f_victory).w
 		move.b	#1,(f_lockctrl).w ; lock controls
-		move.w	#btnR<<8,(v_jpadhold2).w ; make Sonic run to the right
+		move.w	#0,(v_jpadhold2).w ; make Sonic run to the right
 
 loc_EC70:
-		tst.b	(o_player).w
-		beq.s	loc_EC86
-		move.w	(o_player+obX).w,d0
-		move.w	(v_limitright2).w,d1
-		addi.w	#$128,d1
-		cmp.w	d1,d0
-		bcs.s	locret_ECEE
-
-loc_EC86:
 		addq.b	#2,obRoutine(a0)
 
 
