@@ -52,7 +52,7 @@ ptr_Slide:			dc.w MegaAni_Slide-Ani_MegaMan
 ptr_SlideStop:		dc.w MegaAni_SlideStop-Ani_MegaMan
 ptr_Victory:		dc.w MegaAni_Victory-Ani_MegaMan
 ptr_Intro:			dc.w MegaAni_Intro-Ani_MegaMan
-ptr_Teleport:		dc.w MegaAni_Teleport-Ani_MegaMan
+ptr_TeleportBeam:		dc.w MegaAni_TeleportBeam-Ani_MegaMan
 ptr_Exit:			dc.w MegaAni_Exit-Ani_MegaMan
 
 MegaAni_Null:	dc.b $77, fr_Null, afChange, id_Tiptoe
@@ -174,7 +174,7 @@ MegaAni_Intro:		dc.b 3, fr_Tele2, fr_Tele3, fr_Tele4, fr_Tele5, fr_Intro1, fr_In
 		even
 MegaAni_Teleport:	dc.b $77, fr_Tele1, afEnd
 		even
-MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit6, fr_Exit7, afChange, id_Teleport
+MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit6, fr_Exit7, afChange, id_TeleportBeam
 		even
 
 ; Animation IDs
@@ -227,7 +227,7 @@ id_Slide:		equ (ptr_Slide-Ani_MegaMan)/2
 id_SlideStop:	equ (ptr_SlideStop-Ani_MegaMan)/2
 id_Victory:		equ (ptr_Victory-Ani_MegaMan)/2
 id_Intro:		equ (ptr_Intro-Ani_MegaMan)/2
-id_Teleport:	equ	(ptr_Teleport-Ani_MegaMan)/2
+id_TeleportBeam:	equ	(ptr_TeleportBeam-Ani_MegaMan)/2
 id_Exit:		equ	(ptr_Exit-Ani_MegaMan)/2
 
 ; Sonic frame IDs

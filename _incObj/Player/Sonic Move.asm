@@ -17,7 +17,7 @@ Sonic_Move:
 	.cantMove:
 		clr.w	obVelX(a0)
 		clr.w	obInertia(a0)
-		bra.w	locret_1307C
+		bra.w	.notright
 	.canMove:
 		move.w	(v_sonspeedmax).w,d6
 		move.w	(v_sonspeedacc).w,d5
