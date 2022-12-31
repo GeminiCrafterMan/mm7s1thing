@@ -60,7 +60,7 @@ MegaMan_WeaponChange:
 		dc.w	$624,$846,$A68, $0AE,$46E,$22C	; Marble Blazer
 		dc.w	$004,$028,$24A, $8AE,$66C,$648	; SYZ
 		dc.w	$026,$048,$28C, $EEE,$EAA,$A66	; Labyrinth Spear (Blue)
-		dc.w	$042,$264,$486, $CCC,$888,$666	; SLZ (Orbit Shield...?)
+		dc.w	$042,$264,$486, $EEE,$AAA,$666	; Orbit Shield
 		dc.w	$620,$C40,$E60, $ECA,$EA6,$E84	; SBZ
 		dc.w	$206,$20A,$42E, $ECE,$CAE,$86E	; Rush Coil
 		dc.w	$206,$20A,$42E, $ECE,$CAE,$86E	; Rush Jet (same as above)

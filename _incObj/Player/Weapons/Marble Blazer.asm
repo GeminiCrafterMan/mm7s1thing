@@ -1,4 +1,4 @@
-	Weapon_MarbleBlazer:	; rapid-fire alternating spear
+	Weapon_MarbleBlazer:	; arcing fireball that turns into a slow-moving pillar upon hitting the ground
 		cmpi.b	#id_Slide,obAnim(a0)
 		beq.w	.ret
 		btst	#bitB,(v_jpadpress2).w

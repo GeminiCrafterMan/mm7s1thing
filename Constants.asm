@@ -169,6 +169,7 @@ slidetimer:   equ $29 ; byte, timer for sliding, should be 30 frames by default
 flashtime:	equ $30	; time between flashes after getting hit, now a byte by popular demand
 invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
+orbsLeft:   equ $37 ; how many orbs are left in the Orbit Shield
 shoottimer: equ $39 ; time left for the firing animation
 standonobject:	equ $3D	; object Sonic stands on
 

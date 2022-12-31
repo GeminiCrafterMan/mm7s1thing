@@ -41,9 +41,9 @@ MegaMan_Map_4C: 	dc.w MegaMan_Map_48D-MegaMan_Map
 MegaMan_Map_4E: 	dc.w MegaMan_Map_498-MegaMan_Map
 MegaMan_Map_50: 	dc.w MegaMan_Map_4A8-MegaMan_Map
 MegaMan_Map_52: 	dc.w MegaMan_Map_4B8-MegaMan_Map
-MegaMan_Map_54: 	dc.w MegaMan_Map_4CD-MegaMan_Map
-MegaMan_Map_56: 	dc.w MegaMan_Map_4E2-MegaMan_Map
-MegaMan_Map_58: 	dc.w MegaMan_Map_4F2-MegaMan_Map
+MegaMan_Map_54: 	dc.w MegaMan_Map_4C8-MegaMan_Map
+MegaMan_Map_56: 	dc.w MegaMan_Map_4D8-MegaMan_Map
+MegaMan_Map_58: 	dc.w MegaMan_Map_4ED-MegaMan_Map
 MegaMan_Map_5A: 	dc.w MegaMan_Map_502-MegaMan_Map
 MegaMan_Map_5C: 	dc.w MegaMan_Map_512-MegaMan_Map
 MegaMan_Map_5E: 	dc.w MegaMan_Map_51D-MegaMan_Map
@@ -388,24 +388,24 @@ MegaMan_Map_4A8: 	dc.b $3
 	dc.b $F4, $D, $0, $0, $FC
 	dc.b $FC, $5, $0, $8, $EC
 	dc.b $4, $8, $0, $C, $FC
-MegaMan_Map_4B8: 	dc.b $4
-	dc.b $F8, $E, $0, $0, $E8
-	dc.b $0, $5, $0, $C, $8
-	dc.b $F8, $0, $0, $10, $8
-	dc.b $F0, $0, $0, $11, $F8
-MegaMan_Map_4CD: 	dc.b $4
-	dc.b $F8, $E, $0, $0, $E8
-	dc.b $0, $5, $0, $C, $8
-	dc.b $F8, $0, $0, $10, $8
-	dc.b $F0, $0, $0, $11, $F8
-MegaMan_Map_4E2: 	dc.b $3
+MegaMan_Map_4B8: 	dc.b $3
 	dc.b $F4, $D, $8, $0, $E4
 	dc.b $FC, $5, $8, $8, $4
 	dc.b $4, $8, $8, $C, $EC
-MegaMan_Map_4F2: 	dc.b $3
+MegaMan_Map_4C8: 	dc.b $3
 	dc.b $F4, $D, $8, $0, $FC
 	dc.b $FC, $0, $8, $8, $F4
 	dc.b $4, $C, $8, $9, $F4
+MegaMan_Map_4D8: 	dc.b $4
+	dc.b $F8, $E, $0, $0, $E8
+	dc.b $0, $5, $0, $C, $8
+	dc.b $F8, $0, $0, $10, $8
+	dc.b $F0, $0, $0, $11, $F8
+MegaMan_Map_4ED: 	dc.b $4
+	dc.b $F8, $E, $0, $0, $E8
+	dc.b $0, $5, $0, $C, $8
+	dc.b $F8, $0, $0, $10, $8
+	dc.b $F0, $0, $0, $11, $F8
 MegaMan_Map_502: 	dc.b $3
 	dc.b $F0, $E, $0, $0, $EC
 	dc.b $F8, $1, $0, $C, $C

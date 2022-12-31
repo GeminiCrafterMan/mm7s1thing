@@ -2,11 +2,11 @@
 ; Object 8D - Mega Buster bullet
 ; ---------------------------------------------------------------------------
 bshot_lastLoaded = $29 ; byte
-bshot_dplcAddr = $30 ; longword
-bshot_artAddr = $34 ; longword
-bshot_animAddr = $38 ; longword
-bshot_yoffset = $3C ; byte
-bshot_properties = $3D
+bshot_dplcAddr = $2A ; longword
+bshot_artAddr = $2E ; longword
+bshot_animAddr = $32 ; longword
+bshot_yoffset = $36 ; byte
+bshot_properties = $37
 
 BusterShot:
 		moveq	#0,d0
@@ -18,6 +18,7 @@ BShot_Index:
 		dc.w	BShot_Init-BShot_Index
 		dc.w	BShot_Main-BShot_Index
 		dc.w	BShot_Delete-BShot_Index
+		dc.w	BShot_OrbitShield-BShot_Index
 ; ===========================================================================
 BShot_Init:	; Routine 0
 		addq.b	#2,obRoutine(a0)		; go to the next routine
@@ -43,13 +44,17 @@ BShot_Init:	; Routine 0
 		move.b	(a1)+,(o_busterfx+obAnim).w
 		clr.b	(o_busterfx+obAniFrame).w
 		move.b	(a1)+,bshot_properties(a0)	; 1
+		cmpi.b	#6,obSubtype(a0)
+		bne.s	.ret
+		addq.b	#4,obRoutine(a0)	; orb thing
+	.ret:
 		rts
 	
 	bshot_Values:
 	; Buster
 		dc.l	Map_BusterLemon, 0, 0, Ani_BusterLemon	; mappings/dplcs/art/animations
 		dc.w	$57A	; VRAM tile
-		dc.b	6, 8, 1, 0, 1, %00000000	; height, width, health, initial animation, buster fx animation, properties
+		dc.b	8, 8, 1, 0, 1, %00000000	; height, width, health, initial animation, buster fx animation, properties
 		dc.l	Map_BusterCharges, BusterChargesDynPLC, Art_BusterCharges, Ani_BusterMid
 		dc.w	$7A1
 		dc.b	12, 16, 2, 0, 2, %00000000
@@ -67,6 +72,10 @@ BShot_Init:	; Routine 0
 		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
 		dc.w	$79D
 		dc.b	5, 16, 2, 5, 2, %00000000
+	; Orbit Shield
+		dc.l	Map_SpecialWeapons, SpecialWeaponsDynPLC, Art_SpecialWeapons, Ani_SpecialWeapons
+		dc.w	$79D
+		dc.b	16, 16, 2, 6, 0, %00000000
 		even
 
 ; ===========================================================================
@@ -177,57 +186,48 @@ BShot_Delete: ; Routine 4
 		subq.b	#1,(v_bulletsonscreen).w	; subtract 1
 	.justDelete:
 		jmp		(DeleteObject).l
+; ===========================================================================
+BShot_OrbitShield:	; Routine 6
+		movea.l	orb_parent(a0),a1
+		_cmpi.b	#id_MegaManPlayer,0(a1) ; does parent object still exist?
+		bne.s	BShot_Delete	; if not, delete
+		cmpi.b	#6,obRoutine(a1)	; is he dead though
+		beq.s	BShot_Delete
+		cmpi.b	#fr_ShieldU3S,obFrame(a1)	; is Mega Man firing one?
+		beq.s	.isFiring		; if not, branch
+		cmpi.b	#fr_ShieldU3A,obFrame(a1)	; is he in the air and doing it?
+		beq.s	.isFiring
+;		cmpi.b	#$40,obAngle(a0) ; is spikeorb directly under the orbinaut?
+;		bne.s	.circle		; if not, branch
+		bra.s	.circle
+	.isFiring:
+		subq.b	#4,obRoutine(a0)	; since this is a buster shot and NOT an orbinaut, go to BShot_Main
+		subq.b	#1,orbsLeft(a1)
+		bne.s	.fire
+		rts
+;		addq.b	#2,obRoutine(a1)
 
-Ani_BusterLemon:
-    	dc.w .normal-Ani_BusterLemon
-    	dc.w .explode-Ani_BusterLemon
+.fire:	; original location
+		move.w	#$600,obVelX(a0) ; move orb to the left (quickly)
+		btst	#0,obStatus(a1)
+		beq.s	.noflip
+		neg.w	obVelX(a0)
+		bset	#0,obStatus(a0)
 
-.normal:	dc.b 2, 0, afEnd
-		even
-.explode:	dc.b 0, 1, 2, 2, 3, 3, afRoutine
-		even
+.noflip:
+		bra.w	BShot_Main.animate
+; ===========================================================================
 
-Ani_BusterMid:
-    	dc.w .normal-Ani_BusterMid
-    	dc.w .explode-Ani_BusterMid
-
-.normal:	dc.b 0, 1, 2, 2, 3, 3, 3, afEnd
-		even
-.explode:	dc.b 1, 4, 5, 6, 6, afRoutine
-		even
-
-Ani_BusterFull:
-    	dc.w .normal-Ani_BusterFull
-    	dc.w .explode-Ani_BusterFull
-
-.normal:	dc.b 0, 7, 7, 8, 8, 8, 9, afEnd
-		even
-.explode:	dc.b 1, $A, $B, $C, $C, afRoutine
-		even
-
-Ani_SpecialWeapons:
-		dc.w .gwChain-Ani_SpecialWeapons	; probably won't be using this, but who cares
-		dc.w .gwBall-Ani_SpecialWeapons		; bleh
-		dc.w .mbAir-Ani_SpecialWeapons	; marble blazer placeholder
-		dc.w .mbGround-Ani_SpecialWeapons
-		dc.w .syzPHolder-Ani_SpecialWeapons ; spring yard weapon placeholder
-		dc.w .lsSpike-Ani_SpecialWeapons	; labyrinth spear spike
-		dc.w .slzPHolder-Ani_SpecialWeapons	; star light weapon placeholder
-		dc.w .sbzPHolder-Ani_SpecialWeapons	; scrap brain weapon placeholder
-
-	.gwChain:	dc.b 0, 1, afEnd
-		even
-	.gwBall:	dc.b 0, 2, 3, 2, 4, 2, 5, 2, 4, afEnd
-		even
-	.mbAir:	dc.b 0, 6, 7, 8, afEnd
-		even
-	.mbGround:	dc.b 2, 9, 10, 11, 12, 13, 12, 13, 12, 11, 10, 9, 0, afRoutine
-		even
-	.syzPHolder:	dc.b 0, 14, afEnd
-		even
-	.lsSpike:	dc.b 0, 15, afEnd
-		even
-	.slzPHolder:	dc.b 0, 16, afEnd
-		even
-	.sbzPHolder:	dc.b 0, 17, afEnd
-		even
+.circle:
+		move.b	obAngle(a0),d0
+		jsr	(CalcSine).l
+		asr.w	#3,d1
+		add.w	obX(a1),d1
+		move.w	d1,obX(a0)
+		asr.w	#3,d0
+		add.w	obY(a1),d0
+		move.w	d0,obY(a0)
+;		move.b	obAngle(a1),d0
+;		add.b	d0,obAngle(a0)
+		addq.b	#2,obAngle(a0)
+		bra.w	BShot_Main.animate

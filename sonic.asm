@@ -3682,7 +3682,7 @@ Cont_GotoLevel:
 		rts	
 ; ===========================================================================
 		include "_incObj/Player/8D Mega Buster Shot.asm"
-
+		include	"_anim/Weapons.asm"
 Nem_BusterLemon:	binclude "artnem/Buster Lemon.bin"
 		even
 Map_BusterLemon:	include "_maps/Buster Lemon.asm"

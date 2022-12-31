@@ -41,9 +41,9 @@ MegaMan_PLC_4C: 	dc.w MegaMan_PLC_22A-MegaMan_PLC
 MegaMan_PLC_4E: 	dc.w MegaMan_PLC_22D-MegaMan_PLC
 MegaMan_PLC_50: 	dc.w MegaMan_PLC_230-MegaMan_PLC
 MegaMan_PLC_52: 	dc.w MegaMan_PLC_233-MegaMan_PLC
-MegaMan_PLC_54: 	dc.w MegaMan_PLC_238-MegaMan_PLC
-MegaMan_PLC_56: 	dc.w MegaMan_PLC_23D-MegaMan_PLC
-MegaMan_PLC_58: 	dc.w MegaMan_PLC_240-MegaMan_PLC
+MegaMan_PLC_54: 	dc.w MegaMan_PLC_236-MegaMan_PLC
+MegaMan_PLC_56: 	dc.w MegaMan_PLC_239-MegaMan_PLC
+MegaMan_PLC_58: 	dc.w MegaMan_PLC_23E-MegaMan_PLC
 MegaMan_PLC_5A: 	dc.w MegaMan_PLC_243-MegaMan_PLC
 MegaMan_PLC_5C: 	dc.w MegaMan_PLC_248-MegaMan_PLC
 MegaMan_PLC_5E: 	dc.w MegaMan_PLC_24D-MegaMan_PLC
@@ -301,16 +301,16 @@ MegaMan_PLC_22D: 	dc.b $1
 	dc.b $C2, $AB
 MegaMan_PLC_230: 	dc.b $1
 	dc.b $E2, $B8
-MegaMan_PLC_233: 	dc.b $2
+MegaMan_PLC_233: 	dc.b $1
+	dc.b $E2, $93
+MegaMan_PLC_236: 	dc.b $1
+	dc.b $C2, $AB
+MegaMan_PLC_239: 	dc.b $2
 	dc.b $F2, $C7
 	dc.b $12, $D7
-MegaMan_PLC_238: 	dc.b $2
+MegaMan_PLC_23E: 	dc.b $2
 	dc.b $F2, $D9
 	dc.b $12, $E9
-MegaMan_PLC_23D: 	dc.b $1
-	dc.b $E2, $93
-MegaMan_PLC_240: 	dc.b $1
-	dc.b $C2, $AB
 MegaMan_PLC_243: 	dc.b $2
 	dc.b $F2, $EB
 	dc.b $12, $FB

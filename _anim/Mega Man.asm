@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 Ani_MegaMan:
 
-ptr_Null:			dc.w MegaAni_Null-Ani_MegaMan
 ; Walking
 ptr_Tiptoe:			dc.w MegaAni_Tiptoe-Ani_MegaMan
 ptr_TiptoeShoot:	dc.w MegaAni_TiptoeShoot-Ani_MegaMan
@@ -22,6 +21,7 @@ ptr_ShieldUseStanding:	dc.w MegaAni_ShieldUseStanding-Ani_MegaMan
 ptr_ShieldStanding:	dc.w MegaAni_ShieldStanding-Ani_MegaMan
 ptr_PainIdle:		dc.w MegaAni_PainIdle-Ani_MegaMan
 ; Leftover Sonic 1 animations to make the engine happy, replace/remove later
+ptr_Null:			dc.w MegaAni_Null-Ani_MegaMan
 ptr_Roll:			dc.w MegaAni_Roll-Ani_MegaMan
 ptr_Roll2:			dc.w MegaAni_Roll2-Ani_MegaMan
 ptr_Float1:			dc.w MegaAni_Float1-Ani_MegaMan
@@ -55,8 +55,6 @@ ptr_Intro:			dc.w MegaAni_Intro-Ani_MegaMan
 ptr_TeleportBeam:		dc.w MegaAni_TeleportBeam-Ani_MegaMan
 ptr_Exit:			dc.w MegaAni_Exit-Ani_MegaMan
 
-MegaAni_Null:	dc.b $77, fr_Null, afChange, id_Tiptoe
-		even
 ; Walking
 MegaAni_Tiptoe:	dc.b $FF, fr_Step1, fr_Step2, afChange, id_Walking
 		even
@@ -85,7 +83,7 @@ MegaAni_Shoot:	dc.b 0, fr_Shoot1, fr_Shoot2, fr_Shoot3, fr_Shoot2, fr_Shoot1, af
 		even
 MegaAni_ChargeShot:	dc.b 7, fr_ChargeShot1, fr_ChargeShot2, fr_ChargeShot3, fr_ChargeShot4, afChange, id_Wait
 		even
-MegaAni_PickUpStanding:	dc.b 5, fr_PickUp1S, fr_PickUp1S, fr_PickUp2S, fr_PickUp3S, afChange, id_HoldStanding
+MegaAni_PickUpStanding:	dc.b 3, fr_PickUp1S, fr_PickUp1S, fr_PickUp2S, fr_PickUp3S, afChange, id_HoldStanding
 		even
 MegaAni_HoldStanding:	dc.b 3 ; speed of 3 so i don't have to type everything out so many times (it's only ever in increments of 2 anyway)
 		rept 37
@@ -97,11 +95,11 @@ MegaAni_HoldStanding:	dc.b 3 ; speed of 3 so i don't have to type everything out
 		endm
 		dc.b fr_Hold2S, fr_Hold3S, fr_Hold3S, fr_Hold2S, afEnd
 		even
-MegaAni_ThrowStanding:	dc.b 5, fr_PickUp3S, fr_Throw1S, fr_Throw2S, fr_Throw3S, fr_Throw3S, afChange, id_Wait
+MegaAni_ThrowStanding:	dc.b 3, fr_PickUp3S, fr_Throw1S, fr_Throw2S, fr_Throw3S, afBack, 1
 		even
-MegaAni_ShieldUseStanding:	dc.b 5, fr_ShieldU1S, fr_ShieldU2S, fr_ShieldU3S, fr_ShieldU4S, fr_ShieldU4S, afChange, id_Wait
+MegaAni_ShieldUseStanding:	dc.b 3, fr_ShieldU1S, fr_ShieldU2S, fr_ShieldU3S, fr_ShieldU4S, afBack, 1
 		even
-MegaAni_ShieldStanding:	dc.b 5, fr_Shield1S, fr_Shield2S, fr_Shield2S, fr_Shield3S, fr_Shield3S, fr_Throw3S, afChange, id_Wait
+MegaAni_ShieldStanding:	dc.b 3, fr_Shield1S, fr_Shield2S, fr_Shield2S, fr_Shield3S, fr_Shield3S, fr_Throw3S, afBack, 1
 		even
 MegaAni_PainIdle:	dc.b 9
 		rept 3
@@ -110,6 +108,8 @@ MegaAni_PainIdle:	dc.b 9
 			dc.b fr_PainI1, fr_PainI4, fr_PainI5, fr_PainI4, fr_PainI1, fr_PainI1, fr_PainI1, afEnd
 		even
 ; Leftover Sonic 1 animations to make the engine happy, replace/remove later
+MegaAni_Null:	dc.b $77, fr_Null, afChange, id_Tiptoe
+		even
 MegaAni_Roll:	dc.b $FE,  fr_Roll1,  fr_Roll2,  fr_Roll3,  fr_Roll4,  fr_Roll5,     afEnd, afEnd
 		even
 MegaAni_Roll2:	dc.b $FE,  fr_Roll1,  fr_Roll2,  fr_Roll5,  fr_Roll3,  fr_Roll4,  fr_Roll5, afEnd
@@ -136,13 +136,13 @@ MegaAni_Death:	dc.b 1
 			dc.b afEnd
 		even
 ; Airborne
-MegaAni_PickUpAir:	dc.b 3, fr_PickUp1A, fr_PickUp2A, afChange, id_JumpHold
+MegaAni_PickUpAir:	dc.b 5, fr_PickUp1A, fr_PickUp2A, afChange, id_JumpHold
 		even
-MegaAni_ThrowAir:	dc.b 3, fr_Throw1A, fr_Throw2A, afChange, id_Fall
+MegaAni_ThrowAir:	dc.b 5, fr_Throw1A, fr_Throw2A, afBack, 1
 		even
-MegaAni_ShieldUseAir:	dc.b 1, fr_ShieldU1A, fr_ShieldU2A, fr_ShieldU3A, fr_ShieldU4A, fr_ShieldU4A, afChange, id_Fall
+MegaAni_ShieldUseAir:	dc.b 3, fr_ShieldU1A, fr_ShieldU2A, fr_ShieldU3A, fr_ShieldU4A, fr_ShieldU4A, afBack, 1
 		even
-MegaAni_ShieldAir:	dc.b 1, fr_Shield1A, fr_Shield2A, afChange, id_Fall
+MegaAni_ShieldAir:	dc.b 5, fr_Shield1A, fr_Shield2A, afBack, 1
 		even
 MegaAni_Jump:	dc.b 1, fr_Jump1, fr_Jump2, fr_Jump2, fr_Jump3, fr_Jump3, fr_Jump4, afBack, 1
 		even
@@ -178,7 +178,6 @@ MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit
 		even
 
 ; Animation IDs
-id_Null:		equ (ptr_Null-Ani_MegaMan)/2	; $1C
 ; Walking
 id_Tiptoe:		equ (ptr_Tiptoe-Ani_MegaMan)/2	; 0
 id_TiptoeShoot:	equ (ptr_TiptoeShoot-Ani_MegaMan)/2	; 0
@@ -197,6 +196,7 @@ id_ShieldUseStanding:	equ (ptr_ShieldUseStanding-Ani_MegaMan)/2
 id_ShieldStanding:	equ (ptr_ShieldStanding-Ani_MegaMan)/2
 id_PainIdle:	equ (ptr_PainIdle-Ani_MegaMan)/2
 ; Leftover Sonic 1 animations to make the engine happy
+id_Null:		equ (ptr_Null-Ani_MegaMan)/2	; $1C
 id_Roll:		equ (ptr_Roll-Ani_MegaMan)/2	; 2
 id_Roll2:		equ (ptr_Roll2-Ani_MegaMan)/2	; 3
 id_Float1:		equ (ptr_Float1-Ani_MegaMan)/2	; $E
@@ -265,6 +265,7 @@ fr_PainI2:	ds.b 1
 fr_PainI3:	ds.b 1
 fr_PainI4:	ds.b 1
 fr_PainI5:	ds.b 1
+
 fr_Roll1:	ds.b 1
 fr_Roll2:	ds.b 1
 fr_Roll3:	ds.b 1
@@ -274,12 +275,13 @@ fr_Float1:	ds.b 1
 fr_Float2:	ds.b 1
 fr_Float3:	ds.b 1
 fr_Float4:	ds.b 1
-fr_Hang1:	ds.b 1
-fr_Hang2:	ds.b 1
 fr_Float5:	ds.b 1
 fr_Float6:	ds.b 1
+fr_Hang1:	ds.b 1
+fr_Hang2:	ds.b 1
 fr_Injury:	ds.b 1
 fr_WaterSlide:	ds.b 1
+
 fr_SlideT:	ds.b 1
 fr_Slide1:	ds.b 1
 fr_Slide2:	ds.b 1

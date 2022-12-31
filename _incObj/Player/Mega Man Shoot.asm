@@ -7,7 +7,7 @@ MegaMan_Shoot:
 		movea.l	.weaponLUT(pc,d0.w),a1
 		jmp		(a1)
 	.weaponLUT:
-		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_MarbleBlazer, Weapon_Test, Weapon_LabyrinthSpear, Weapon_Test, Weapon_Test, Weapon_Test, Weapon_Test
+		dc.l	Weapon_MegaBuster, Weapon_Test, Weapon_MarbleBlazer, Weapon_Test, Weapon_LabyrinthSpear, Weapon_OrbitShield, Weapon_Test, Weapon_Test, Weapon_Test
 	.ret:
 		rts
 	
@@ -18,12 +18,7 @@ MegaMan_Shoot:
 		beq.s	.notFlipped
 		neg.w	obVelX(a1)
 		bset	#0,obStatus(a1)
-	;	subi.w	#15,obX(a1)
-;		bra.s	.doneFlipChk
-;
 	.notFlipped:
-	;	addi.w	#15,obX(a1)
-	;.doneFlipChk:
 		bset	#7,obStatus(a0)		; set 'shooting' flag in status
 		bsr.s	SetShootingAnim
 		cmpi.b	#id_Shoot,obAnim(a0)
@@ -75,11 +70,16 @@ SetShootingAnim:
 		move.b	.animLUT(pc,d0.w),obAnim(a0)
 		rts
 	.animLUT:	; tiptoe, walking, standing, jumping, falling, landing
-		dc.b	id_TiptoeShoot, id_WalkingShoot, id_Shoot, id_JumpShoot, id_FallShoot, id_LandShoot
-		dc.b	id_TiptoeShoot, id_WalkingShoot, id_ChargeShot, id_JumpShoot, id_FallShoot, id_LandShoot
+		dc.b	id_TiptoeShoot,			id_WalkingShoot,		id_Shoot,				id_JumpShoot,		id_FallShoot,		id_LandShoot			; Normal shots
+		dc.b	id_TiptoeShoot,			id_WalkingShoot,		id_ChargeShot,			id_JumpShoot,		id_FallShoot,		id_LandShoot			; Charge shot
+		dc.b	id_PickUpStanding,		id_PickUpStanding,		id_PickUpStanding,		id_PickUpAir,		id_PickUpAir,		id_PickUpStanding		; Pick up
+		dc.b	id_ThrowStanding,		id_ThrowStanding,		id_ThrowStanding,		id_ThrowAir,		id_ThrowAir,		id_ThrowStanding		; Throw
+		dc.b	id_ShieldUseStanding,	id_ShieldUseStanding,	id_ShieldUseStanding,	id_ShieldUseAir,	id_ShieldUseAir,	id_ShieldUseStanding	; Use shield (mostly throwing)
+		dc.b	id_ShieldStanding,		id_ShieldStanding,		id_ShieldStanding,		id_ShieldAir,		id_ShieldAir,		id_ShieldStanding		; Activate shield
 
 ; Weapon includes
 	include	"_incObj/Player/Weapons/Mega Buster.asm"
 	include	"_incObj/Player/Weapons/Test.asm"
 	include "_incObj/Player/Weapons/Marble Blazer.asm"
 	include "_incObj/Player/Weapons/Labyrinth Spear.asm"
+	include	"_incObj/Player/Weapons/Orbit Shield.asm"
