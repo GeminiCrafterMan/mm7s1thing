@@ -305,6 +305,10 @@ FMUpdateTrack:
 		jsr	FMDoNext(pc)
 		jsr	FMPrepareNote(pc)
 		bra.w	FMNoteOn
+	;S2 Sound Driver Bugfix
+		jsr	DoModulation(pc)
+		bra.w	FMUpdateFreq
+	;end Sound Driver Bugfix
 ; ===========================================================================
 ; loc_71CE0:
 .notegoing:
@@ -388,6 +392,9 @@ SetDuration:
 TrackSetRest:
 		bset	#1,TrackPlaybackControl(a5)	; Set 'track at rest' bit
 		clr.w	TrackFreq(a5)			; Clear frequency
+	;S2 Sound Driver Bugfix
+		rts	
+	;end Sound Driver Bugfix
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -445,6 +452,10 @@ NoteTimeoutUpdate:
 ; sub_71DC6:
 DoModulation:
 		addq.w	#4,sp				; Do not return to caller (but see below)
+	;S2 Sound Driver Bugfix
+		btst	#1,(a5)
+		bne.s	.locret
+	;end Sound Driver Bugfix
 		btst	#3,TrackPlaybackControl(a5)	; Is modulation active?
 		beq.s	.locret				; Return if not
 		tst.b	TrackModulationWait(a5)	; Has modulation wait expired?
@@ -706,7 +717,7 @@ Sound_PlayBGM:
 ;		bne.s	.bgmnot1up		; if not, branch
 		bra.s	.bgmnot1up		; skip all this shit, nobody cares
 		tst.b	f_1up_playing(a6)	; Is a 1-up music playing?
-		bne.w	.locdblret		; if yes, branch
+		bne.s	.bgm_loadMusic		; if yes, branch	;S2 Sound Driver Bugfix
 		lea	v_music_track_ram(a6),a5
 		moveq	#((v_music_track_ram_end-v_music_track_ram)/TrackSz)-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_71FE6:
@@ -723,7 +734,7 @@ Sound_PlayBGM:
 		adda.w	#TrackSz,a5
 		dbf	d0,.cleartrackplayloop
 
-		_clr.b	v_sndprio(a6)		; Clear priority
+		;_clr.b	v_sndprio(a6)		; Clear priority	;S2 Sound Driver Bugfix
 		movea.l	a6,a0
 		lea	v_1up_ram_copy(a6),a1
 		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; Backup $220 bytes: all variables and music track data
@@ -739,6 +750,9 @@ Sound_PlayBGM:
 ; loc_72024:
 .bgmnot1up:
 		clr.b	f_1up_playing(a6)
+	;S2 Sound Driver Bugfix
+		clr.b	v_fadeout_counter(a6)
+	;end Sound Driver Bugfix
 		clr.b	v_fadein_counter(a6)
 ; loc_7202C:
 .bgm_loadMusic:
@@ -777,7 +791,7 @@ Sound_PlayBGM:
 		lea	FMDACInitBytes(pc),a2
 ; loc_72098:
 .bmg_fmloadloop:
-		bset	#7,TrackPlaybackControl(a1)	; Initial playback control: set 'track playing' bit
+		move.b	#$82,TrackPlaybackControl(a1)	; Initial playback control: set 'track play' bit	;S2 Sound Driver Bugfix
 		move.b	(a2)+,TrackVoiceControl(a1)	; Voice control bits
 		move.b	d4,TrackTempoDivider(a1)
 		move.b	d6,TrackStackPointer(a1)	; set "gosub" (coord flag $F8) stack init value
@@ -827,7 +841,7 @@ Sound_PlayBGM:
 		lea	PSGInitBytes(pc),a2
 ; loc_72126:
 .bgm_psgloadloop:
-		bset	#7,TrackPlaybackControl(a1)	; Initial playback control: set 'track playing' bit
+		move.b	#$82,TrackPlaybackControl(a1)	; Initial playback control: set 'track play' bit	;S2 Sound Driver Bugfix
 		move.b	(a2)+,TrackVoiceControl(a1)	; Voice control bits
 		move.b	d4,TrackTempoDivider(a1)
 		move.b	d6,TrackStackPointer(a1)	; set "gosub" (coord flag $F8) stack init value
@@ -893,8 +907,10 @@ Sound_PlayBGM:
 		adda.w	d6,a5
 		dbf	d4,.psgnoteoffloop		; run all PSG tracks
 ; loc_721B6:
-.locdblret:
-		addq.w	#4,sp	; Tamper with return value to not return to caller
+	;S2 Sound Driver Bugfix
+;.locdblret:
+		;addq.w	#4,sp	; Tamper with return value to not return to caller
+	;end Sound Driver Bugfix
 		rts	
 ; ===========================================================================
 ; byte_721BA:
@@ -911,8 +927,10 @@ PSGInitBytes:	dc.b $80, $A0, $C0	; Specifically, these configure writes to the P
 Sound_PlaySFX:
 		tst.b	f_1up_playing(a6)	; Is 1-up playing?
 		bne.w	.clear_sndprio		; Exit is it is
-		tst.b	v_fadeout_counter(a6)	; Is music being faded out?
-		bne.w	.clear_sndprio		; Exit if it is
+	;S2 Sound Driver Bugfix
+		;tst.b	v_fadeout_counter(a6)	; Is music being faded out?
+		;bne.w	.clear_sndprio		; Exit if it is
+	;end Sound Driver Bugfix
 		tst.b	f_fadein_flag(a6)	; Is music being faded in?
 		bne.w	.clear_sndprio		; Exit if it is
 		cmpi.b	#sfx_Ring,d7		; is ring sound	effect played?
@@ -1514,11 +1532,13 @@ DoFadeIn:
 		bpl.s	.nextpsg		; Branch if not
 		subq.b	#1,TrackVolume(a5)	; Reduce volume attenuation
 		move.b	TrackVolume(a5),d6	; Get value
-		cmpi.b	#$10,d6			; Is it is < $10?
-		blo.s	.sendpsgvol		; Branch if yes
-		moveq	#$F,d6			; Limit to $F (maximum attenuation)
+	;S2 Sound Driver Bugfix
+		;cmpi.b	#$10,d6			; Is it is < $10?
+		;blo.s	.sendpsgvol		; Branch if yes
+		;moveq	#$F,d6			; Limit to $F (maximum attenuation)
 ; loc_726C8:
-.sendpsgvol:
+;.sendpsgvol:
+	;end Sound Driver Bugfix
 		jsr	SetPSGVolume(pc)
 ; loc_726CC:
 .nextpsg:
@@ -1602,9 +1622,11 @@ WriteFMI:
 		btst	#7,d2		; Is FM busy?
 		bne.s	WriteFMI	; Loop if so
 		move.b	d0,(ym2612_a0).l
-		nop	
-		nop	
-		nop	
+	;S2 Sound Driver Bugfix
+		;nop	
+		;nop	
+		;nop	
+	;end Sound Driver Bugfix	
 ; loc_72746:
 .waitloop:
 		move.b	(ym2612_a0).l,d2
@@ -1630,9 +1652,11 @@ WriteFMII:
 		btst	#7,d2		; Is FM busy?
 		bne.s	WriteFMII	; Loop if so
 		move.b	d0,(ym2612_a1).l
-		nop	
-		nop	
-		nop	
+	;S2 Sound Driver Bugfix
+		;nop	
+		;nop	
+		;nop	
+	;end Sound Driver Bugfix
 ; loc_7277C:
 .waitloop:
 		move.b	(ym2612_a0).l,d2
@@ -1685,6 +1709,10 @@ PSGUpdateTrack:
 		jsr	PSGDoNext(pc)
 		jsr	PSGDoNoteOn(pc)
 		bra.w	PSGDoVolFX
+	;S2 Sound Driver Bugfix
+		jsr	DoModulation(pc)
+		bra.w	PSGUpdateFreq
+	;end Sound Driver Bugfix
 ; ===========================================================================
 ; loc_72866:
 .notegoing:
@@ -1740,13 +1768,16 @@ PSGSetFreq:
 		lsl.w	#1,d5
 		lea	PSGFrequencies(pc),a0
 		move.w	(a0,d5.w),TrackFreq(a5)	; Set new frequency
-		bra.w	FinishTrackUpdate
+	;S2 Sound Driver Bugfix
+		;bra.w	FinishTrackUpdate
+		rts
+	;end Sound Driver Bugfix
 ; ===========================================================================
 ; loc_728CA:
 .restpsg:
 		bset	#1,TrackPlaybackControl(a5)	; Set 'track at rest' bit
 		move.w	#-1,TrackFreq(a5)		; Invalidate note frequency
-		jsr	FinishTrackUpdate(pc)
+		;jsr	FinishTrackUpdate(pc)	;S2 Sound Driver Bugfix
 		bra.w	PSGNoteOff
 ; End of function PSGSetFreq
 
@@ -1821,9 +1852,11 @@ PSGDoVolFX:	; This can actually be made a bit more efficient, see the comments f
 ; loc_72960:
 .gotflutter:
 		add.w	d0,d6		; Add volume envelope value to volume
-		cmpi.b	#$10,d6		; Is volume $10 or higher?
-		blo.s	SetPSGVolume	; Branch if not
-		moveq	#$F,d6		; Limit to silence and fall through
+	;S2 Sound Driver Bugfix
+		;cmpi.b	#$10,d6		; Is volume $10 or higher?
+		;blo.s	SetPSGVolume	; Branch if not
+		;moveq	#$F,d6		; Limit to silence and fall through
+	;end Sound Driver Bugfix
 ; End of function PSGUpdateVolFX
 
 
@@ -1839,9 +1872,16 @@ SetPSGVolume:
 		bne.s	PSGCheckNoteTimeout ; Branch if yes
 ; loc_7297C:
 PSGSendVolume:
+	;S2 Sound Driver Bugfix
+		cmpi.b	#$10,d6
+		bcs.s	.sendpsg
+		moveq	#$F,d6
+		
+	.sendpsg:
 		or.b	TrackVoiceControl(a5),d6 ; Add in track selector bits
 		addi.b	#$10,d6			; Mark it as a volume command
 		move.b	d6,(psg_input).l
+	;end Sound Driver Bugfix
 
 locret_7298A:
 		rts	
