@@ -37,6 +37,19 @@ MegaMan_WeaponChange:
 	; continue into .loadWepPal
 	.loadWepPal:
 		bclr	#4,obStatus(a0)	; used by a couple weapons to determine which shot you're on (LSpear's switching, SYZWep's picking up/throwing)
+	; fucking... reload the shit. god. i hate this.
+		moveq	#0,d0
+		lea	(Pal_MegaMan).l,a2
+		lea	(v_pal_dry).w,a3
+		move.l	(a2,d0.w),(a3)+
+		move.l	4(a2,d0.w),(a3)+
+		move.l	8(a2,d0.w),(a3)+
+		move.l	12(a2,d0.w),(a3)+
+		move.l	16(a2,d0.w),(a3)+
+		move.l	20(a2,d0.w),(a3)+
+		move.l	24(a2,d0.w),(a3)+
+		move.l	28(a2,d0.w),(a3)+
+
 		moveq	#0,d0
 		move.b	(v_weapon).w,d0
 		mulu.w	#6,d0	; multiply by 6
