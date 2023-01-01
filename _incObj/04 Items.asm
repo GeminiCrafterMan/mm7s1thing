@@ -3,6 +3,8 @@
 ; ---------------------------------------------------------------------------
 ; uses flashtime from Sonic's SSTs, if dropped by an enemy.
 Items:
+		cmpi.b	#9,obSubtype(a0)
+		bge.w	Items_Delete
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	Items_Index(pc,d0.w),d1
@@ -85,6 +87,10 @@ Items_Delete:	; Routine 6
 CollectItem:
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
+		cmpi.b	#9,d0
+		bls.s	validSubtype
+		RaiseError "invalid subtype, in d0"
+	validSubtype:
 		lsl.w	#2,d0
 		movea.l	.itemLUT(pc,d0.w),a1
 		jmp		(a1)

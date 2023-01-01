@@ -7282,6 +7282,30 @@ Map_Cred:	include	"_maps/Credits.asm"
 
 		include	"_incObj/3D Boss - Green Hill (part 1).asm"
 
+LoadBossColors:
+		lea		(v_pal_dry+$24).w,a1
+		move.w	#$004,(a1)+
+		move.w	#$008,(a1)+
+		move.w	#$00E,(a1)+
+		move.w	#$8AE,(a1)+
+		rts
+
+ReloadLevelColors:
+		lea		(v_pal_dry+$24).w,a1
+		cmpi.b	#id_SLZ,(v_zone).w
+		beq.s	.slz
+		move.w	#$626,(a1)+
+		move.w	#$A2A,(a1)+
+		move.w	#$C4C,(a1)+
+		move.w	#$E8E,(a1)+
+		rts
+	.slz:
+		move.w	#$260,(a1)+
+		move.w	#$6A0,(a1)+
+		move.w	#$8C0,(a1)+
+		move.w	#$AE0,(a1)+
+		rts
+
 ; ---------------------------------------------------------------------------
 ; Defeated boss	subroutine
 ; ---------------------------------------------------------------------------

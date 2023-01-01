@@ -3,12 +3,13 @@
 		beq.w	.ret
 		btst	#bitB,(v_jpadpress2).w
 		beq.w	.ret
-		cmpi.b	#1,(v_bulletsonscreen).w
+		cmpi.b	#1,orbsLeft(a0)
 		bge.w	.shootOrb
 		tst.b	(v_weapon5energy).w
 		beq.w	.outofenergy
 	.makeShield:
 		addq.b	#4,(v_bulletsonscreen).w
+		addq.b	#4,orbsLeft(a0)
 		subq.b	#4,(v_weapon5energy).w
 		move.w	#sfx_Shield,d0	; fireyish sound
 		jsr		(PlaySound_Special).l	; play shooting sound
@@ -17,20 +18,11 @@
 ;		move.b	#3,obSubtype(a1)
 ; i have no clue how this'll work but it'll be really funny nonetheless
 		moveq	#0,d2
-		lea	orbsLeft(a0),a2
-		movea.l	a2,a3
-		addq.w	#1,a2
 		moveq	#3,d1
 
 .makesatellites:
 		bsr.w	FindNextFreeObj
 		bne.s	.fail
-		addq.b	#1,(a3)
-		move.w	a1,d5
-		subi.w	#$D000,d5
-		lsr.w	#6,d5
-		andi.w	#$7F,d5
-		move.b	d5,(a2)+
 		move.b	#id_BusterShot,0(a1)	; load spiked orb object
 		move.b	#6,obSubtype(a1)	; Orbit Shield
 		move.b	d2,obAngle(a1)

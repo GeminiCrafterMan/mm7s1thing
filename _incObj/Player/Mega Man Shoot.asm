@@ -34,6 +34,7 @@ MegaMan_Shoot:
 
 SetShootingAnim:
 		moveq	#0,d0
+		moveq	#0,d1
 		move.b	(v_shottype).w,d0
 		mulu.w	#6,d0
 		cmpi.b	#id_TiptoeHold,obAnim(a0)
@@ -53,22 +54,40 @@ SetShootingAnim:
 		cmpi.b	#id_JumpHold,obAnim(a0)
 		bgt.s	.notJumping
 		addq.b	#3,d0
-		move.b	.animLUT(pc,d0.w),obNextAni(a0)
-		bra.s	.notLanding
+		bra.s	.airAnimChecks
 	.notJumping:
 		cmpi.b	#id_FallHold,obAnim(a0)
 		bgt.s	.notFalling
 		addq.b	#4,d0
-		move.b	.animLUT(pc,d0.w),obNextAni(a0)
-		bra.s	.notLanding
+		bra.s	.airAnimChecks
 	.notFalling:
 		cmpi.b	#id_LandHold,obAnim(a0)
 		bgt.s	.notLanding
 		addq.b	#5,d0
-		move.b	.animLUT(pc,d0.w),obNextAni(a0)
+		bra.s	.airAnimChecks
 	.notLanding:
 		move.b	.animLUT(pc,d0.w),obAnim(a0)
 		rts
+	.airAnimChecks:
+		move.b	.animLUT(pc,d0.w),d1
+		cmpi.b	#id_PickUpAir,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ThrowAir,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ShieldUseAir,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ShieldAir,d1
+		beq.s	.notLanding
+		cmpi.b	#id_PickUpStanding,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ThrowStanding,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ShieldUseStanding,d1
+		beq.s	.notLanding
+		cmpi.b	#id_ShieldStanding,d1
+		beq.s	.notLanding
+		move.b	d1,obNextAni(a0)
+		bra.s	.notLanding
 	.animLUT:	; tiptoe, walking, standing, jumping, falling, landing
 		dc.b	id_TiptoeShoot,			id_WalkingShoot,		id_Shoot,				id_JumpShoot,		id_FallShoot,		id_LandShoot			; Normal shots
 		dc.b	id_TiptoeShoot,			id_WalkingShoot,		id_ChargeShot,			id_JumpShoot,		id_FallShoot,		id_LandShoot			; Charge shot

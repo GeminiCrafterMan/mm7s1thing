@@ -232,10 +232,10 @@ React_Enemy:
 		cmpi.b	#id_BusterShot,0(a0)
 		beq.s	.spawnItem
 		tst.w	obVelY(a0)
-		bmi.s	.bouncedown
+		bmi.w	.bouncedown
 		move.w	obY(a0),d0
 		cmp.w	obY(a1),d0
-		bcc.s	.bounceup
+		bcc.w	.bounceup
 		neg.w	obVelY(a0)
 	.spawnItem:
 	; Create a random drop!
@@ -250,13 +250,20 @@ React_Enemy:
 	; Large Health = 2/128
 	;
 	; I don't actually want to work on this at the moment, so it just spawns a score ball instead.
+		moveq	#0,d0
 		jsr		FindFreeObj
 		move.b	#id_Items,0(a1)
 		move.w	d1,obX(a1)
 		move.w	d2,obY(a1)
-		move.b	#8,obSubtype(a1)
+		moveq	#0,d0
+;		moveq	#0,d1
+		jsr		(RandomNumber).l
+		andi.w	#127,d0
+		move.b	.itemProbabilityLUT(pc,d0.w),obSubtype(a1)
+;		move.b	#8,obSubtype(a1)
 	.ret:
 		rts
+
 ; ===========================================================================
 
 .bouncedown:
@@ -266,6 +273,26 @@ React_Enemy:
 .bounceup:
 		subi.w	#$100,obVelY(a0)
 		rts
+.itemProbabilityLUT:
+	; nothing
+		rept 24
+			dc.b 9
+		endm
+	; 1up
+		dc.b 0
+	; no etanks will probably not be included
+	; bonus ball
+		rept 69
+			dc.b 8
+		endm
+	; small health & small weapon energy
+		rept 15
+			dc.b 5
+			dc.b 7
+		endm
+	; large health & weapon energy
+		dc.b 4, 4, 6, 6
+	even
 
 ; ===========================================================================
 

@@ -7,6 +7,7 @@ bshot_artAddr = $2E ; longword
 bshot_animAddr = $32 ; longword
 bshot_yoffset = $36 ; byte
 bshot_properties = $37
+bshot_orbID = $38 ; byte
 
 BusterShot:
 		moveq	#0,d0
@@ -193,18 +194,20 @@ BShot_OrbitShield:	; Routine 6
 		bne.s	BShot_Delete	; if not, delete
 		cmpi.b	#6,obRoutine(a1)	; is he dead though
 		beq.s	BShot_Delete
+		btst	#7,obStatus(a0)
+		bne.s	BShot_Delete
 		cmpi.b	#fr_ShieldU3S,obFrame(a1)	; is Mega Man firing one?
 		beq.s	.isFiring		; if not, branch
 		cmpi.b	#fr_ShieldU3A,obFrame(a1)	; is he in the air and doing it?
 		beq.s	.isFiring
 ;		cmpi.b	#$40,obAngle(a0) ; is spikeorb directly under the orbinaut?
-;		bne.s	.circle		; if not, branch
+;		beq.s	.isFiring		; if not, branch
 		bra.s	.circle
 	.isFiring:
 		subq.b	#4,obRoutine(a0)	; since this is a buster shot and NOT an orbinaut, go to BShot_Main
 		subq.b	#1,orbsLeft(a1)
-		bne.s	.fire
-		rts
+;		bne.s	.fire
+;		rts
 ;		addq.b	#2,obRoutine(a1)
 
 .fire:	; original location
@@ -215,6 +218,7 @@ BShot_OrbitShield:	; Routine 6
 		bset	#0,obStatus(a0)
 
 .noflip:
+		jsr		(ReactToItem).l
 		bra.w	BShot_Main.animate
 ; ===========================================================================
 
@@ -230,4 +234,5 @@ BShot_OrbitShield:	; Routine 6
 ;		move.b	obAngle(a1),d0
 ;		add.b	d0,obAngle(a0)
 		addq.b	#2,obAngle(a0)
+		jsr		(ReactToItem).l
 		bra.w	BShot_Main.animate

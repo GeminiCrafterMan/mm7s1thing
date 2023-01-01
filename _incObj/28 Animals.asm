@@ -20,6 +20,8 @@ Anml_Index:	dc.w Anml_Ending-Anml_Index, loc_912A-Anml_Index
 		dc.w loc_9314-Anml_Index, loc_9370-Anml_Index
 		dc.w loc_92D6-Anml_Index
 
+animal_type = $30
+
 Anml_VarIndex:	dc.b 0,	5	; GHZ
 				dc.b 2, 3	; LZ
 				dc.b 6, 3	; MZ
@@ -90,7 +92,7 @@ Anml_FromEnemy:
 		add.w	d0,d1
 		lea	Anml_VarIndex(pc),a1
 		move.b	(a1,d1.w),d0
-		move.b	d0,$30(a0)
+		move.b	d0,animal_type(a0)
 		lsl.w	#3,d0
 		lea	Anml_Variables(pc),a1
 		adda.w	d0,a1
@@ -98,14 +100,14 @@ Anml_FromEnemy:
 		move.w	(a1)+,$34(a0)	; load vertical	speed
 		move.l	(a1)+,obMap(a0)	; load mappings
 		move.w	#$580,obGfx(a0)	; VRAM setting for 1st animal
-		btst	#0,$30(a0)	; is 1st animal	used?
+		btst	#0,animal_type(a0)	; is 1st animal	used?
 		beq.s	loc_90C0	; if yes, branch
 		move.w	#$592,obGfx(a0)	; VRAM setting for 2nd animal
 
 loc_90C0: ; i... think this is working?
-		cmpi.b	#4,$30(a0)
+		cmpi.b	#4,animal_type(a0)
 		beq.s	.noAdd
-		cmpi.b	#6,$30(a0)
+		cmpi.b	#6,animal_type(a0)
 		beq.s	.noAdd
 		addi.w	#$2000,obGfx(a0)
 	.noAdd:
@@ -151,7 +153,7 @@ loc_912A:
 		move.w	$32(a0),obVelX(a0)
 		move.w	$34(a0),obVelY(a0)
 		move.b	#1,obFrame(a0)
-		move.b	$30(a0),d0
+		move.b	animal_type(a0),d0
 		add.b	d0,d0
 		addq.b	#4,d0
 		move.b	d0,obRoutine(a0)

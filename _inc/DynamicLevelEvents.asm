@@ -153,6 +153,7 @@ loc_6EB0:
 		_move.b	#id_BossGreenHill,0(a1) ; load GHZ boss	object
 		move.w	#$2A60,obX(a1)
 		move.w	#$280,obY(a1)
+		jsr		LoadBossColors
 
 loc_6ED0:
 		move.w	#bgm_Boss,d0
@@ -211,6 +212,7 @@ loc_6F28:
 		bsr.w	FindFreeObj
 		bne.s	loc_6F4A
 		_move.b	#id_BossLabyrinth,0(a1) ; load LZ boss object
+		jsr		LoadBossColors
 
 loc_6F4A:
 		move.w	#bgm_Boss,d0
@@ -389,6 +391,7 @@ DLE_MZ3boss:
 		_move.b	#id_BossMarble,0(a1) ; load MZ boss object
 		move.w	#$19F0,obX(a1)
 		move.w	#$22C,obY(a1)
+		jsr		LoadBossColors
 
 loc_70D0:
 		move.w	#bgm_Boss,d0
@@ -454,6 +457,7 @@ DLE_SLZ3boss:
 		bsr.w	FindFreeObj
 		bne.s	loc_7144
 		move.b	#id_BossStarLight,(a1) ; load SLZ boss object
+		jsr		LoadBossColors
 
 loc_7144:
 		move.w	#bgm_Boss,d0
@@ -536,6 +540,7 @@ DLE_SYZ3boss:
 		bsr.w	FindFreeObj
 		bne.s	loc_71EC
 		move.b	#id_BossSpringYard,(a1) ; load SYZ boss	object
+		jsr		LoadBossColors
 		addq.b	#2,(v_dle_routine).w
 
 loc_71EC:
@@ -677,6 +682,7 @@ DLE_FZboss:
 		bsr.w	FindFreeObj
 		bne.s	loc_7312
 		move.b	#id_BossFinal,(a1) ; load FZ boss object
+		jsr		LoadBossColors
 		addq.b	#2,(v_dle_routine).w
 		move.b	#1,(f_lockscreen).w ; lock screen
 
