@@ -250,6 +250,7 @@ Got_SBZ2:
 		bne.w	DeleteObject
 		addq.b	#2,obRoutine(a0)
 		clr.b	(f_lockctrl).w	; unlock controls
+		clr.b	(f_victory).w
 		move.w	#bgm_FZ,d0
 		jmp	(PlaySound).l	; play FZ music
 	.tpOut:

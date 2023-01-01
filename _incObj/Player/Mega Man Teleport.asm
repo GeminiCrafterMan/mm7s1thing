@@ -26,7 +26,7 @@ MegaMan_Teleport:
 		clr.w	obVelY(a0)
 		rts
 	.introLoop:
-		move.w	#$800,obVelY(a0)
+		move.w	#$A00,obVelY(a0)
 		bsr.w	Sonic_Display
 		bsr.w	Sonic_Animate
 		bsr.w	Sonic_LoadGfx
@@ -49,11 +49,11 @@ MegaMan_Teleport:
 		move.w	(v_exitlevely).w,d2
 		cmp.w	d1,d2
 		blt.s	.notYet
-		move.w	(v_exitlevely).w,obVelY(a0)
+		move.w	(v_exitlevely).w,obY(a0)
 		clr.w	obVelY(a0)
 		rts
 	.notYet:
-		move.w	#-$800,obVelY(a0)
+		move.w	#-$A00,obVelY(a0)
 		bsr.w	Sonic_Display
 		bsr.w	Sonic_Animate
 		bsr.w	Sonic_LoadGfx

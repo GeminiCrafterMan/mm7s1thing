@@ -304,7 +304,7 @@ FMUpdateTrack:
 		bclr	#4,TrackPlaybackControl(a5)	; Clear 'do not attack next note' bit
 		jsr	FMDoNext(pc)
 		jsr	FMPrepareNote(pc)
-		bra.w	FMNoteOn
+		bsr.w	FMNoteOn
 	;S2 Sound Driver Bugfix
 		jsr	DoModulation(pc)
 		bra.w	FMUpdateFreq
@@ -1708,7 +1708,7 @@ PSGUpdateTrack:
 		bclr	#4,TrackPlaybackControl(a5)	; Clear 'do not attack note' bit
 		jsr	PSGDoNext(pc)
 		jsr	PSGDoNoteOn(pc)
-		bra.w	PSGDoVolFX
+		bsr.w	PSGDoVolFX
 	;S2 Sound Driver Bugfix
 		jsr	DoModulation(pc)
 		bra.w	PSGUpdateFreq
