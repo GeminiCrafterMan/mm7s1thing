@@ -94,7 +94,7 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
-		dc.b "GEMINI0 2022.DEC" ; Copyright holder and release date (generally year)
+		dc.b "GEMINI0 2023.JAN" ; Copyright holder and release date (generally year)
 		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; Domestic name
 		dc.b "MEGA MAN IN SONIC THE   HEDGEHOG                " ; International name
 		dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
