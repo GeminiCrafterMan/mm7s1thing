@@ -6631,8 +6631,8 @@ loc_12C7E:
 		bsr.s	Sonic_Display
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Water
-		move.b	(v_anglebuffer).w,$36(a0)
-		move.b	(v_anglebuffer2).w,$37(a0)
+		move.b	(v_anglebuffer).w,angleFront(a0)
+		move.b	(v_anglebuffer2).w,angleBack(a0)
 		tst.b	(f_wtunnelmode).w
 		beq.s	loc_12CA6
 		tst.b	obAnim(a0)
@@ -7370,9 +7370,6 @@ Map_BossItems:	include	"_maps/Boss Items.asm"
 		include	"_incObj/77 Boss - Labyrinth.asm"
 		include	"_incObj/73 Boss - Marble.asm"
 		include	"_incObj/74 MZ Boss Fire.asm"
-
-Obj7A_Delete:
-		jmp	(DeleteObject).l
 
 		include	"_incObj/7A Boss - Star Light.asm"
 		include	"_incObj/7B SLZ Boss Spikeball.asm"

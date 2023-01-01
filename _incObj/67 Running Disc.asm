@@ -74,7 +74,7 @@ Disc_MoveSonic:
 loc_155A8:
 		tst.b	$3A(a0)
 		beq.s	locret_155B6
-		clr.b	$38(a1)
+		clr.b	stickToConvex(a1)
 		clr.b	$3A(a0)
 
 locret_155B6:
@@ -92,7 +92,7 @@ loc_155B8:
 loc_155D0:
 		bclr	#5,obStatus(a1)
 		move.b	#1,obNextAni(a1)
-		move.b	#1,$38(a1)
+		move.b	#1,stickToConvex(a1)
 
 loc_155E2:
 		move.w	obInertia(a1),d0

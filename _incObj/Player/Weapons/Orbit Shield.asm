@@ -7,9 +7,10 @@
 		bge.w	.shootOrb
 		tst.b	(v_weapon5energy).w
 		beq.w	.outofenergy
+		tst.b	(v_bulletsonscreen).w
+		bne.w	.ret
 	.makeShield:
 		addq.b	#4,(v_bulletsonscreen).w
-		addq.b	#4,orbsLeft(a0)
 		subq.b	#4,(v_weapon5energy).w
 		move.w	#sfx_Shield,d0	; fireyish sound
 		jsr		(PlaySound_Special).l	; play shooting sound
@@ -23,11 +24,13 @@
 .makesatellites:
 		bsr.w	FindNextFreeObj
 		bne.s	.fail
+		addq.b	#1,orbsLeft(a0)
 		move.b	#id_BusterShot,0(a1)	; load spiked orb object
 		move.b	#6,obSubtype(a1)	; Orbit Shield
 		move.b	d2,obAngle(a1)
 		addi.b	#$40,d2
 		move.l	a0,orb_parent(a1)
+		move.b	orbsLeft(a0),bshot_orbID(a1)
 		dbf	d1,.makesatellites	; repeat sequence 3 more times
 .fail:
 		move.b	#5,(v_shottype).w

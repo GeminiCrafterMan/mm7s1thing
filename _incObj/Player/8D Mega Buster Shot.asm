@@ -187,23 +187,30 @@ BShot_Delete: ; Routine 4
 		subq.b	#1,(v_bulletsonscreen).w	; subtract 1
 	.justDelete:
 		jmp		(DeleteObject).l
+	.orb:
+		subq.b	#1,orbsLeft(a1)
+		bra.s	.onlyOne
 ; ===========================================================================
 BShot_OrbitShield:	; Routine 6
 		movea.l	orb_parent(a0),a1
 		_cmpi.b	#id_MegaManPlayer,0(a1) ; does parent object still exist?
 		bne.s	BShot_Delete	; if not, delete
 		cmpi.b	#6,obRoutine(a1)	; is he dead though
-		beq.s	BShot_Delete
+		beq.s	BShot_Delete.orb
 		btst	#7,obStatus(a0)
-		bne.s	BShot_Delete
-		cmpi.b	#fr_ShieldU3S,obFrame(a1)	; is Mega Man firing one?
+		bne.s	BShot_Delete.orb
+		move.b	bshot_orbID(a0),d0
+		move.b	orbsLeft(a1),d1
+		cmp.b	d0,d1
+		bne.s	.circle
+		cmpi.b	#id_ShieldUseStanding,obAnim(a1)	; is Mega Man firing one?
 		beq.s	.isFiring		; if not, branch
-		cmpi.b	#fr_ShieldU3A,obFrame(a1)	; is he in the air and doing it?
+		cmpi.b	#id_ShieldUseAir,obAnim(a1)	; is he in the air and doing it?
 		beq.s	.isFiring
-;		cmpi.b	#$40,obAngle(a0) ; is spikeorb directly under the orbinaut?
-;		beq.s	.isFiring		; if not, branch
 		bra.s	.circle
 	.isFiring:
+		cmpi.b	#13,shoottimer(a1)
+		bne.s	.circle
 		subq.b	#4,obRoutine(a0)	; since this is a buster shot and NOT an orbinaut, go to BShot_Main
 		subq.b	#1,orbsLeft(a1)
 ;		bne.s	.fire

@@ -407,3 +407,7 @@ loc_18CB8:
 		move.w	#$246C,obGfx(a0)
 		move.b	#3,obFrame(a0)
 		bra.s	loc_18C78
+
+Obj7A_Delete:
+		jsr	ReloadLevelColors
+		jmp	(DeleteObject).l

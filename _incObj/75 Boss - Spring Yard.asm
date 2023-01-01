@@ -454,10 +454,11 @@ Obj75_FaceMain:	; Routine 4
 		move.b	(a0),d0
 		cmp.b	(a1),d0
 		bne.s	Obj75_FaceDelete
-		bra.s	loc_195BE
+		bra.w	loc_195BE
 ; ===========================================================================
 
 Obj75_FaceDelete:
+		jsr	ReloadLevelColors
 		jmp	(DeleteObject).l
 ; ===========================================================================
 off_19546:	dc.w loc_19574-off_19546, loc_19574-off_19546
