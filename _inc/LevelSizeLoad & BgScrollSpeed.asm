@@ -108,7 +108,13 @@ LevSz_SonicPos:
 		move.w	d1,(o_player+obX).w ; set Sonic's position on x-axis
 		moveq	#0,d0
 		move.w	(a1),d0
-		move.w	d0,(o_player+obY).w ; set Sonic's position on y-axis
+		tst.b	(v_act).w
+		bne.s	.noIntroAnim
+		move.w	d0,(v_startposy).w ; set Sonic's position on y-axis
+		bra.s	.cont
+	.noIntroAnim:
+		move.w	d0,(o_player+obY).w
+	.cont:
 		move.b	(v_gamemode).w,d2			; MJ: load game mode
 		andi.w	#$FC,d2					; MJ: keep in range
 		cmpi.b	#4,d2					; MJ: is screen mode at title?

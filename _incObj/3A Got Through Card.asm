@@ -119,15 +119,21 @@ Got_ChkBonus:
 		move.w	#sfx_Cash,d0
 		jsr	(PlaySound_Special).l	; play "ker-ching" sound
 		addq.b	#2,obRoutine(a0)
+		cmpi.b	#2,(v_act).w
+		beq.s	.moveOff
 		cmpi.w	#(id_SBZ<<8)+1,(v_zone).w
 		bne.s	Got_SetDelay
+	.moveOff:
+		move.w	(o_player+obY).w,d1
+		subi.w	#$E0,d1
+		move.w	d1,(v_exitlevely).w
 		addq.b	#4,obRoutine(a0)
 
 Got_SetDelay:
 		move.w	#180,obTimeFrame(a0) ; set time delay to 3 seconds
 
 locret_C692:
-		rts	
+		rts
 ; ===========================================================================
 
 Got_AddBonus:
@@ -152,7 +158,11 @@ Got_NextLevel:	; Routine $A
 		tst.w	d0
 		bne.s	Got_ChkSS
 		move.b	#id_Sega,(v_gamemode).w
+		cmpi.b	#$A,obRoutine(a0)
+		bne.s	.ret
 		bra.s	Got_Display2
+	.ret:
+		rts
 ; ===========================================================================
 
 Got_ChkSS:
@@ -234,12 +244,24 @@ locret_C748:
 ; ===========================================================================
 
 Got_SBZ2:
+		cmpi.b	#2,(v_act).w
+		beq.s	.tpOut
 		cmpi.b	#4,obFrame(a0)
 		bne.w	DeleteObject
 		addq.b	#2,obRoutine(a0)
 		clr.b	(f_lockctrl).w	; unlock controls
 		move.w	#bgm_FZ,d0
 		jmp	(PlaySound).l	; play FZ music
+	.tpOut:
+		move.b	#$A,(o_player+obRoutine).w
+		move.w	(o_player+obY).w,d1
+		move.w	(v_exitlevely).w,d2
+		cmp.w	d1,d2
+		bne.s	.ret
+		subq.b	#4,obRoutine
+		jmp		Got_NextLevel
+	.ret:
+		rts
 ; ===========================================================================
 
 loc_C766:	; Routine $10

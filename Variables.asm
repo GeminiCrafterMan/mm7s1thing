@@ -150,12 +150,18 @@ v_weapon3max	= ramaddr ( $FFFFF5D1 ) ; Weapon 3 energy, byte
 v_weapon4max	= ramaddr ( $FFFFF5D2 ) ; Weapon 4 energy, byte
 v_weapon5max	= ramaddr ( $FFFFF5D3 ) ; Weapon 5 energy, byte
 v_weapon6max	= ramaddr ( $FFFFF5D4 ) ; Weapon 6 energy, byte
-v_rushcoilmax   = ramaddr ( $FFFFF5D5 ) ; Rush Coil item energy, byte
+v_rushcoilmax	= ramaddr ( $FFFFF5D5 ) ; Rush Coil item energy, byte
 v_rushjetmax	= ramaddr ( $FFFFF5D6 ) ; Rush Jet item energy, byte
-; F5CF - F5FF are unused
+
+; F5D7 is unused
+
+v_startposy		= ramaddr ( $FFFFF5D8 ) ; word, start position on the Y axis.
+v_exitlevely	= ramaddr ( $FFFFF5DA ) ; word, y-position to exit level at
+
+; F5DC - F5FF are unused
 
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
-f_jpad_6button = ramaddr ( $FFFFF601 ) ; 6-button flag
+f_jpad_6button	= ramaddr ( $FFFFF601 ) ; 6-button flag
 
 v_jpad2	= ramaddr ( $FFFFF602 )
 v_jpadhold2	= v_jpad2 ; joypad input - held, duplicate

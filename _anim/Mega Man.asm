@@ -174,7 +174,7 @@ MegaAni_Intro:		dc.b 3, fr_Tele2, fr_Tele3, fr_Tele4, fr_Tele5, fr_Intro1, fr_In
 		even
 MegaAni_TeleportBeam:	dc.b $77, fr_Tele1, afEnd
 		even
-MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit6, fr_Exit7, afChange, id_TeleportBeam
+MegaAni_Exit:		dc.b 3, fr_Exit1, fr_Exit2, fr_Exit3, fr_Exit4, fr_Exit5, fr_Exit6, fr_Exit7, fr_Tele5, fr_Tele4, fr_Tele3, fr_Tele2, afChange, id_TeleportBeam
 		even
 
 ; Animation IDs

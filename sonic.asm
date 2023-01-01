@@ -2853,6 +2853,7 @@ Level_MainLoop:
 		bne.s	Level_DoScroll	; if yes, branch
 		cmpi.b	#6,(o_player+obRoutine).w ; has Sonic just died?
 		bhs.s	Level_SkipScroll ; if yes, branch
+	; this SHOULD also cover #$A (teleporting)
 
 Level_DoScroll:
 		bsr.w	DeformLayers
@@ -6002,8 +6003,9 @@ BuildSprites:
 		btst	#5,d4		; is static mappings flag on?
 		bne.s	.drawFrame	; if yes, branch
 		move.b	obFrame(a0),d1
-		add.b	d1,d1
+		add.w	d1,d1		; MJ: changed from byte to word (we want more than $7F sprites)
 		adda.w	(a1,d1.w),a1	; get mappings frame address
+		moveq	#0,d1		; clear d1 (because of our byte to word change)
 		move.b	(a1)+,d1	; number of sprite pieces
 		subq.b	#1,d1
 		bmi.s	.setVisible
@@ -6566,17 +6568,19 @@ Sonic_Normal:
 		move.w	Sonic_Index(pc,d0.w),d1
 		jmp	Sonic_Index(pc,d1.w)
 ; ===========================================================================
-Sonic_Index:	dc.w Sonic_Main-Sonic_Index
+Sonic_Index:
+		dc.w Sonic_Main-Sonic_Index
 		dc.w Sonic_Control-Sonic_Index
 		dc.w Sonic_Hurt-Sonic_Index
 		dc.w Sonic_Death-Sonic_Index
 		dc.w Sonic_ResetLevel-Sonic_Index
+		dc.w MegaMan_Teleport-Sonic_Index
 ; ===========================================================================
 
 Sonic_Main:	; Routine 0
 		move.b	#$C,(v_top_solid_bit).w	; MJ: set collision to 1st
 		move.b	#$D,(v_lrb_solid_bit).w	; MJ: set collision to 1st
-		addq.b	#2,obRoutine(a0)
+		addi.b	#$A,obRoutine(a0)	; intro
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
 		move.l	#Map_MegaMan,obMap(a0)
@@ -6610,6 +6614,7 @@ Sonic_Main:	; Routine 0
 		move.b	#32,(v_rushcoilmax).w; Rush Coil
 		move.b	#32,(v_rushjetenergy).w	; Rush Jet
 		move.b	#32,(v_rushjetmax).w	; Rush Jet
+		rts
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?
@@ -6793,6 +6798,7 @@ loc_12EA6:
 		include	"_incObj/Player/Sonic Animate.asm"
 		include	"_anim/Mega Man.asm"
 		include	"_incObj/Player/Sonic LoadGfx.asm"
+		include	"_incObj/Player/Mega Man Teleport.asm"
 
 		include	"_incObj/Player/02 Mega Buster Effects.asm"
 
