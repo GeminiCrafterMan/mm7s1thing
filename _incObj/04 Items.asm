@@ -114,10 +114,10 @@ CollectItem:
 		bra.s	.playsnd
 	.lHP:
 		move.b	#10,d2
-		bra.s	.addHealth
+		bra.s	.addHP
 	.sHP:
 		move.b	#2,d2
-		bra.s	.addHealth
+		bra.s	.addHP
 	.lEn:
 		tst.b	(v_weapon).w
 		beq.s	.ret
