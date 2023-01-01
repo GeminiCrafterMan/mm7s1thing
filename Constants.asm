@@ -285,6 +285,7 @@ sfx_Spring:	equ ((ptr_sndCC-SoundIndex)/4)+sfx__First
 sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
+sfx_Waterfall:	equ ((ptr_sndD0-SoundIndex)/4)+sfx__First
 sfx_JumpLand:	equ ((ptr_sndJumpLand-SoundIndex)/4)+sfx__First
 sfx_Slide:		equ ((ptr_sndSlide-SoundIndex)/4)+sfx__First
 sfx_BusterShot:	equ ((ptr_sndBusterShot-SoundIndex)/4)+sfx__First
@@ -295,9 +296,9 @@ sfx_ChargeLoop:    equ ((ptr_sndChargeLoop-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects
-spec__First:	equ sfx__Last+1
-sfx_Waterfall:	equ ((ptr_sndD0-SpecSoundIndex)/4)+spec__First
-spec__Last:	equ ((ptr_specend-SpecSoundIndex-4)/4)+spec__First
+;spec__First:	equ sfx__Last+1
+;sfx_Waterfall:	equ ((ptr_sndD0-SpecSoundIndex)/4)+spec__First
+;spec__Last:	equ ((ptr_specend-SpecSoundIndex-4)/4)+spec__First
 
 flg__First:	equ $FB ; last few possible sounds
 bgm_Fade:	equ ((ptr_flgE0-Sound_ExIndex)/4)+flg__First

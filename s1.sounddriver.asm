@@ -4,7 +4,7 @@
 ; Go_SoundTypes:
 Go_SoundPriorities:	dc.l SoundPriorities
 ; Go_SoundD0:
-Go_SpecSoundIndex:	dc.l SpecSoundIndex
+;Go_SpecSoundIndex:	dc.l SpecSoundIndex
 Go_MusicIndex:		dc.l MusicIndex
 Go_SoundIndex:		dc.l SoundIndex
 ; off_719A0:
@@ -645,14 +645,14 @@ PlaySoundID:
 		; SFX
 		cmpi.b	#sfx__Last,d7		; Is this sfx?
 		bls.w	Sound_PlaySFX		; Branch if yes
-		cmpi.b	#spec__First,d7		; Is this after sfx but before special sfx?
+		cmpi.b	#flg__First,d7		; Is this after sfx but before special sfx?
 		blo.w	.locret			; Return if yes
 
 		; Special SFX
-		cmpi.b	#spec__Last,d7		; Is this special sfx?
-		bls.w	Sound_PlaySpecial	; Branch if yes
-		cmpi.b	#flg__First,d7		; Is this after special sfx but before the commands?
-		blo.w	.locret			; Return if yes
+		;cmpi.b	#spec__Last,d7		; Is this special sfx?
+		;bls.w	Sound_PlaySpecial	; Branch if yes
+		;cmpi.b	#flg__First,d7		; Is this after special sfx but before the commands?
+		;blo.w	.locret			; Return if yes
 
 		; Sound Commands
 		cmpi.b	#flg__Last,d7		; Is this sound commands?
@@ -1043,80 +1043,80 @@ SFX_SFXChannelRAM:
 ; Play GHZ waterfall sound
 ; ---------------------------------------------------------------------------
 ; Sound_D0toDF:
-Sound_PlaySpecial:
-		tst.b	f_1up_playing(a6)	; Is 1-up playing?
-		bne.w	.locret			; Return if so
-		tst.b	v_fadeout_counter(a6)	; Is music being faded out?
-		bne.w	.locret			; Exit if it is
-		tst.b	f_fadein_flag(a6)	; Is music being faded in?
-		bne.w	.locret			; Exit if it is
-		movea.l	(Go_SpecSoundIndex).l,a0
-		subi.b	#spec__First,d7		; Make it 0-based
-		lsl.w	#2,d7
-		movea.l	(a0,d7.w),a3
-		movea.l	a3,a1
-		moveq	#0,d0
-		move.w	(a1)+,d0			; Voice pointer
-		add.l	a3,d0				; Relative pointer
-		move.l	d0,v_special_voice_ptr(a6)	; Store voice pointer
-		move.b	(a1)+,d5			; Dividing timing
-		moveq	#0,d7
-		move.b	(a1)+,d7			; Number of tracks (FM + PSG)
-		subq.b	#1,d7
-		moveq	#TrackSz,d6
+;Sound_PlaySpecial:
+		;tst.b	f_1up_playing(a6)	; Is 1-up playing?
+		;bne.w	.locret			; Return if so
+		;tst.b	v_fadeout_counter(a6)	; Is music being faded out?
+		;bne.w	.locret			; Exit if it is
+		;tst.b	f_fadein_flag(a6)	; Is music being faded in?
+		;bne.w	.locret			; Exit if it is
+		;movea.l	(Go_SpecSoundIndex).l,a0
+		;subi.b	#spec__First,d7		; Make it 0-based
+		;lsl.w	#2,d7
+		;movea.l	(a0,d7.w),a3
+		;movea.l	a3,a1
+		;moveq	#0,d0
+		;move.w	(a1)+,d0			; Voice pointer
+		;add.l	a3,d0				; Relative pointer
+		;move.l	d0,v_special_voice_ptr(a6)	; Store voice pointer
+		;move.b	(a1)+,d5			; Dividing timing
+		;moveq	#0,d7
+		;move.b	(a1)+,d7			; Number of tracks (FM + PSG)
+		;subq.b	#1,d7
+		;moveq	#TrackSz,d6
 ; loc_72348:
-.sfxloadloop:
-		move.b	1(a1),d4					; Voice control bits
-		bmi.s	.sfxoverridepsg					; Branch if PSG
-		bset	#2,v_music_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+;.sfxloadloop:
+		;move.b	1(a1),d4					; Voice control bits
+		;bmi.s	.sfxoverridepsg					; Branch if PSG
+		;bset	#2,v_music_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
 
-		lea	v_spcsfx_fm4_track(a6),a5
-		bra.s	.sfxinitpsg
+		;lea	v_spcsfx_fm4_track(a6),a5
+		;bra.s	.sfxinitpsg
 ; ===========================================================================
 ; loc_7235A:
-.sfxoverridepsg:
-		bset	#2,v_music_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
-		lea	v_spcsfx_psg3_track(a6),a5
+;.sfxoverridepsg:
+		;bset	#2,v_music_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		;lea	v_spcsfx_psg3_track(a6),a5
 ; loc_72364:
-.sfxinitpsg:
-		movea.l	a5,a2
-		moveq	#(TrackSz/4)-1,d0	; $30 bytes
+;.sfxinitpsg:
+		;movea.l	a5,a2
+		;moveq	#(TrackSz/4)-1,d0	; $30 bytes
 ; loc_72368:
-.clearsfxtrackram:
-		clr.l	(a2)+
-		dbf	d0,.clearsfxtrackram
+;.clearsfxtrackram:
+		;clr.l	(a2)+
+		;dbf	d0,.clearsfxtrackram
 
-		move.w	(a1)+,TrackPlaybackControl(a5)	; Initial playback control bits & voice control bits
-		move.b	d5,TrackTempoDivider(a5)
-		moveq	#0,d0
-		move.w	(a1)+,d0			; Track data pointer
-		add.l	a3,d0				; Relative pointer
-		move.l	d0,TrackDataPointer(a5)	; Store track pointer
-		move.w	(a1)+,TrackTranspose(a5)	; load FM/PSG channel modifier
-		move.b	#1,TrackDurationTimeout(a5)	; Set duration of first "note"
-		move.b	d6,TrackStackPointer(a5)	; set "gosub" (coord flag $F8) stack init value
-		tst.b	d4				; Is this a PSG channel?
-		bmi.s	.sfxpsginitdone			; Branch if yes
-		move.b	#$C0,TrackAMSFMSPan(a5)	; AMS/FMS/Panning
+		;move.w	(a1)+,TrackPlaybackControl(a5)	; Initial playback control bits & voice control bits
+		;move.b	d5,TrackTempoDivider(a5)
+		;moveq	#0,d0
+		;move.w	(a1)+,d0			; Track data pointer
+		;add.l	a3,d0				; Relative pointer
+		;move.l	d0,TrackDataPointer(a5)	; Store track pointer
+		;move.w	(a1)+,TrackTranspose(a5)	; load FM/PSG channel modifier
+		;move.b	#1,TrackDurationTimeout(a5)	; Set duration of first "note"
+		;move.b	d6,TrackStackPointer(a5)	; set "gosub" (coord flag $F8) stack init value
+		;tst.b	d4				; Is this a PSG channel?
+		;bmi.s	.sfxpsginitdone			; Branch if yes
+		;move.b	#$C0,TrackAMSFMSPan(a5)	; AMS/FMS/Panning
 ; loc_72396:
-.sfxpsginitdone:
-		dbf	d7,.sfxloadloop
+;.sfxpsginitdone:
+		;dbf	d7,.sfxloadloop
 
-		tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6)	; Is track playing?
-		bpl.s	.doneoverride					; Branch if not
-		bset	#2,v_spcsfx_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		;tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6)	; Is track playing?
+		;bpl.s	.doneoverride					; Branch if not
+		;bset	#2,v_spcsfx_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
 ; loc_723A6:
-.doneoverride:
-		tst.b	v_sfx_psg3_track+TrackPlaybackControl(a6)	; Is track playing?
-		bpl.s	.locret						; Branch if not
-		bset	#2,v_spcsfx_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
-		ori.b	#$1F,d4						; Command to silence channel
-		move.b	d4,(psg_input).l
-		bchg	#5,d4			; Command to silence noise channel
-		move.b	d4,(psg_input).l
+;.doneoverride:
+		;tst.b	v_sfx_psg3_track+TrackPlaybackControl(a6)	; Is track playing?
+		;bpl.s	.locret						; Branch if not
+		;bset	#2,v_spcsfx_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		;ori.b	#$1F,d4						; Command to silence channel
+		;move.b	d4,(psg_input).l
+		;bchg	#5,d4			; Command to silence noise channel
+		;move.b	d4,(psg_input).l
 ; locret_723C6:
-.locret:
-		rts	
+;.locret:
+		;rts	
 ; End of function PlaySoundID
 
 ; ===========================================================================
@@ -1135,16 +1135,16 @@ Sound_PlaySpecial:
 
 ; BGMFM4PSG3RAM:
 ;SpecSFX_BGMChannelRAM:
-		dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
-		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF
 ; SFXFM4PSG3RAM:
 ;SpecSFX_SFXChannelRAM:
-		dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
-		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF
 ; SpecialSFXFM4PSG3RAM:
 ;SpecSFX_SpecSFXChannelRAM:
-		dc.l (v_snddriver_ram+v_spcsfx_fm4_track)&$FFFFFF
-		dc.l (v_snddriver_ram+v_spcsfx_psg3_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_spcsfx_fm4_track)&$FFFFFF
+		;dc.l (v_snddriver_ram+v_spcsfx_psg3_track)&$FFFFFF
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -2137,22 +2137,22 @@ cfClearPush:
 ; ===========================================================================
 ; loc_72BF4:
 cfStopSpecialFM4:
-		bclr	#7,TrackPlaybackControl(a5)	; Stop track
-		bclr	#4,TrackPlaybackControl(a5)	; Clear 'do not attack next note' bit
-		jsr	FMNoteOff(pc)
-		tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6) ; Is SFX using FM4?
-		bmi.s	.locexit			; Branch if yes
-		movea.l	a5,a3
-		lea	v_music_fm4_track(a6),a5
-		movea.l	v_voice_ptr(a6),a1		; Voice pointer
-		bclr	#2,TrackPlaybackControl(a5)	; Clear 'SFX is overriding' bit
-		bset	#1,TrackPlaybackControl(a5)	; Set 'track at rest' bit
-		move.b	TrackVoiceIndex(a5),d0		; Current voice
-		jsr	SetVoice(pc)
-		movea.l	a3,a5
+		;bclr	#7,TrackPlaybackControl(a5)	; Stop track
+		;bclr	#4,TrackPlaybackControl(a5)	; Clear 'do not attack next note' bit
+		;jsr	FMNoteOff(pc)
+		;tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6) ; Is SFX using FM4?
+		;bmi.s	.locexit			; Branch if yes
+		;movea.l	a5,a3
+		;lea	v_music_fm4_track(a6),a5
+		;movea.l	v_voice_ptr(a6),a1		; Voice pointer
+		;bclr	#2,TrackPlaybackControl(a5)	; Clear 'SFX is overriding' bit
+		;bset	#1,TrackPlaybackControl(a5)	; Set 'track at rest' bit
+		;move.b	TrackVoiceIndex(a5),d0		; Current voice
+		;jsr	SetVoice(pc)
+		;movea.l	a3,a5
 ; loc_72C22:
-.locexit:
-		addq.w	#8,sp		; Tamper with return value so we don't return to caller
+;.locexit:
+		;addq.w	#8,sp		; Tamper with return value so we don't return to caller
 		rts	
 ; ===========================================================================
 ; loc_72C26:
@@ -2569,6 +2569,7 @@ ptr_sndCC:	dc.l SoundCC
 ptr_sndCD:	dc.l SoundCD
 ptr_sndCE:	dc.l SoundCE
 ptr_sndCF:	dc.l SoundCF
+ptr_sndD0:	dc.l SoundD0
 ptr_sndJumpLand:	dc.l SoundJumpLand
 ptr_sndSlide:	dc.l SoundSlide
 ptr_sndBusterShot:	dc.l SoundBusterShot
@@ -2581,9 +2582,9 @@ ptr_sndend
 ; ---------------------------------------------------------------------------
 ; Special sound effect pointers
 ; ---------------------------------------------------------------------------
-SpecSoundIndex:
-ptr_sndD0:	dc.l SoundD0
-ptr_specend
+;SpecSoundIndex:
+;ptr_sndD0:	dc.l SoundD0
+;ptr_specend
 
 ; ---------------------------------------------------------------------------
 ; Sound effect data
@@ -2684,6 +2685,8 @@ SoundCE:	include	"sound/sfx/SndCE - Ring Left Speaker.asm"
 		even
 SoundCF:	include	"sound/sfx/SndCF - Signpost.asm"
 		even
+SoundD0:	include	"sound/sfx/SndD0 - Waterfall.asm"
+		even
 SoundJumpLand:	include "sound/sfx/Snd - Jump Land.asm"
 		even
 SoundSlide:	include	"sound/sfx/Snd - Slide.asm"
@@ -2702,8 +2705,8 @@ SoundChargeLoop:	include	"sound/sfx/Snd - Charge Loop.asm"
 ; ---------------------------------------------------------------------------
 ; Special sound effect data
 ; ---------------------------------------------------------------------------
-SoundD0:	include	"sound/sfx/SndD0 - Waterfall.asm"
-		even
+;SoundD0:	include	"sound/sfx/SndD0 - Waterfall.asm"
+		;even
 
 ; ---------------------------------------------------------------------------
 ; 'Sega' chant PCM sample

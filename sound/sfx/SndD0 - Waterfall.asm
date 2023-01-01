@@ -20,7 +20,7 @@ SndD0_Waterfall_Loop01:
 	smpsAlterVol        $01
 	smpsLoop            $00, $22, SndD0_Waterfall_Loop01
 	dc.b	nRst, $01
-	smpsStopSpecial
+	smpsStop
 
 SndD0_Waterfall_Voices:
 ;	Voice $00
