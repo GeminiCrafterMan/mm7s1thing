@@ -100,6 +100,18 @@ Sonic_Animate:
 .nomodspeed: ; apparently the tiptoe animation doesn't even actually use this at all.
 		btst	#7,obStatus(a0)	; shooting?
 		beq.s	.notShooting
+		cmpi.b	#2,(v_shottype).w
+		bne.s	.notHolding
+		cmpi.b	#id_Walking,obAnim(a0)	; walking animation?
+		bge.s	.alreadyWalkingH	; if lower, we're not already out of the tiptoe one
+		lea	(MegaAni_TiptoeHold).l,a1 ; use tiptoe shoot animation
+		bra.s	.tiptoeSpeed
+
+	.alreadyWalkingH:
+		lea	(MegaAni_WalkingHold).l,a1 ; use walking shoot animation
+		bra.s	.contNoModSpeed
+
+	.notHolding:
 		cmpi.b	#id_Walking,obAnim(a0)	; walking animation?
 		bge.s	.alreadyWalkingS	; if lower, we're not already out of the tiptoe one
 		lea	(MegaAni_TiptoeShoot).l,a1 ; use tiptoe shoot animation

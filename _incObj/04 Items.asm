@@ -113,21 +113,21 @@ CollectItem:
 		move.w	#sfx_1up,d0 ; play extra life sound
 		bra.s	.playsnd
 	.lHP:
-		move.w	#sfx_Ring,d0 ; play extra life sound
-		bra.s	.playsnd
+		move.b	#10,d2
+		bra.s	.addHealth
 	.sHP:
-		move.w	#sfx_Ring,d0 ; play extra life sound
-		bra.s	.playsnd
+		move.b	#2,d2
+		bra.s	.addHealth
 	.lEn:
 		tst.b	(v_weapon).w
 		beq.s	.ret
-		move.w	#sfx_Ring,d0 ; play extra life sound
-		bra.s	.playsnd
+		move.b	#10,d2
+		bra.s	.addWep
 	.sEn:
 		tst.b	(v_weapon).w
 		beq.s	.ret
-		move.w	#sfx_Ring,d0 ; play extra life sound
-		bra.s	.playsnd
+		move.b	#2,d2
+		bra.s	.addWep
 	.scr:	; change this later to add these to the tally at the end of the level.
 		; Something about results card subroutines, and a byte in RAM for the amount of score balls collected
 		move.w	#100,d0
@@ -136,7 +136,40 @@ CollectItem:
 ;		bra.s	.playsnd
 
 .playsnd:
-		jmp	(PlaySound_Special).l
+		jmp		(PlaySound_Special).l
 
-.ret:
+.addWep:
+		move.b	(v_weapon).w,d1
+		lea		(v_weapon1energy).w,a1
+		lea		(v_weapon1max).w,a2
+		subq.b	#1,d1
+		subq.b	#1,d2	; loop counter
+		adda.l	d1,a1
+		adda.l	d1,a2
+		move.b	#1,(f_pause).w
+		move.b	(a1),d3
+		move.b	(a2),d4
+	.addWepLoop:
+		cmp.b	d3,d4
+		beq.s	.stopLoop
+		move.w	#sfx_Switch,d0 ; play extra life sound
+		jsr		(PlaySound_Special).l
+		addi.b	#1,d3
+		move.b	d3,(a1)
+		dbf	d2,.addWepLoop
+	.stopLoop:
+		move.b	#0,(f_pause).w
+	.ret:
 		rts
+
+.addHP:
+		subq.b	#1,d1	; loop counter
+		move.b	#1,(f_pause).w
+	.addHPLoop:
+		cmp.b	#32,(v_health).w
+		beq.s	.stopLoop
+		move.w	#sfx_Switch,d0 ; play extra life sound
+		jsr		(PlaySound_Special).l
+		addi.b	#1,(v_health).w
+		dbf	d1,.addHPLoop
+		bra.s	.stopLoop

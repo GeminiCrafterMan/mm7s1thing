@@ -6595,13 +6595,21 @@ Sonic_Main:	; Routine 0
 	.setWeaponEnergy:
 		move.b	#32,(v_health).w		; this isn't used yet, but i'd like it to be here just in case.
 		move.b	#32,(v_weapon1energy).w	; Green Wrecker
+		move.b	#32,(v_weapon1max).w	; Green Wrecker
 		move.b	#32,(v_weapon2energy).w	; Marble Blazer
+		move.b	#32,(v_weapon2max).w	; Marble Blazer
 		move.b	#32,(v_weapon3energy).w	; SYZ
+		move.b	#32,(v_weapon3max).w	; SYZ
 		move.b	#64,(v_weapon4energy).w	; Labyrinth Spear
-		move.b	#32,(v_weapon5energy).w	; SLZ
+		move.b	#64,(v_weapon4max).w	; Labyrinth Spear
+		move.b	#32,(v_weapon5energy).w	; Orbit Shield
+		move.b	#32,(v_weapon5max).w	; Orbit Shield
 		move.b	#32,(v_weapon6energy).w	; SBZ
+		move.b	#32,(v_weapon6max).w	; SBZ
 		move.b	#32,(v_rushcoilenergy).w; Rush Coil
+		move.b	#32,(v_rushcoilmax).w; Rush Coil
 		move.b	#32,(v_rushjetenergy).w	; Rush Jet
+		move.b	#32,(v_rushjetmax).w	; Rush Jet
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?

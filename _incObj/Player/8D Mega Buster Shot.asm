@@ -202,7 +202,7 @@ BShot_OrbitShield:	; Routine 6
 		move.b	bshot_orbID(a0),d0
 		move.b	orbsLeft(a1),d1
 		cmp.b	d0,d1
-		bne.s	.circle
+		bgt.s	.circle
 		cmpi.b	#id_ShieldUseStanding,obAnim(a1)	; is Mega Man firing one?
 		beq.s	.isFiring		; if not, branch
 		cmpi.b	#id_ShieldUseAir,obAnim(a1)	; is he in the air and doing it?

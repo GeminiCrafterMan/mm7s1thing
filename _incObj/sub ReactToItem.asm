@@ -301,13 +301,7 @@ React_Caterkiller:
 
 React_ChkHurt:
 		cmpi.b	#id_BusterShot,0(a0)
-		bne.s	.notBullet
-		subq.b	#1,obColProp(a0)
-		bne.s	.dontDestroyShot
-		bset	#7,obStatus(a0)
-	.dontDestroyShot:
-		bra.s	.isflashing
-	.notBullet:
+		beq.s	.isflashing
 		tst.b	(v_invinc).w	; is Sonic invincible?
 		beq.s	.notinvincible	; if not, branch
 

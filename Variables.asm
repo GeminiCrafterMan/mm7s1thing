@@ -144,6 +144,14 @@ f_victory	= ramaddr ( $FFFFF5CD ) ; victory animation flag
 
 v_shottype	= ramaddr ( $FFFFF5CE ) ; What type of animation to use for the player when firing
 
+v_weapon1max	= ramaddr ( $FFFFF5CF ) ; Weapon 1 energy, byte
+v_weapon2max	= ramaddr ( $FFFFF5D0 ) ; Weapon 2 energy, byte
+v_weapon3max	= ramaddr ( $FFFFF5D1 ) ; Weapon 3 energy, byte
+v_weapon4max	= ramaddr ( $FFFFF5D2 ) ; Weapon 4 energy, byte
+v_weapon5max	= ramaddr ( $FFFFF5D3 ) ; Weapon 5 energy, byte
+v_weapon6max	= ramaddr ( $FFFFF5D4 ) ; Weapon 6 energy, byte
+v_rushcoilmax   = ramaddr ( $FFFFF5D5 ) ; Rush Coil item energy, byte
+v_rushjetmax	= ramaddr ( $FFFFF5D6 ) ; Rush Jet item energy, byte
 ; F5CF - F5FF are unused
 
 v_gamemode	= ramaddr ( $FFFFF600 )	; game mode (00=Sega; 04=Title; 08=Demo; 0C=Level; 10=SS; 14=Cont; 18=End; 1C=Credit; +8C=PreLevel)
