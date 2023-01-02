@@ -81,9 +81,6 @@ PCycLZ_NotSBZ3:
 		lea	(v_pal_dry+$56).w,a1
 		move.l	(a0,d0.w),(a1)+
 		move.l	4(a0,d0.w),(a1)
-		lea	(v_pal_water+$56).w,a1
-		move.l	(a0,d0.w),(a1)+
-		move.l	4(a0,d0.w),(a1)
 
 PCycLZ_Skip1:
 ; Conveyor belts
