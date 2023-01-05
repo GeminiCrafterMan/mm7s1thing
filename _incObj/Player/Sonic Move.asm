@@ -183,20 +183,14 @@ loc_1309A:
 		neg.w	d1
 		cmp.w	d1,d0
 		bgt.s	loc_130A6
+	; Removed speed cap
+		add.w	d5,d0
+		cmp.w	d1,d0
+		ble.s	loc_130A6
+	; End of speed cap change
 		move.w	d1,d0
 
 loc_130A6:
-		tst.b	(v_shoes).w
-		beq.s	.noShoes
-		cmpi.w	#-$800,d0	; above negative limit?
-		bge.s	.noCap		; ignore
-		bra.s	.cap
-	.noShoes:
-		cmpi.w	#-$400,d0	; above negative no-shoes limit?
-		bge.s	.noCap		; ignore
-	.cap:
-		addi.w	#1,d0		; if below, add 1
-	.noCap:
 		move.w	d0,obInertia(a0)
 	.ret:
 		rts
@@ -227,20 +221,14 @@ loc_13104:
 		add.w	d5,d0
 		cmp.w	d6,d0
 		blt.s	loc_1310C
+	; Removed speed cap
+		sub.w	d5,d0
+		cmp.w	d6,d0
+		bge.s	loc_1310C
+	; End of speed cap change
 		move.w	d6,d0
 
 loc_1310C:
-		tst.b	(v_shoes).w
-		beq.s	.noShoes
-		cmpi.w	#$800,d0	; below positive limit?
-		ble.s	.noCap		; ignore
-		bra.s	.cap
-	.noShoes:
-		cmpi.w	#$400,d0	; below positive no-shoes limit?
-		ble.s	.noCap		; ignore
-	.cap:
-		subi.w	#1,d0		; if above, subtract 1
-	.noCap:
 		move.w	d0,obInertia(a0)
 	.ret:
 		rts
