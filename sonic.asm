@@ -19,6 +19,7 @@ DebugPathSwappers = 1
 	include	"Constants.asm"
 	include	"Variables.asm"
 	include	"Macros.asm"
+	include "Sonic-2-Clone-Driver-v2/Definitions.asm"
 
 EnableSRAM	  = 0	; change to 1 to enable SRAM
 BackupSRAM	  = 1
@@ -405,9 +406,10 @@ VBlank:
 		jsr	VBla_Index(pc,d0.w)
 
 VBla_Music:
-		jsr	(UpdateMusic).l
+		;jsr	(UpdateMusic).l
 
 VBla_Exit:
+		SMPS_UpdateSoundDriver
 		addq.l	#1,(v_vbla_count).w
 		movem.l	(sp)+,d0-a6
 		rte	
@@ -703,7 +705,7 @@ loc_119E:
 		clr.b	($FFFFF64F).w
 		movem.l	d0-a6,-(sp)
 		bsr.w	Demo_Time
-		jsr	(UpdateMusic).l
+		;jsr	(UpdateMusic).l
 		movem.l	(sp)+,d0-a6
 		rte	
 ; End of function HBlank
@@ -968,24 +970,24 @@ ClearScreen:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-SoundDriverLoad:
-		nop	
-		stopZ80
-		resetZ80
-		lea	(Kos_Z80).l,a0	; load sound driver
-		lea	(z80_ram).l,a1	; target Z80 RAM
-		bsr.w	KosDec		; decompress
-		resetZ80a
-		nop	
-		nop	
-		nop	
-		nop	
-		resetZ80
-		startZ80
-		rts	
+;SoundDriverLoad:
+		;nop	
+		;stopZ80
+		;resetZ80
+		;lea	(Kos_Z80).l,a0	; load sound driver
+		;lea	(z80_ram).l,a1	; target Z80 RAM
+		;bsr.w	KosDec		; decompress
+		;resetZ80a
+		;nop	
+		;nop	
+		;nop	
+		;nop	
+		;resetZ80
+		;startZ80
+		;rts	
 ; End of function SoundDriverLoad
 
-		include	"_incObj/sub PlaySound.asm"
+		include "Sonic-2-Clone-Driver-v2/engine/Functions.asm"
 		include	"_inc/PauseGame.asm"
 
 ; ---------------------------------------------------------------------------
@@ -8744,7 +8746,7 @@ ObjPos_End:	binclude	"objpos/ending.bin"
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 		even
 
-SoundDriver:	include "s1.sounddriver.asm"
+		include "Sonic-2-Clone-Driver-v2/engine/Sonic 2 Clone Driver v2.asm"
 
 ; end of 'ROM'
 		even
